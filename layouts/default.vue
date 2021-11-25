@@ -1,5 +1,6 @@
 <template>
   <v-app dark>
+    <Header />
     <v-main>
       <v-container>
         <Nuxt />
@@ -9,7 +10,11 @@
 </template>
 
 <script>
+import Header from "~/components/Header.vue";
+
 export default {
-  
-}
+  components: {
+    Header
+  }
+};
 </script>

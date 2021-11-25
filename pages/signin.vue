@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <form @submit.prevent="userSignUp">
+ <div>
+    <form @submit.prevent="userSignIn">
       <h2>Sign Up</h2>
 
       <div class="mb-4">
@@ -12,15 +12,16 @@
         <label for="password">Password</label>
         <input type="password" id="password" v-model="password"/>
       </div>
-      <button>Sign Up</button>
+      <button>Sign In</button>
     </form>
   </div>
 </template>
+
+<!-- The script tag of ~/pages/signin.vue -->
+
 <script>
 export default {
-  components: {
-
-  },
+  name: "signin",
 
   data: function() {
     return {
@@ -30,16 +31,15 @@ export default {
   },
 
   methods: {
-    userSignUp: function(err) {
+    userSignIn: function(err) {
       this.$store
-        .dispatch("signUp", {
+        .dispatch("signInWithEmail", {
           email: this.email,
           password: this.password
         })
         .then(() => {
           this.email = "";
           this.password = "";
-          //if you wanted to redirect after sign in you'd do that here with this.$router.push('/pagename')
         })
         .catch(err => {
           alert(err.message);
@@ -48,3 +48,7 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+
+</style>
