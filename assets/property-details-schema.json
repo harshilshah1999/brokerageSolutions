@@ -1,0 +1,216 @@
+{
+    "flat/appartment": {
+        "construction_details": {
+            "property_for": "string",
+            "property_type": "string",
+            "construction_type": "string",
+            "possesion_date": "date",
+            "oc_status": "string",
+            "property_age": "string",
+            "property_available_from": "date"
+        },
+        "location_details": {
+            "city_id": "ObjectID",
+            "locality_id": "ObjectID",
+            "sub-locality_id": "ObjectID",
+            "property_id": "ObjectID",
+            "google_map_details": {
+                "google_map_coordinates": "Point"
+            }
+        },
+        "property_details": {
+            "BHKtype": "string",
+            "carpet_area": "number",
+            "builtup_area": "number",
+            "super_builtup_area": "number",
+            "floor_number": "string",
+            "total_floors": "string",
+            "facing": "string",
+            "furnishing": "string",
+            "bathrooms": "number",
+            "balconies": "number",
+            "description": "string"
+        },
+        "pricing_details": {
+            "negotiable_price": "number/string",
+            "non-negotiable_price": "number/string",
+            "all_inclusive_price": "number/string",
+            "inclusions": {
+                "parking": "boolean",
+                "clubhouse_membership": "boolean",
+                "maintenance": "string",
+                "other": "string"
+            },
+            "monthly_maintainence": "number/string",
+            "annual_maintainence": "number/string"
+        },
+        "amenities": {
+            "lift": "boolean",
+            "gas_pipeline": "boolean",
+            "visitor_parking": "boolean",
+            "gym": "boolean",
+            "swimming_pool": "boolean",
+            "clubhouse": "boolean"
+        },
+        "photos": [
+            {
+                "storage_location": "string",
+                "photo_type": "string (living room,etc)",
+                "thumbnail": "boolean"
+            }
+        ],
+        "scheduling_visits": {
+            "preferred_days": [],
+            "preferred_time": "string",
+            "alternate_number": "string "
+        },
+        "other_details": {
+            "posted_date": "date",
+            "expiration_date": "date",
+            "status": "string - Active or not",
+            "posted_by": "ObjectID",
+            "verification_status?": "string",
+            "times_visited": "number",
+            "user_feedback": {
+                "user_id": "ObjectID",
+                "user_remark": "string"
+            }
+        }
+    },
+    "cities": [
+        {
+            "city_id": "ObjectID",
+            "city_name": "string",
+            "localities": [
+                {
+                    "locality_id": "ObjectID",
+                    "locality_name": "string",
+                    "sub-locality": [
+                        {
+                            "sub-locality_id": "ObjectID",
+                            "sub-locality_name": "string",
+                            "properties": [
+                                {
+                                    "property_id": "ObjectID",
+                                    "property_name": "string"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "all_properties": [
+        {
+            "flat/appartment": {
+                "property_id": "ObjectID"
+            },
+            "commercial": {
+                "property_id": "ObjectID"
+            },
+            "bungalow": {
+                "property_id": "ObjectID"
+            }
+        }
+    ],
+    "users": [
+        {
+            "user_id": "string",
+            "user_name": "string",
+            "user_role": "string - user/agent/staff",
+            "search_preferences/filter_preferences" : {
+                "object" : "THIS OBJECT CAN INCLUDE ALL FIELDS RELATED TO SEARCH FILTER/ used for continue last search feature"
+            },
+            "staff_roles(optional)": [
+                "string"
+            ],
+            "date_joined": "date",
+            "favourites": [
+                "propertyID"
+            ],
+            "user_remarks": [
+                "paragraph",
+                "paragraph"
+            ],
+            "properties_posted": [
+                {
+                    "property_id": "ObjectID"
+                }
+            ],
+            "properties_seen": [
+                {
+                    "property_id": "ObjectID",
+                    "seen_date": "date"
+                }
+            ],
+            "search_history": [
+                {
+                    "filters_applied": "(Optional - maybe for ML)"
+                }
+            ],
+            "basic_requirements": {
+                "": "PROPERTY POSTING FORM"
+            },
+            "user_enquiries": [
+                {
+                    "property_id": "ObjectID",
+                    "shortlisted_date": "date",
+                    "ideal_visit_time": "date"
+                }
+            ],
+            "staff_interaction": {
+                "contacted_on": [],
+                "contacted_by": [],
+                "remarks": "string"
+            },
+            "site_visits": [
+                "visit_id"
+            ],
+            "suggested_properties": [
+                {
+                    "property_id": "ObjectID",
+                    "suggested_date": "date"
+                }
+            ],
+            "blacklisted?": "boolean"
+        }
+    ],
+    "staff_roles": [
+        "admin",
+        "delivery_boy",
+        "property_explorer",
+        "cold_calling",
+        "data_entry",
+        "property_verifier",
+        "relationship_manager",
+        "alltasks_manager"
+    ],
+    "alltasks_manager": {
+        "assigned_locality": "string",
+        "assigned_buyers": "string",
+        "manager_activities": {
+            "users_called": {
+                "user_id": "ObjectID",
+                "call_time": "date",
+                "call_remarks": "string",
+                "suggested_properties": {
+                    "property_id": "ObjectID",
+                    "suggestion_date": "date"
+                }
+            }
+        }
+    },
+    "site_visits": [
+        {
+            "visit_id": "objectid",
+            "visit_timings": "date",
+            "property_id": "ObjectID",
+            "buyer": "user_id",
+            "seller": "user_id",
+            "delivery_boy": "user_id",
+            "visit_completed?": "boolean",
+            "buyer_visit_feedback_remark": "user_Remark(Objectid)"
+        }
+    ]
+}
