@@ -1,6 +1,7 @@
 <template>
     <div>
         <h1>Hi, I'm the header.</h1>
+        <nuxt-link to="/post-form">form</nuxt-link>
         <nuxt-link to="/signin">Sign In</nuxt-link>
         <button
             @click="signOut"

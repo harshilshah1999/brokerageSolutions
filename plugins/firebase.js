@@ -1,9 +1,9 @@
 // ~/plugins/firebase.js
 
-import * as firebase from 'firebase/app'
+import { initializeApp } from "firebase/app"
 import { getAuth } from 'firebase/auth'
+import { getFirestore } from "firebase/firestore";
 
-// Your web app's Firebase configuration
 // Your web app's Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyDToWTl1sIdI1NhW3EFp4-l48oD-J9Qi6I",
@@ -15,7 +15,9 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig)
-  
-export const auth = getAuth();
-export default firebase
+const firebaseApp = initializeApp(firebaseConfig)
+const db = getFirestore(firebaseApp);
+const auth = getAuth();
+
+export { auth, db }
+export default firebaseApp

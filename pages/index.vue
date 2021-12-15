@@ -5,12 +5,12 @@
 
       <div class="mb-4">
         <label for="email">Email</label>
-        <input type="text" id="email"  v-model="email"/>
+        <input type="text" id="email" v-model="email" />
       </div>
 
       <div>
         <label for="password">Password</label>
-        <input type="password" id="password" v-model="password"/>
+        <input type="password" id="password" v-model="password" />
       </div>
       <button>Sign Up</button>
     </form>
@@ -18,33 +18,31 @@
 </template>
 <script>
 export default {
-  components: {
+  components: {},
 
-  },
-
-  data: function() {
+  data: function () {
     return {
-      email: "",
-      password: ""
-    };
+      email: '',
+      password: '',
+    }
   },
 
   methods: {
-    userSignUp: function(err) {
+    userSignUp: function (err) {
       this.$store
-        .dispatch("signUp", {
+        .dispatch('signUp', {
           email: this.email,
-          password: this.password
+          password: this.password,
         })
         .then(() => {
-          this.email = "";
-          this.password = "";
+          this.email = ''
+          this.password = ''
           //if you wanted to redirect after sign in you'd do that here with this.$router.push('/pagename')
         })
-        .catch(err => {
-          alert(err.message);
-        });
-    }
-  }
-};
+        .catch((err) => {
+          alert(err.message)
+        })
+    },
+  },
+}
 </script>
