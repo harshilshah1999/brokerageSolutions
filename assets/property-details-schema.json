@@ -80,20 +80,23 @@
     "cities": [
         {
             "city_id": "ObjectID",
-            "city_name": "string",
+            "city_name": "Mumbai",
+            "properties": [
+                "property_id"
+            ],
             "localities": [
                 {
                     "locality_id": "ObjectID",
-                    "locality_name": "string",
+                    "locality_name": "Dahisar",
+                    "properties": [
+                        "property_id"
+                    ],
                     "sub-locality": [
                         {
                             "sub-locality_id": "ObjectID",
-                            "sub-locality_name": "string",
+                            "sub-locality_name": "Anand Nagar",
                             "properties": [
-                                {
-                                    "property_id": "ObjectID",
-                                    "property_name": "string"
-                                }
+                                "property_id"
                             ]
                         }
                     ]
@@ -119,8 +122,8 @@
             "user_id": "string",
             "user_name": "string",
             "user_role": "string - user/agent/staff",
-            "search_preferences/filter_preferences" : {
-                "object" : "THIS OBJECT CAN INCLUDE ALL FIELDS RELATED TO SEARCH FILTER/ used for continue last search feature"
+            "search_preferences/filter_preferences": {
+                "object": "THIS OBJECT CAN INCLUDE ALL FIELDS RELATED TO SEARCH FILTER/ used for continue last search feature"
             },
             "staff_roles(optional)": [
                 "string"
