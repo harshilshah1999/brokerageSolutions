@@ -54,30 +54,35 @@ export default {
     property_type: '',
     property_types: ['appartments'],
     results: {},
-    formData: {},
+    formData: {
+      property_type: 'appartments',
+    },
   }),
 
   mounted: function () {
-    postProperty.getHomepageData().then((response) => {
+    postProperty.readallProperty('cities').then((response) => {
       this.results = response
       console.log(this.results)
     })
     postProperty.getMedia('appartments/video.webm').then((vid_url) => {
-      console.log(vid_url)
-      const img = document.getElementById('vid')
-      img.setAttribute('src', vid_url)
+      // console.log(vid_url)
+      const video = document.getElementById('vid')
+      video.setAttribute('src', vid_url)
     })
     postProperty.getMedia('appartments/image.jpeg').then((img_src) => {
       const img = document.getElementById('myimg')
       img.setAttribute('src', img_src)
     })
+    postProperty.updateProperty('appartments','S2GEh6qUHWsP2kc02CL6',{verified:true}).then((response) => {})
   },
 
   methods: {
     submit: function () {
-      postProperty.postPropertData(this.formData).then((response) => {
-        console.log(response)
-      })
+      postProperty
+        .createProperty('appartments', this.formData)
+        .then((response) => {
+          console.log(response)
+        })
     },
   },
 }

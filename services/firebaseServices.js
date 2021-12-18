@@ -1,39 +1,51 @@
 import { db, storage } from '../plugins/firebase'
 import {
     doc,
-    getDoc,
     collection,
+    addDoc,
+    getDoc,
+    updateDoc,
+    deleteDoc,
+    getDocs,
     query,
     where,
-    getDocs,
-    setDoc,
 } from 'firebase/firestore'
 import { ref, getDownloadURL } from 'firebase/storage'
 
 export default {
 
-    async getHomepageData() {
+    async createProperty(collectionID, data) { // adds a document in the collection
+        const collection_name = collection(db, collectionID)
+        return await addDoc(collection_name, data)
+            .then((response) => {
+                console.log("Document written with ID: ", response.id)
+                return response
+            })
+            .catch((err) => { console.error(err); });
+    },
+    async getProperty(collectionID, documentID) { //get any single document from the collection
+        const document = doc(db, collectionID, documentID);
+        await getDoc(document);
+    },
+    async updateProperty(collectionID, documentID, newdata) { //update any document in a collection
+        const document = doc(db, collectionID, documentID);
+        await updateDoc(document, newdata);
+    },
+    async deleteProperty(collectionID, documentID) { //deletes a specific document
+        const document = doc(db, collectionID, documentID);
+        await deleteDoc(document);
+    },
+    async readallProperty(collectionID) { //reads all the documents in a collection
         const results = []
-        const response = await getDocs(collection(db, 'cities')).catch((err) => { console.error(err); })
-        response.forEach((doc) => {
+        const all_documents = await getDocs(collection(db, collectionID)).catch((err) => { console.error(err); })
+        all_documents.forEach((doc) => {
             results.push({ id: doc.id, ...doc.data() })
         })
         return results
     },
+    async getMedia(media_path) {
 
-    async postPropertData(formData) {
-        const collection_name = collection(db, 'appartments' /*formData.property_type*/)
-
-        await setDoc(
-            doc(collection_name /*, use second parameter for manual id name */),
-            formData
-        ).catch((err) => { console.error(err); })
-        return "Property posted successfully" //this works
-    },
-
-    async getMedia(image_path) {
-
-        const url = getDownloadURL(ref(storage, image_path))
+        const url = getDownloadURL(ref(storage, media_path))
             .then((url) => {
                 // This can be downloaded directly:
                 const xhr = new XMLHttpRequest()
