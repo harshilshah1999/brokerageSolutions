@@ -2,39 +2,44 @@
   <div>
     <hr />
     <br />
-    <v-autocomplete
-      v-model="property_type"
-      :items="property_types"
-      label="Property Type"
-      filled
-    ></v-autocomplete>
-    <v-btn>
-      <input
-        type="submit"
-        value="CONSTRUCTION DETAILS"
-        v-on:click="construction_submit"
-      />
-    </v-btn>
-    <v-btn>
-      <input
-        type="submit"
-        value="LOCATION DETAILS"
-        v-on:click="location_submit"
-      />
-    </v-btn>
-    <v-btn>
-      <input
-        type="submit"
-        value="PROPERTY DETAILS"
-        v-on:click="detail_submit"
-      />
-    </v-btn>
-
-
-
+    <div>
+      <v-autocomplete
+        v-model="property_type"
+        :items="property_types"
+        label="Property Type"
+        filled
+      ></v-autocomplete>
+      <v-btn>
+        <input
+          type="submit"
+          value="CONSTRUCTION DETAILS"
+          v-on:click="construction_submit"
+        />
+      </v-btn>
+      <v-btn>
+        <input
+          type="submit"
+          value="LOCATION DETAILS"
+          v-on:click="location_submit"
+        />
+      </v-btn>
+      <v-btn>
+        <input
+          type="submit"
+          value="PROPERTY DETAILS"
+          v-on:click="detail_submit"
+        />
+      </v-btn>
+      <v-btn>
+        <input
+          type="submit"
+          value="PRICING DETAILS"
+          v-on:click="pricing_submit"
+        />
+      </v-btn>
+    </div>
 
     <br /><br /><br /><br /><br />
-    <hr />
     <v-file-input
       counter
       multiple
@@ -95,8 +100,8 @@ export default {
     location_formData: {
       location_details: {
         city: 'mumbai',
-        locality: 'ObjectID',
-        sub_locality: 'ObjectID',
+        locality: 'Dahisar',
+        sub_locality: 'Anand Nagar',
         google_map_details: {
           google_map_coordinates: 'Point',
         },
@@ -117,6 +122,21 @@ export default {
         description: 'Auto-generate summary API - lorem ipsum',
       },
     },
+    pricing_formData: {
+      pricing_details: {
+        negotiable_price: 'number/string',
+        non_negotiable_price: 'number/string',
+        all_inclusive_price: 'number/string',
+        inclusions: {
+          parking: 'boolean',
+          clubhouse_membership: 'boolean',
+          maintenance: 'string',
+          other_inclusions: 'string',
+        },
+        monthly_maintainence: 'number/string',
+        annual_maintainence: 'number/string',
+      },
+    },
     formData: {
       property_type: 'appartments',
     },
@@ -127,36 +147,60 @@ export default {
   },
 
   methods: {
-    construction_submit: function () {
-      postPropertyServices
-        .postConstructionDetails('appartments', this.construction_formData)
-        .then((response) => {
-          this.documentid = response.id
-          console.log('Added' + response.id)
-        })
+    construction_submit: async function () {
+      try {
+        const response = await postPropertyServices.postConstructionDetails(
+          'appartments',
+          this.construction_formData
+        )
+        this.documentid = response['id']
+        console.log('Construction Submitted : ' + response['id'])
+      } catch (error) {
+        console.error(error)
+      }
     },
-    location_submit: function () {
-      postPropertyServices
-        .postLocationDetails(
+
+    location_submit: async function () {
+      try {
+        await postPropertyServices.postLocationDetails(
           'appartments',
           this.documentid,
           this.location_formData
         )
-        .then((response) => {
-          console.log('Added' + response)
-        })
+      } catch (error) {
+        console.error(error)
+      }
     },
-    detail_submit: function () {
-      postPropertyServices
-        .postPropertyDetails(
+
+    detail_submit: async function () {
+      try {
+        await postPropertyServices.postPropertyDetails(
           'appartments',
           this.documentid,
           this.details_formData
         )
-        .then((response) => {
-          console.log('Added' + response)
-        })
+      } catch (error) {
+        console.error(error)
+      }
     },
+
+    pricing_submit: async function () {
+      try {
+        await postPropertyServices.postPricingDetails(
+          'appartments',
+          this.documentid,
+          this.pricing_formData
+        )
+      } catch (error) {
+        console.error(error)
+      }
+    },
+
+
+
+
+
+    
     submit_image: async function () {
       // this.chosenFile.forEach((element) => {
       //   postPropertyServices

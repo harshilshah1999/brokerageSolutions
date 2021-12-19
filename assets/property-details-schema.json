@@ -4,17 +4,17 @@
             "property_for": "Sale/Rent",
             "property_type": "Flat/Bungalow/Commercial/etc",
             "construction_type": "Under Construction/New/resale",
-            "possesion_date": "date",
+            "possesion_date": "date()",
             "oc_status": "Received/Not Received",
             "property_age": "15 years, 7 months",
-            "property_available_from": "date"
+            "property_available_from": "date()"
         },
         "location_details": {
-            "city": "ObjectID",
-            "locality": "ObjectID",
-            "sub-locality": "ObjectID",
+            "city": "Mumbai",
+            "locality": "Dahisar",
+            "sub_locality": "Anand Nagar",
             "google_map_details": {
-                "google_map_coordinates": "Point"
+                "google_map_coordinates": "..."
             }
         },
         "property_details": {
@@ -31,17 +31,20 @@
             "description": "Auto-generate summary API - lorem ipsum"
         },
         "pricing_details": {
-            "negotiable_price": "number/string",
-            "non-negotiable_price": "number/string",
-            "all_inclusive_price": "number/string",
+            "negotiable_price": "1.8Cr",
+            "non_negotiable_price": "1.73Cr",
+            "all_inclusive_price": "1.95Cr",
+            "monthly_maintainence": "5000/month",
+            "annual_maintainence": "70000/year",
             "inclusions": {
-                "parking": "boolean",
-                "clubhouse_membership": "boolean",
-                "maintenance": "string",
-                "other": "string"
-            },
-            "monthly_maintainence": "number/string",
-            "annual_maintainence": "number/string"
+                "parking": true,
+                "clubhouse_membership": false,
+                "maintenance": "For 2 years",
+                "other_inclusions": [
+                    "banquet",
+                    "something else"
+                ]
+            }
         },
         "amenities": {
             "lift": "boolean",
@@ -64,8 +67,8 @@
             "alternate_number": "string "
         },
         "other_details": {
-            "posted_date": "date",
-            "expiration_date": "date",
+            "posted_date": "date()",
+            "expiration_date": "date()",
             "status": "string - Active or not",
             "posted_by": "ObjectID",
             "verification_status?": "string",
@@ -127,7 +130,7 @@
             "staff_roles(optional)": [
                 "string"
             ],
-            "date_joined": "date",
+            "date_joined": "date()",
             "favourites": [
                 "propertyID"
             ],
@@ -143,7 +146,7 @@
             "properties_seen": [
                 {
                     "property_id": "ObjectID",
-                    "seen_date": "date"
+                    "seen_date": "date()"
                 }
             ],
             "search_history": [
@@ -157,8 +160,8 @@
             "user_enquiries": [
                 {
                     "property_id": "ObjectID",
-                    "shortlisted_date": "date",
-                    "ideal_visit_time": "date"
+                    "shortlisted_date": "date()",
+                    "ideal_visit_time": "date()"
                 }
             ],
             "staff_interaction": {
@@ -172,7 +175,7 @@
             "suggested_properties": [
                 {
                     "property_id": "ObjectID",
-                    "suggested_date": "date"
+                    "suggested_date": "date()"
                 }
             ],
             "blacklisted?": "boolean"
@@ -194,11 +197,11 @@
         "manager_activities": {
             "users_called": {
                 "user_id": "ObjectID",
-                "call_time": "date",
+                "call_time": "date()",
                 "call_remarks": "string",
                 "suggested_properties": {
                     "property_id": "ObjectID",
-                    "suggestion_date": "date"
+                    "suggestion_date": "date()"
                 }
             }
         }
@@ -206,7 +209,7 @@
     "site_visits": [
         {
             "visit_id": "objectid",
-            "visit_timings": "date",
+            "visit_timings": "date()",
             "property_id": "ObjectID",
             "buyer": "user_id",
             "seller": "user_id",
