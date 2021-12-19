@@ -37,6 +37,14 @@
           v-on:click="pricing_submit"
         />
       </v-btn>
+
+      <v-btn>
+        <input
+          type="submit"
+          value="AMENITIES DETAILS"
+          v-on:click="amenities_submit"
+        />
+      </v-btn>
     </div>
 
     <br /><br /><br /><br /><br />
@@ -137,6 +145,16 @@ export default {
         annual_maintainence: 'number/string',
       },
     },
+    amenities_formData: {
+      amenities: {
+        lift: true,
+        gas_pipeline: false,
+        visitor_parking: true,
+        gym: false,
+        swimming_pool: true,
+        clubhouse: false,
+      },
+    },
     formData: {
       property_type: 'appartments',
     },
@@ -195,12 +213,18 @@ export default {
         console.error(error)
       }
     },
+    amenities_submit: async function () {
+      try {
+        await postPropertyServices.postAmenitiesDetails(
+          'appartments',
+          this.documentid,
+          this.amenities_formData
+        )
+      } catch (error) {
+        console.error(error)
+      }
+    },
 
-
-
-
-
-    
     submit_image: async function () {
       // this.chosenFile.forEach((element) => {
       //   postPropertyServices

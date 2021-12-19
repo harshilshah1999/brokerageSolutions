@@ -47,12 +47,12 @@
             }
         },
         "amenities": {
-            "lift": "boolean",
-            "gas_pipeline": "boolean",
-            "visitor_parking": "boolean",
-            "gym": "boolean",
-            "swimming_pool": "boolean",
-            "clubhouse": "boolean"
+            "lift": true,
+            "gas_pipeline": false,
+            "visitor_parking": true,
+            "gym": false,
+            "swimming_pool": true,
+            "clubhouse": false
         },
         "photos": [
             {

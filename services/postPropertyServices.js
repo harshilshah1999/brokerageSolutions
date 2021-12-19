@@ -28,5 +28,11 @@ export default {
         try {
             return await firebaseServices.updateSingleDocument(collectionID, documentID, newdata) //update property
         } catch (error) { console.error(error); }
+    },
+
+    async postAmenitiesDetails(collectionID, documentID, newdata) {
+        try {
+            return await firebaseServices.updateSingleDocument(collectionID, documentID, newdata) //update property
+        } catch (error) { console.error(error); }
     }
 }
