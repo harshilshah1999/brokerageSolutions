@@ -13,7 +13,6 @@
             "city_id": "ObjectID",
             "locality_id": "ObjectID",
             "sub-locality_id": "ObjectID",
-            "property_id": "ObjectID",
             "google_map_details": {
                 "google_map_coordinates": "Point"
             }

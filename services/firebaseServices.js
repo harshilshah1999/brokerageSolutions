@@ -10,57 +10,50 @@ import {
     query,
     where,
 } from 'firebase/firestore'
-import { ref, getDownloadURL } from 'firebase/storage'
+import { ref, getDownloadURL, uploadBytes } from 'firebase/storage'
 
 export default {
 
     async createProperty(collectionID, data) { // adds a document in the collection
-        const collection_name = collection(db, collectionID)
-        return await addDoc(collection_name, data)
-            .then((response) => {
-                console.log("Document written with ID: ", response.id)
-                return response
-            })
-            .catch((err) => { console.error(err); });
+        const collectionLocation = collection(db, collectionID)
+        return await addDoc(collectionLocation, data)
+            .then((response) => { return response })
+            .catch((err) => { console.error(err); })
     },
     async getProperty(collectionID, documentID) { //get any single document from the collection
-        const document = doc(db, collectionID, documentID);
-        await getDoc(document);
+        const documentLocation = doc(db, collectionID, documentID);
+        return await getDoc(documentLocation)
+            .then((response) => { return response })
+            .catch((err) => { console.error(err); });
     },
     async updateProperty(collectionID, documentID, newdata) { //update any document in a collection
-        const document = doc(db, collectionID, documentID);
-        await updateDoc(document, newdata);
+        const documentLocation = doc(db, collectionID, documentID);
+        return await updateDoc(documentLocation, newdata)
+            .then((response) => { return response })
+            .catch((err) => { console.error(err); });
     },
-    async deleteProperty(collectionID, documentID) { //deletes a specific document
-        const document = doc(db, collectionID, documentID);
-        await deleteDoc(document);
+    async deleteProperty(collectionID, documentID) { //deletes a specific document from the collection
+        const documentLocation = doc(db, collectionID, documentID);
+        return await deleteDoc(documentLocation)
+            .then((response) => { return response })
+            .catch((err) => { console.error(err); })
     },
     async readallProperty(collectionID) { //reads all the documents in a collection
-        const results = []
-        const all_documents = await getDocs(collection(db, collectionID)).catch((err) => { console.error(err); })
-        all_documents.forEach((doc) => {
-            results.push({ id: doc.id, ...doc.data() })
-        })
-        return results
+        const collectionLocation = collection(db, collectionID)
+        return await getDocs(collectionLocation)
+            .then((response) => { return response })
+            .catch((err) => { console.error(err); })
     },
     async getMedia(media_path) {
-
-        const url = getDownloadURL(ref(storage, media_path))
-            .then((url) => {
-                // This can be downloaded directly:
-                const xhr = new XMLHttpRequest()
-                xhr.responseType = 'blob'
-                xhr.onload = (event) => {
-                    const blob = xhr.response
-                }
-                xhr.open('GET', url)
-                xhr.send()
-                return url
-
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-        return url
+        const downloadLocation = ref(storage, media_path);
+        return await getDownloadURL(downloadLocation)
+            .then((url) => { return url })
+            .catch((error) => { console.log(error) })
+    },
+    async setMedia(media_path, file) {
+        const uploadLocation = ref(storage, media_path);
+        return await uploadBytes(uploadLocation, file).then((snapshot) => {
+            return snapshot;
+        });
     }
 }
