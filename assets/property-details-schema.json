@@ -1,34 +1,34 @@
 {
     "flat/appartment": {
         "construction_details": {
-            "property_for": "string",
-            "property_type": "string",
-            "construction_type": "string",
+            "property_for": "Sale/Rent",
+            "property_type": "Flat/Bungalow/Commercial/etc",
+            "construction_type": "Under Construction/New/resale",
             "possesion_date": "date",
-            "oc_status": "string",
-            "property_age": "string",
+            "oc_status": "Received/Not Received",
+            "property_age": "15 years, 7 months",
             "property_available_from": "date"
         },
         "location_details": {
-            "city_id": "ObjectID",
-            "locality_id": "ObjectID",
-            "sub-locality_id": "ObjectID",
+            "city": "ObjectID",
+            "locality": "ObjectID",
+            "sub-locality": "ObjectID",
             "google_map_details": {
                 "google_map_coordinates": "Point"
             }
         },
         "property_details": {
-            "BHKtype": "string",
-            "carpet_area": "number",
-            "builtup_area": "number",
-            "super_builtup_area": "number",
-            "floor_number": "string",
-            "total_floors": "string",
-            "facing": "string",
-            "furnishing": "string",
-            "bathrooms": "number",
-            "balconies": "number",
-            "description": "string"
+            "BHKtype": "2BHK",
+            "carpet_area": "706 sq.ft",
+            "builtup_area": "900 sq.ft",
+            "super_builtup_area": "1200 sq.ft",
+            "floor_number": "19",
+            "total_floors": "42",
+            "facing": "East/West/South/North/South-East/...",
+            "furnishing": "Unfurnished/Semifurnished/Unfurnished",
+            "bathrooms": "3",
+            "balconies": "0",
+            "description": "Auto-generate summary API - lorem ipsum"
         },
         "pricing_details": {
             "negotiable_price": "number/string",
