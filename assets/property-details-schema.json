@@ -56,26 +56,32 @@
         },
         "photos": [
             {
-                "storage_location": "string",
-                "photo_type": "string (living room,etc)",
-                "thumbnail": "boolean"
+                "storage_path": "appartments/DocID/image.jpeg",
+                "photo_type": "Living Room/Bedroom/Kitchen/...",
+                "thumbnail": true
             }
         ],
-        "scheduling_visits": {
-            "preferred_days": [],
-            "preferred_time": "string",
-            "alternate_number": "string "
+        "visit_preference_details": {
+            "preferred_days": [
+                "Sunday",
+                "Saturday"
+            ],
+            "preferred_time": {
+                "from": "10am",
+                "to": "9pm"
+            },
+            "alternate_number": "1234567890"
         },
         "other_details": {
             "posted_date": "date()",
             "expiration_date": "date()",
-            "status": "string - Active or not",
-            "posted_by": "ObjectID",
-            "verification_status?": "string",
-            "times_visited": "number",
+            "status": "Active/Inactive",
+            "posted_by": "Somil Shah - 124567890",
+            "verification_status?": "verified/under_verification/rejected",
+            "times_visited": "increment()",
             "user_feedback": {
-                "user_id": "ObjectID",
-                "user_remark": "string"
+                "user_id": "Harshil Shah - 0987654321",
+                "user_remark": "Nice property! Good interior!"
             }
         }
     },

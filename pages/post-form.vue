@@ -37,13 +37,22 @@
           v-on:click="pricing_submit"
         />
       </v-btn>
-
       <v-btn>
         <input
           type="submit"
           value="AMENITIES DETAILS"
           v-on:click="amenities_submit"
         />
+      </v-btn>
+      <v-btn>
+        <input
+          type="submit"
+          value="VISIT DETAILS"
+          v-on:click="visit_preference_submit"
+        />
+      </v-btn>
+      <v-btn>
+        <input type="submit" value="OTHER DETAILS" v-on:click="other_submit" />
       </v-btn>
     </div>
 
@@ -73,12 +82,7 @@
       <video width="400" controls>
         <source src="../assets/video2.webm" id="vid" type="video/webm" />
       </video>
-    </span>
-    <br />
-    <hr />
-    <div v-for="value in results" :key="value.id">
-      {{ value }}
-    </div> -->
+    </span> -->
   </div>
 </template>
 
@@ -93,7 +97,9 @@ export default {
     property_types: ['appartments'],
     results: {},
     chosenFile: null,
-    documentid: '',
+    collectionID: 'appartments',
+    documentID: 'cBPvEwByvBLKsV5ehuWG',
+    storage_path: '',
     construction_formData: {
       construction_details: {
         property_for: 'Sale/Rent',
@@ -155,9 +161,31 @@ export default {
         clubhouse: false,
       },
     },
-    formData: {
-      property_type: 'appartments',
+    visit_preference_formData: {
+      visit_preference_details: {
+        preferred_days: ['Sunday', 'Monday'],
+        preferred_time: {
+          from: '10am',
+          to: '9pm',
+        },
+        alternate_number: '1234567890',
+      },
     },
+    other_formData: {
+      other_details: {
+        posted_date: 'date()',
+        expiration_date: 'date()',
+        status: 'Active/Inactive',
+        posted_by: 'Somil Shah - 124567890',
+        verification_status: 'verified/under_verification/rejected',
+        times_visited: 'increment()',
+        user_feedback: {
+          user_id: 'Harshil Shah - 0987654321',
+          user_remark: 'Nice property! Good interior!',
+        },
+      },
+    },
+    image_formData: {},
   }),
 
   mounted: function () {
@@ -171,42 +199,42 @@ export default {
           'appartments',
           this.construction_formData
         )
-        this.documentid = response['id']
-        console.log('Construction Submitted : ' + response['id'])
+        this.documentID = response['id']
+        // this.collectionID = response['parent']
+        this.storage_path = response['path']
+
+        console.log('Construction Submitted : ', response['id'], response)
       } catch (error) {
         console.error(error)
       }
     },
-
     location_submit: async function () {
       try {
         await postPropertyServices.postLocationDetails(
-          'appartments',
-          this.documentid,
+          this.collectionID,
+          this.documentID,
           this.location_formData
         )
       } catch (error) {
         console.error(error)
       }
     },
-
     detail_submit: async function () {
       try {
         await postPropertyServices.postPropertyDetails(
-          'appartments',
-          this.documentid,
+          this.collectionID,
+          this.documentID,
           this.details_formData
         )
       } catch (error) {
         console.error(error)
       }
     },
-
     pricing_submit: async function () {
       try {
         await postPropertyServices.postPricingDetails(
-          'appartments',
-          this.documentid,
+          this.collectionID,
+          this.documentID,
           this.pricing_formData
         )
       } catch (error) {
@@ -216,8 +244,8 @@ export default {
     amenities_submit: async function () {
       try {
         await postPropertyServices.postAmenitiesDetails(
-          'appartments',
-          this.documentid,
+          this.collectionID,
+          this.documentID,
           this.amenities_formData
         )
       } catch (error) {
@@ -226,13 +254,51 @@ export default {
     },
 
     submit_image: async function () {
-      // this.chosenFile.forEach((element) => {
-      //   postPropertyServices
-      //     .setSingleMedia('appartments/' + element.name, element)
-      //     .then((response) => {
-      //       console.log(response)
-      //     })
-      // })
+      try {
+        this.chosenFile.forEach(async (element, index) => {
+          ;(this.image_formData = {
+            photos: [
+              {
+                storage_path:
+                  this.storage_path + '/' + index + '_' + element.name, //need image name validation here
+                photo_type: 'Living Room/Bedroom/Kitchen/...',
+                thumbnail: true,
+              },
+            ],
+          }),
+            await postPropertyServices.postImage(
+              this.collectionID,
+              this.documentID,
+              element,
+              this.image_formData,
+              this.collectionID + '/' + this.documentID + '/' + element.name
+            )
+        })
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    visit_preference_submit: async function () {
+      try {
+        await postPropertyServices.postVisitPreferenceDetails(
+          this.collectionID,
+          this.documentID,
+          this.visit_preference_formData
+        )
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    other_submit: async function () {
+      try {
+        await postPropertyServices.postOtherDetails(
+          this.collectionID,
+          this.documentID,
+          this.other_formData
+        )
+      } catch (error) {
+        console.error(error)
+      }
     },
     // randomfunctions: function () {
     //   postPropertyServices.getAllDocuments('cities').then((response) => {
@@ -247,12 +313,6 @@ export default {
     //     const img = document.getElementById('myimg')
     //     img.setAttribute('src', img_src)
     //   })
-    //   postPropertyServices
-    //     .updateSingleDocument('appartments', 'S2GEh6qUHWsP2kc02CL6', {
-    //       verified: true,
-    //     })
-    //     .then((response) => {  console.log(response)})
-    // },
   },
 }
 </script>

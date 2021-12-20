@@ -34,5 +34,27 @@ export default {
         try {
             return await firebaseServices.updateSingleDocument(collectionID, documentID, newdata) //update property
         } catch (error) { console.error(error); }
-    }
+    },
+
+    async postImage(collectionID, documentID, file, metadata, image_path) {
+        try {
+            return [
+                await firebaseServices.setSingleMedia(image_path, file), //update property
+                await firebaseServices.addArrayElement(collectionID, documentID, 'photos', metadata['photos'][0]), //update photos array
+            ]
+        } catch (error) { console.error(error); }
+    },
+
+    async postVisitPreferenceDetails(collectionID, documentID, newdata) {
+        try {
+            return await firebaseServices.updateSingleDocument(collectionID, documentID, newdata) //update property
+        } catch (error) { console.error(error); }
+    },
+
+    async postOtherDetails(collectionID, documentID, newdata) {
+        try {
+            return await firebaseServices.updateSingleDocument(collectionID, documentID, newdata) //update property
+        } catch (error) { console.error(error); }
+    },
+
 }
