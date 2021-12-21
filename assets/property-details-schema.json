@@ -85,33 +85,56 @@
             }
         }
     },
-    "cities": [
-        {
-            "city_id": "ObjectID",
-            "city_name": "Mumbai",
-            "properties": [
-                "property_id"
-            ],
-            "localities": [
-                {
-                    "locality_id": "ObjectID",
-                    "locality_name": "Dahisar",
-                    "properties": [
-                        "property_id"
-                    ],
-                    "sub-locality": [
-                        {
-                            "sub-locality_id": "ObjectID",
-                            "sub-locality_name": "Anand Nagar",
-                            "properties": [
-                                "property_id"
-                            ]
-                        }
-                    ]
-                }
-            ]
-        }
-    ],
+    "cities": {
+        "city_id": "ObjectID",
+        "city_name": "Mumbai",
+        "localities": [
+            "Dahisar",
+            "Borivali"
+        ],
+        "appartment": [
+            "property_id"
+        ],
+        "bungalow": [
+            "property_id"
+        ],
+        "commercial": [
+            "property_id"
+        ]
+    },
+    "localities": {
+        "locality_id": "ObjectID",
+        "locality_name": "Dahisar",
+        "city_id": "Reference - ObjectID",
+        "sub_localities": [
+            "Anand Nagar",
+            "Kandarpada"
+        ],
+        "appartment": [
+            "property_id"
+        ],
+        "bungalow": [
+            "property_id"
+        ],
+        "commercial": [
+            "property_id"
+        ]
+    },
+    "sub-locality": {
+        "sub-locality_id": "ObjectID",
+        "sub-locality_name": "Anand Nagar",
+        "locality_id": "Reference - ObjectID",
+        "city_id": "Reference - ObjectID",
+        "appartment": [
+            "property_id"
+        ],
+        "bungalow": [
+            "property_id"
+        ],
+        "commercial": [
+            "property_id"
+        ]
+    },
     "all_properties": [
         {
             "flat/appartment": {
