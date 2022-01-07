@@ -88,7 +88,8 @@
 
 <script>
 import postPropertyServices from '../services/postPropertyServices'
-
+// import cities from '../assets/cities.json'
+// import firebaseServices from '../services/firebaseServices'
 export default {
   name: 'post-form',
 
@@ -113,7 +114,7 @@ export default {
     },
     location_formData: {
       location_details: {
-        city: 'mumbai',
+        city: 'Achalpur',
         locality: 'Dahisar',
         sub_locality: 'Anand Nagar',
         google_map_details: {
@@ -188,8 +189,15 @@ export default {
     image_formData: {},
   }),
 
-  mounted: function () {
+  mounted: async function () {
     // this.randomfunctions()
+    // cities.forEach(async (element) => {
+    //   await firebaseServices.addDocumentManualID('cities', element['id'], {
+    //     name: element['name'],
+    //     state: element['state'],
+    //     status: element['status'],
+    //   })
+    // })
   },
 
   methods: {
@@ -213,7 +221,30 @@ export default {
         await postPropertyServices.postLocationDetails(
           this.collectionID,
           this.documentID,
-          this.location_formData
+          this.location_formData,
+          true
+        )
+      } catch (error) {
+        console.error(error)
+      }
+      //add new locality
+      try {
+        await postPropertyServices.addNewLocality(
+          this.collectionID,
+          this.documentID,
+          this.location_formData,
+          true
+        )
+      } catch (error) {
+        console.error(error)
+      }
+      //add new sublocality
+      try {
+        await postPropertyServices.addNewSubLocality(
+          this.collectionID,
+          this.documentID,
+          this.location_formData,
+          true
         )
       } catch (error) {
         console.error(error)
@@ -252,7 +283,6 @@ export default {
         console.error(error)
       }
     },
-
     submit_image: async function () {
       try {
         this.chosenFile.forEach(async (element, index) => {

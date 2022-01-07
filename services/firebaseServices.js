@@ -90,5 +90,20 @@ export default {
         try {
             return await uploadBytes(uploadLocation, file) //(parameter) snapshot: UploadResult
         } catch (error) { console.error(error); return error }
+    },
+
+    async singleEqualsQuery(collectionID, parameter1, parameter2) {
+        const q = query(collection(db, collectionID), where(parameter1, "==", parameter2));
+        // const querySnapshot = await getDocs(q);
+        // querySnapshot.forEach((doc) => {
+        //     // doc.data() is never undefined for query doc snapshots
+        //     console.log(doc.id, " => ", doc.data());
+        // });
+        return await getDocs(q)
+    },
+
+    async doubleEqualsQuery(collectionID, parameter1, parameter2, parameter3, parameter4){
+        const q1 = query(collection(db, collectionID), where(parameter1, "==", parameter2),where(parameter3, "==", parameter4))
+        return await getDocs(q1)
     }
 }

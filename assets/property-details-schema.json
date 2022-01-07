@@ -88,6 +88,7 @@
     "cities": {
         "city_id": "ObjectID",
         "city_name": "Mumbai",
+        "status":"Active/Inactive",
         "localities": [
             "Dahisar",
             "Borivali"
@@ -105,6 +106,7 @@
     "localities": {
         "locality_id": "ObjectID",
         "locality_name": "Dahisar",
+        "verified": true,
         "city_id": "Reference - ObjectID",
         "sub_localities": [
             "Anand Nagar",
@@ -120,9 +122,10 @@
             "property_id"
         ]
     },
-    "sub-locality": {
-        "sub-locality_id": "ObjectID",
-        "sub-locality_name": "Anand Nagar",
+    "sub_localities": {
+        "sub_locality_id": "ObjectID",
+        "sub_locality_name": "Anand Nagar",
+        "verified": false,
         "locality_id": "Reference - ObjectID",
         "city_id": "Reference - ObjectID",
         "appartment": [
