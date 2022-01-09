@@ -1,6 +1,13 @@
-import firebaseServices from './firebaseServices'
+import firebaseServices from '../firebaseServices'
 
 export default {
+
+    async postRentalDetails(collectionID, documentID, newdata) {
+        try {
+            return await firebaseServices.updateSingleDocument(collectionID, documentID, newdata) //update property
+        } catch (error) { console.error(error); return error }
+    },
+
     async postConstructionDetails(collectionID, data) {
         try {
             return await firebaseServices.addDocumentAutoID(collectionID, data).catch((err) => { console.error(err); })
@@ -12,7 +19,7 @@ export default {
             "locality_name": newdata['location_details']['locality'],
             "verified": verification_status,
             "city_id": newdata['location_details']['city'],
-            "sub_localities": [newdata['location_details']['sub_locality']],
+            "sub_localities": newdata['location_details']['sub_locality'],
         }
 
         let sub_localityForm = {
@@ -45,13 +52,13 @@ export default {
         await firebaseServices.addDocumentManualID('pending_sublocality_verification', sub_locality['id'], sub_localityForm).catch((err) => { console.error(err); }) //enter new locality
     },
 
-    async postLocationDetails(collectionID, documentID, newdata, verification_status /* depends on who is posting the property [staff=true,other=false] */) {
+    async postLocationDetails(collectionID, documentID, newdata) {
         try {
             return [
                 await firebaseServices.updateSingleDocument(collectionID, documentID, newdata), //add location details to the property
-                await firebaseServices.addArrayElement('cities', newdata['location_details']['city'], 'properties', documentID), //update cities array
-                await firebaseServices.addArrayElement('localities', newdata['location_details']['locality'], 'properties', documentID), //update localities array
-                await firebaseServices.addArrayElement('sub_localities', newdata['location_details']['sub_locality'], 'properties', documentID), //update sub_localities array
+                await firebaseServices.addArrayElement('cities', newdata['location_details']['city'], collectionID, documentID), //update cities array
+                await firebaseServices.addArrayElement('localities', newdata['location_details']['locality'], collectionID, documentID), //update localities array
+                await firebaseServices.addArrayElement('sub_localities', newdata['location_details']['sub_locality'], collectionID, documentID), //update sub_localities array
             ]
         } catch (error) { console.error(error); return error }
     },
@@ -74,11 +81,11 @@ export default {
         } catch (error) { console.error(error); return error }
     },
 
-    async postImage(collectionID, documentID, file, metadata, image_path) {
+    async postMedia(collectionID, documentID, file, metadata, image_path) {
         try {
             return [
                 await firebaseServices.setSingleMedia(image_path, file), //update property
-                await firebaseServices.addArrayElement(collectionID, documentID, 'photos', metadata['photos'][0]), //update photos array
+                await firebaseServices.addArrayElement(collectionID, documentID, 'media', metadata['media'][0]), //update media array
             ]
         } catch (error) { console.error(error); return error }
     },
@@ -95,17 +102,23 @@ export default {
         } catch (error) { console.error(error); return error }
     },
 
-    //GetCities
     async getCities() {
-        return await firebaseServices.singleEqualsQuery('cities', 'status', 'active')
-    },
-    //GetLocalities(city) status verified = true
-    async getLocalities(cityID) {
-        return await firebaseServices.doubleEqualsQuery('localities', 'city_id', cityID, 'verified' ,true)
+        try {
+            return await firebaseServices.singleEqualsQuery('cities', 'status', 'active')
+        } catch (error) { console.error(error); return error }
+
     },
 
-    // //GetSublocalities(localityID)
+    async getLocalities(cityID) {
+        try {
+            return await firebaseServices.doubleEqualsQuery('localities', 'city_id', cityID, 'verified', true)
+        } catch (error) { console.error(error); return error }
+
+    },
+
     async getSublocalities(localityID) {
-        return await firebaseServices.doubleEqualsQuery('sub_localities', 'locality_id', localityID, 'verified' ,true)
+        try {
+            return await firebaseServices.doubleEqualsQuery('sub_localities', 'locality_id', localityID, 'verified', true)
+        } catch (error) { console.error(error); return error }
     }
 }

@@ -1,7 +1,7 @@
 import firebaseServices from './firebaseServices'
 
 export default {
-    async changeLocalityVerificationStatus(documentID, newdata) {
+    async verifyLocality(documentID, newdata) {
         try {
             //update locality verification status
             await firebaseServices.updateSingleDocument('localities', documentID, { "verified": true })
@@ -12,7 +12,7 @@ export default {
         } catch (error) { console.error(error); return error }
     },
 
-    async changeSubLocalityVerificationStatus(documentID, newdata) {
+    async verifySublocality(documentID, newdata) {
         try {
             //update sub_locality verification status
             await firebaseServices.updateSingleDocument('sub_localities', documentID, { "verified": true })
@@ -23,13 +23,13 @@ export default {
         } catch (error) { console.error(error); return error }
     },
 
-    async getUnverifiedLocalities() {
+    async getAllUnverifiedLocalities() {
         try {
             return await firebaseServices.getAllDocuments('pending_localities_verification')
         } catch (error) { console.error(error); return error }
     },
 
-    async getUnverifiedSublocalities() {
+    async getAllUnverifiedSublocalities() {
         try {
             return await firebaseServices.getAllDocuments('pending_sublocalities_verification')
         } catch (error) { console.error(error); return error }

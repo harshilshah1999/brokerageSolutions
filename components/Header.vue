@@ -3,6 +3,7 @@
         <h1>Hi, I'm the header.</h1>
         <nuxt-link to="/post-form">form</nuxt-link>
         <nuxt-link to="/signin">Sign In</nuxt-link>
+        <nuxt-link to="/home">Homepage</nuxt-link>
         <button
             @click="signOut"
             class="pl-4 opacity-50 hover:opacity-100"

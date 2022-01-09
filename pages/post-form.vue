@@ -87,7 +87,8 @@
 </template>
 
 <script>
-import postPropertyServices from '../services/postPropertyServices'
+import postApartmentServices from '../services/apartments/postApartmentServices'
+
 // import cities from '../assets/cities.json'
 // import firebaseServices from '../services/firebaseServices'
 export default {
@@ -95,16 +96,14 @@ export default {
 
   data: () => ({
     property_type: '',
-    property_types: ['appartments'],
+    property_types: ['apartments_sale', 'apartments_rent'],
     results: {},
     chosenFile: null,
-    collectionID: 'appartments',
+    CollectionID: '',
     documentID: 'cBPvEwByvBLKsV5ehuWG',
     storage_path: '',
-    construction_formData: {
+    sale_construction_formData: {
       construction_details: {
-        property_for: 'Sale/Rent',
-        property_type: 'Flat/Bungalow/Commercial/etc',
         construction_type: 'Under Construction/New/resale',
         possesion_date: 'date',
         oc_status: 'string',
@@ -112,11 +111,20 @@ export default {
         property_available_from: 'date',
       },
     },
+    rent_construction_formData: {
+      construction_details: {
+        construction_type: 'Under Construction/New/resale',
+        property_age: 'string',
+      },
+    },
     location_formData: {
       location_details: {
         city: 'Achalpur',
         locality: 'Dahisar',
         sub_locality: 'Anand Nagar',
+        flat_number: '203',
+        apartment_name: 'B/43, Mayuri CHS',
+        landmark: 'Azam Dairy',
         google_map_details: {
           google_map_coordinates: 'Point',
         },
@@ -150,6 +158,25 @@ export default {
         },
         monthly_maintainence: 'number/string',
         annual_maintainence: 'number/string',
+      },
+    },
+    rental_formData: {
+      rental_details: {
+        property_for: 'Rent/Lease',
+        negotiable_rent: '',
+        non_negotiable_rent: '',
+        negotiable_deposit: '',
+        non_negotiable_deposit: '',
+        maintainence_included: 'true/false',
+        monthly_maintainence: '5000/month',
+        annual_maintainence: '70000/year',
+        available_from: 'Date()',
+        tenents_preference: 'None/Family/Bachelors/Company',
+        inclusions: {
+          parking: true,
+          clubhouse_membership: false,
+          other_inclusions: ['banquet', 'something else'],
+        },
       },
     },
     amenities_formData: {
@@ -186,29 +213,31 @@ export default {
         },
       },
     },
-    image_formData: {},
+    media_formData: {},
   }),
 
   mounted: async function () {
-    // this.randomfunctions()
-    // cities.forEach(async (element) => {
-    //   await firebaseServices.addDocumentManualID('cities', element['id'], {
-    //     name: element['name'],
-    //     state: element['state'],
-    //     status: element['status'],
-    //   })
-    // })
+    // await postApartmentServices.getCities()
+    // await postApartmentServices.getLocalities('Mumbai')
+    // await postApartmentServices.getSublocalities('localityID')
   },
 
   methods: {
     construction_submit: async function () {
+      let construction_formData
+      if (this.property_type == 'apartments_sale') {
+        construction_formData = this.sale_construction_formData
+      } else {
+        //apartments_rent
+        construction_formData = this.rent_construction_formData
+      }
       try {
-        const response = await postPropertyServices.postConstructionDetails(
-          'appartments',
-          this.construction_formData
+        const response = await postApartmentServices.postConstructionDetails(
+          this.property_type,
+          construction_formData
         )
         this.documentID = response['id']
-        // this.collectionID = response['parent']
+        // this.property_type = response['parent']
         this.storage_path = response['path']
 
         console.log('Construction Submitted : ', response['id'], response)
@@ -218,42 +247,42 @@ export default {
     },
     location_submit: async function () {
       try {
-        await postPropertyServices.postLocationDetails(
-          this.collectionID,
+        await postApartmentServices.postLocationDetails(
+          this.property_type,
           this.documentID,
           this.location_formData,
-          true
+          'apartment_sale'
         )
       } catch (error) {
         console.error(error)
       }
-      //add new locality
-      try {
-        await postPropertyServices.addNewLocality(
-          this.collectionID,
-          this.documentID,
-          this.location_formData,
-          true
-        )
-      } catch (error) {
-        console.error(error)
-      }
-      //add new sublocality
-      try {
-        await postPropertyServices.addNewSubLocality(
-          this.collectionID,
-          this.documentID,
-          this.location_formData,
-          true
-        )
-      } catch (error) {
-        console.error(error)
-      }
+      // //add new locality
+      // try {
+      //   await postApartmentServices.addNewLocality(
+      //     this.property_type,
+      //     this.documentID,
+      //     this.location_formData,
+      //     true
+      //   )
+      // } catch (error) {
+      //   console.error(error)
+      // }
+      // //add new sublocality
+      // try {
+      //   await postApartmentServices.addNewSubLocality(
+      //     this.property_type,
+      //     this.documentID,
+      //     this.location_formData,
+      //     true
+      //   )
+      // } catch (error) {
+      //   console.error(error)
+      // }
     },
     detail_submit: async function () {
       try {
-        await postPropertyServices.postPropertyDetails(
-          this.collectionID,
+        await postApartmentServices.postPropertyDetails(
+          this.property_type,
           this.documentID,
           this.details_formData
         )
@@ -262,20 +291,32 @@ export default {
       }
     },
     pricing_submit: async function () {
-      try {
-        await postPropertyServices.postPricingDetails(
-          this.collectionID,
-          this.documentID,
-          this.pricing_formData
-        )
-      } catch (error) {
-        console.error(error)
+      if (this.property_type == 'apartments_sale') {
+        try {
+          await postApartmentServices.postPricingDetails(
+            this.property_type,
+            this.documentID,
+            this.pricing_formData
+          )
+        } catch (error) {
+          console.error(error)
+        }
+      } else {
+        try {
+          await postApartmentServices.postRentalDetails(
+            this.property_type,
+            this.documentID,
+            this.rental_formData
+          )
+        } catch (error) {
+          console.error(error)
+        }
       }
     },
     amenities_submit: async function () {
       try {
-        await postPropertyServices.postAmenitiesDetails(
-          this.collectionID,
+        await postApartmentServices.postAmenitiesDetails(
+          this.property_type,
           this.documentID,
           this.amenities_formData
         )
@@ -286,22 +327,22 @@ export default {
     submit_image: async function () {
       try {
         this.chosenFile.forEach(async (element, index) => {
-          ;(this.image_formData = {
-            photos: [
+          ;(this.media_formData = {
+            media: [
               {
                 storage_path:
                   this.storage_path + '/' + index + '_' + element.name, //need image name validation here
-                photo_type: 'Living Room/Bedroom/Kitchen/...',
+                media_type: 'Living Room/Bedroom/Kitchen/...',
                 thumbnail: true,
               },
             ],
           }),
-            await postPropertyServices.postImage(
-              this.collectionID,
+            await postApartmentServices.postMedia(
+              this.property_type,
               this.documentID,
               element,
-              this.image_formData,
-              this.collectionID + '/' + this.documentID + '/' + element.name
+              this.media_formData,
+              this.property_type + '/' + this.documentID + '/' + element.name
             )
         })
       } catch (error) {
@@ -310,8 +351,8 @@ export default {
     },
     visit_preference_submit: async function () {
       try {
-        await postPropertyServices.postVisitPreferenceDetails(
-          this.collectionID,
+        await postApartmentServices.postVisitPreferenceDetails(
+          this.property_type,
           this.documentID,
           this.visit_preference_formData
         )
@@ -321,8 +362,8 @@ export default {
     },
     other_submit: async function () {
       try {
-        await postPropertyServices.postOtherDetails(
-          this.collectionID,
+        await postApartmentServices.postOtherDetails(
+          this.property_type,
           this.documentID,
           this.other_formData
         )
@@ -331,15 +372,15 @@ export default {
       }
     },
     // randomfunctions: function () {
-    //   postPropertyServices.getAllDocuments('cities').then((response) => {
+    //   postApartmentServices.getAllDocuments('cities').then((response) => {
     //     console.log(response)
     //   })
-    //   postPropertyServices.getSingleMedia('appartments/video.webm').then((vid_url) => {
+    //   postApartmentServices.getSingleMedia(collectionIDvideo.webm').then((vid_url) => {
     //     // console.log(vid_url)
     //     const video = document.getElementById('vid')
     //     video.setAttribute('src', vid_url)
     //   })
-    //   postPropertyServices.getSingleMedia('appartments/image.jpeg').then((img_src) => {
+    //   postApartmentServices.getSingleMedia('apartments_sale/image.jpeg').then((img_src) => {
     //     const img = document.getElementById('myimg')
     //     img.setAttribute('src', img_src)
     //   })
