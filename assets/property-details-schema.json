@@ -1,238 +1,279 @@
 {
-    "apartment_sale": {
-        "construction_details": {
+    "apartment_sale": [
+        {
+            "location_details": {
+                "city": "Mumbai",
+                "locality_name": "Dahisar",
+                "locality_id": "ObjectID",
+                "sublocality_name": "Anand Nagar",
+                "sublocality_id": "ObjectID",
+                "flat_number": "203",
+                "apartment_name": "B/43, Mayuri CHS",
+                "landmark": "Azam Dairy",
+                "google_map_details": {
+                    "google_map_coordinates": "..."
+                }
+            },
+            "construction_details": {
+                "construction_type": "Under Construction/New/resale",
+                "possesion_date": "date()",
+                "oc_status": "Received/Not Received",
+                "property_age": "15 years, 7 months",
+                "property_available_from": "date()"
+            },
+            "property_details": {
+                "BHKtype": "2BHK",
+                "carpet_area": "706 sq.ft",
+                "builtup_area": "900 sq.ft",
+                "super_builtup_area": "1200 sq.ft",
+                "floor_number": "19",
+                "total_floors": "42",
+                "facing": "East/West/South/North/South-East/...",
+                "furnishing": "Unfurnished/Semifurnished/Unfurnished",
+                "bathrooms": "3",
+                "balconies": "0",
+                "description": "Auto-generate summary API - lorem ipsum"
+            },
+            "pricing_details": {
+                "negotiable_price": "1.8Cr",
+                "non_negotiable_price": "1.73Cr",
+                "all_inclusive_price": "1.95Cr",
+                "monthly_maintainence": "5000/month",
+                "annual_maintainence": "70000/year",
+                "inclusions": {
+                    "parking": true,
+                    "clubhouse_membership": false,
+                    "maintenance": "For 2 years",
+                    "other_inclusions": [
+                        "banquet",
+                        "something else"
+                    ]
+                }
+            },
+            "amenities": {
+                "lift": true,
+                "gas_pipeline": false,
+                "visitor_parking": true,
+                "gym": false,
+                "swimming_pool": true,
+                "clubhouse": false
+            },
+            "media": [
+                {
+                    "storage_path": "apartments_sale/DocID/image.jpeg",
+                    "media_type": "Living Room/Bedroom/Kitchen/...",
+                    "thumbnail": true
+                }
+            ],
+            "visit_preference_details": {
+                "preferred_days": [
+                    "Sunday",
+                    "Saturday"
+                ],
+                "preferred_time": {
+                    "from": "10am",
+                    "to": "9pm"
+                },
+                "alternate_number": "1234567890"
+            },
+            "other_details": {
+                "posted_date": "date()",
+                "expiration_date": "date()",
+                "status": "Active/Inactive",
+                "posted_by": "Somil Shah - 124567890",
+                "verification_status?": "verified/under_verification/rejected",
+                "times_visited": "increment()",
+                "user_feedback": [
+                    {
+                        "user_id": "Harshil Shah - 0987654321",
+                        "user_remark": "Nice property! Good interior!"
+                    }
+                ]
+            }
+        }
+    ],
+    "apartment_rent": [
+        {
+            "location_details": {
+                "city": "Mumbai",
+                "locality_name": "Dahisar",
+                "locality_id": "ObjectID",
+                "sublocality_name": "Anand Nagar",
+                "sublocality_id": "ObjectID",
+                "flat_number": "203",
+                "apartment_name": "B/43, Mayuri CHS",
+                "landmark": "Azam Dairy",
+                "google_map_details": {
+                    "google_map_coordinates": "..."
+                }
+            },
+            "construction_details": {
+                "construction_type": "New/resale",
+                "property_age": "15 years, 7 months"
+            },
+            "property_details": {
+                "BHKtype": "2BHK",
+                "carpet_area": "706 sq.ft",
+                "builtup_area": "900 sq.ft",
+                "super_builtup_area": "1200 sq.ft",
+                "floor_number": "19",
+                "total_floors": "42",
+                "facing": "East/West/South/North/South-East/...",
+                "furnishing": "Unfurnished/Semifurnished/Unfurnished",
+                "bathrooms": "3",
+                "balconies": "0",
+                "description": "Auto-generate summary API - lorem ipsum"
+            },
+            "rental_details": {
+                "property_for": "Rent/Lease",
+                "negotiable_rent": "",
+                "non_negotiable_rent": "",
+                "negotiable_deposit": "",
+                "non_negotiable_deposit": "",
+                "maintainence_included": "true/false",
+                "monthly_maintainence": "5000/month",
+                "annual_maintainence": "70000/year",
+                "available_from": "Date()",
+                "tenents_preference": "None/Family/Bachelors/Company",
+                "inclusions": {
+                    "parking": true,
+                    "clubhouse_membership": false,
+                    "other_inclusions": [
+                        "banquet",
+                        "something else"
+                    ]
+                }
+            },
+            "amenities": {
+                "lift": true,
+                "gas_pipeline": false,
+                "visitor_parking": true,
+                "gym": false,
+                "swimming_pool": true,
+                "clubhouse": false
+            },
+            "media": [
+                {
+                    "storage_path": "apartments_rent/DocID/image.jpeg",
+                    "media_type": "Living Room/Bedroom/Kitchen/...",
+                    "thumbnail": true
+                }
+            ],
+            "visit_preference_details": {
+                "preferred_days": [
+                    "Sunday",
+                    "Saturday"
+                ],
+                "preferred_time": {
+                    "from": "10am",
+                    "to": "9pm"
+                },
+                "alternate_number": "1234567890"
+            },
+            "other_details": {
+                "posted_date": "date()",
+                "expiration_date": "date()",
+                "status": "Active/Inactive",
+                "posted_by": "Somil Shah - 124567890",
+                "verification_status?": "verified/under_verification/rejected",
+                "times_visited": "increment()",
+                "user_feedback": [
+                    {
+                        "user_id": "Harshil Shah - 0987654321",
+                        "user_remark": "Nice property! Good interior!"
+                    }
+                ]
+            }
+        }
+    ],
+    "cities": [
+        {
+            "city": "Mumbai",
+            "status": "Active/Inactive",
+            "localities": [
+                "Dahisar",
+                "Borivali"
+            ]
+        }
+    ],
+    "localities": [
+        {
+            "locality_id": "ObjectID",
+            "locality_name": "Dahisar",
+            "verified": true,
+            "city": "Reference - ObjectID",
+            "sublocalities": [
+                "Anand Nagar",
+                "Kandarpada"
+            ],
+            "appartment": [
+                "property_id"
+            ],
+            "bungalow": [
+                "property_id"
+            ],
+            "commercial": [
+                "property_id"
+            ]
+        }
+    ],
+    "sublocalities": [
+        {
+            "sublocality_id": "ObjectID",
+            "sublocality_name": "Anand Nagar",
+            "verified": false,
+            "locality_id": "Reference - ObjectID",
+            "locality_name": "Dahisar",
+            "city": "Reference - ObjectID",
+            "buildings": [
+                "Mayuri CHS",
+                "Anand Sagar CHS"
+            ],
+            "apartment_sale": [
+                "propertyID"
+            ],
+            "apartment_rent": [
+                "propertyID"
+            ]
+        }
+    ],
+    "buildings": [
+        {
+            "building_id": "autoID",
+            "building_name": "B/43, Mayuri CHS",
+            "city": "Mumbai",
+            "locality_name": "Dahisar",
+            "locality_id": "ObjectID",
+            "sublocality_name": "Anand Nagar",
+            "sublocality_id": "ObjectID",
+            "landmark": "Azam Dairy",
             "construction_type": "Under Construction/New/resale",
             "possesion_date": "date()",
             "oc_status": "Received/Not Received",
             "property_age": "15 years, 7 months",
-            "property_available_from": "date()"
-        },
-        "location_details": {
-            "city": "Mumbai",
-            "locality": "Dahisar",
-            "sub_locality": "Anand Nagar",
-            "flat_number": "203",
-            "apartment_name": "B/43, Mayuri CHS",
-            "landmark": "Azam Dairy",
-            "google_map_details": {
-                "google_map_coordinates": "..."
-            }
-        },
-        "property_details": {
-            "BHKtype": "2BHK",
-            "carpet_area": "706 sq.ft",
-            "builtup_area": "900 sq.ft",
-            "super_builtup_area": "1200 sq.ft",
-            "floor_number": "19",
-            "total_floors": "42",
-            "facing": "East/West/South/North/South-East/...",
-            "furnishing": "Unfurnished/Semifurnished/Unfurnished",
-            "bathrooms": "3",
-            "balconies": "0",
-            "description": "Auto-generate summary API - lorem ipsum"
-        },
-        "pricing_details": {
-            "negotiable_price": "1.8Cr",
-            "non_negotiable_price": "1.73Cr",
-            "all_inclusive_price": "1.95Cr",
-            "monthly_maintainence": "5000/month",
-            "annual_maintainence": "70000/year",
-            "inclusions": {
-                "parking": true,
-                "clubhouse_membership": false,
-                "maintenance": "For 2 years",
-                "other_inclusions": [
-                    "banquet",
-                    "something else"
-                ]
-            }
-        },
-        "amenities": {
-            "lift": true,
-            "gas_pipeline": false,
-            "visitor_parking": true,
-            "gym": false,
-            "swimming_pool": true,
-            "clubhouse": false
-        },
-        "media": [
-            {
-                "storage_path": "apartments_sale/DocID/image.jpeg",
-                "media_type": "Living Room/Bedroom/Kitchen/...",
-                "thumbnail": true
-            }
-        ],
-        "visit_preference_details": {
-            "preferred_days": [
-                "Sunday",
-                "Saturday"
-            ],
-            "preferred_time": {
-                "from": "10am",
-                "to": "9pm"
+            "verified": false,
+            "amenities": {
+                "lift": true,
+                "gas_pipeline": false,
+                "visitor_parking": true,
+                "gym": false,
+                "swimming_pool": true,
+                "clubhouse": false
             },
-            "alternate_number": "1234567890"
-        },
-        "other_details": {
-            "posted_date": "date()",
-            "expiration_date": "date()",
-            "status": "Active/Inactive",
-            "posted_by": "Somil Shah - 124567890",
-            "verification_status?": "verified/under_verification/rejected",
-            "times_visited": "increment()",
-            "user_feedback": [
+            "flats": [
                 {
-                    "user_id": "Harshil Shah - 0987654321",
-                    "user_remark": "Nice property! Good interior!"
+                    "BHKtype": "2BHK",
+                    "carpet_area": "706 sq.ft",
+                    "builtup_area": "900 sq.ft",
+                    "super_builtup_area": "1200 sq.ft",
+                    "total_floors": "42",
+                    "facing": "East/West/South/North/South-East/...",
+                    "bathrooms": "3",
+                    "balconies": "0",
+                    "monthly_maintainence": "5000/month",
+                    "annual_maintainence": "70000/year"
                 }
             ]
-        }
-    },
-    "apartment_rent": {
-        "construction_details": {
-            "construction_type": "New/resale",
-            "property_age": "15 years, 7 months"
-        },
-        "location_details": {
-            "city": "Mumbai",
-            "locality": "Dahisar",
-            "sub_locality": "Anand Nagar",
-            "flat_number": "203",
-            "apartment_name": "B/43, Mayuri CHS",
-            "landmark": "Azam Dairy",
-            "google_map_details": {
-                "google_map_coordinates": "..."
-            }
-        },
-        "property_details": {
-            "BHKtype": "2BHK",
-            "carpet_area": "706 sq.ft",
-            "builtup_area": "900 sq.ft",
-            "super_builtup_area": "1200 sq.ft",
-            "floor_number": "19",
-            "total_floors": "42",
-            "facing": "East/West/South/North/South-East/...",
-            "furnishing": "Unfurnished/Semifurnished/Unfurnished",
-            "bathrooms": "3",
-            "balconies": "0",
-            "description": "Auto-generate summary API - lorem ipsum"
-        },
-        "rental_details": {
-            "property_for": "Rent/Lease",
-            "negotiable_rent": "",
-            "non_negotiable_rent": "",
-            "negotiable_deposit": "",
-            "non_negotiable_deposit": "",
-            "maintainence_included": "true/false",
-            "monthly_maintainence": "5000/month",
-            "annual_maintainence": "70000/year",
-            "available_from": "Date()",
-            "tenents_preference": "None/Family/Bachelors/Company",
-            "inclusions": {
-                "parking": true,
-                "clubhouse_membership": false,
-                "other_inclusions": [
-                    "banquet",
-                    "something else"
-                ]
-            }
-        },
-        "amenities": {
-            "lift": true,
-            "gas_pipeline": false,
-            "visitor_parking": true,
-            "gym": false,
-            "swimming_pool": true,
-            "clubhouse": false
-        },
-        "media": [
-            {
-                "storage_path": "apartments_rent/DocID/image.jpeg",
-                "media_type": "Living Room/Bedroom/Kitchen/...",
-                "thumbnail": true
-            }
-        ],
-        "visit_preference_details": {
-            "preferred_days": [
-                "Sunday",
-                "Saturday"
-            ],
-            "preferred_time": {
-                "from": "10am",
-                "to": "9pm"
-            },
-            "alternate_number": "1234567890"
-        },
-        "other_details": {
-            "posted_date": "date()",
-            "expiration_date": "date()",
-            "status": "Active/Inactive",
-            "posted_by": "Somil Shah - 124567890",
-            "verification_status?": "verified/under_verification/rejected",
-            "times_visited": "increment()",
-            "user_feedback": [
-                {
-                    "user_id": "Harshil Shah - 0987654321",
-                    "user_remark": "Nice property! Good interior!"
-                }
-            ]
-        }
-    },
-    "cities": {
-        "city_id": "ObjectID",
-        "city_name": "Mumbai",
-        "status": "Active/Inactive",
-        "localities": [
-            "Dahisar",
-            "Borivali"
-        ]
-    },
-    "localities": {
-        "locality_id": "ObjectID",
-        "locality_name": "Dahisar",
-        "verified": true,
-        "city_id": "Reference - ObjectID",
-        "sub_localities": [
-            "Anand Nagar",
-            "Kandarpada"
-        ],
-        "appartment": [
-            "property_id"
-        ],
-        "bungalow": [
-            "property_id"
-        ],
-        "commercial": [
-            "property_id"
-        ]
-    },
-    "sub_localities": {
-        "sub_locality_id": "ObjectID",
-        "sub_locality_name": "Anand Nagar",
-        "verified": false,
-        "locality_id": "Reference - ObjectID",
-        "city_id": "Reference - ObjectID",
-        "appartment": [
-            "property_id"
-        ],
-        "bungalow": [
-            "property_id"
-        ],
-        "commercial": [
-            "property_id"
-        ]
-    },
-    "all_properties": [
-        {
-            "flat/appartment": {
-                "property_id": "ObjectID"
-            },
-            "commercial": {
-                "property_id": "ObjectID"
-            },
-            "bungalow": {
-                "property_id": "ObjectID"
-            }
         }
     ],
     "users": [

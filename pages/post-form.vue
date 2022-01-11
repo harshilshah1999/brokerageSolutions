@@ -12,15 +12,15 @@
       <v-btn>
         <input
           type="submit"
-          value="CONSTRUCTION DETAILS"
-          v-on:click="construction_submit"
+          value="LOCATION DETAILS"
+          v-on:click="location_submit"
         />
       </v-btn>
       <v-btn>
         <input
           type="submit"
-          value="LOCATION DETAILS"
-          v-on:click="location_submit"
+          value="CONSTRUCTION DETAILS"
+          v-on:click="construction_submit"
         />
       </v-btn>
       <v-btn>
@@ -56,7 +56,32 @@
       </v-btn>
     </div>
 
-    <br /><br /><br /><br /><br />
+    <br />
+    <!-- <v-btn>
+      <input type="submit" value="ADD LOCALITY" v-on:click="add_locality" />
+    </v-btn>
+    <v-btn>
+      <input
+        type="submit"
+        value="ADD SUBLOCALITY"
+        v-on:click="add_sublocality"
+      />
+    </v-btn>
+    <v-btn>
+      <input
+        type="submit"
+        value="VERIFY LOCALITY"
+        v-on:click="verify_locality"
+      />
+    </v-btn>
+    <v-btn>
+      <input
+        type="submit"
+        value="VERIFY SUBLOCALITY"
+        v-on:click="verify_sublocality"
+      />
+    </v-btn> -->
+    <br /><br /><br /><br />
     <v-file-input
       counter
       multiple
@@ -88,9 +113,10 @@
 
 <script>
 import postApartmentServices from '../services/apartments/postApartmentServices'
-
+// import verificationServices from '../services/verificationServices'
 // import cities from '../assets/cities.json'
 // import firebaseServices from '../services/firebaseServices'
+
 export default {
   name: 'post-form',
 
@@ -120,8 +146,10 @@ export default {
     location_formData: {
       location_details: {
         city: 'Achalpur',
-        locality: 'Dahisar',
-        sub_locality: 'Anand Nagar',
+        locality_id: 'ObjectID',
+        locality_name: 'Dahisar',
+        sublocality_id: 'ObjectID',
+        sublocality_name: 'Anand Nagar',
         flat_number: '203',
         apartment_name: 'B/43, Mayuri CHS',
         landmark: 'Azam Dairy',
@@ -223,6 +251,21 @@ export default {
   },
 
   methods: {
+    location_submit: async function () {
+      try {
+        const response = await postApartmentServices.postLocationDetails(
+          this.property_type,
+          this.location_formData
+        )
+
+        this.documentID = response[0]['id']
+        // this.property_type = response[0]['parent']
+        this.storage_path = response[0]['path']
+        console.log('New property Added : ', response['id'], response)
+      } catch (error) {
+        console.error(error)
+      }
+    },
     construction_submit: async function () {
       let construction_formData
       if (this.property_type == 'apartments_sale') {
@@ -232,53 +275,64 @@ export default {
         construction_formData = this.rent_construction_formData
       }
       try {
-        const response = await postApartmentServices.postConstructionDetails(
+        await postApartmentServices.postConstructionDetails(
           this.property_type,
           construction_formData
         )
-        this.documentID = response['id']
-        // this.property_type = response['parent']
-        this.storage_path = response['path']
-
-        console.log('Construction Submitted : ', response['id'], response)
       } catch (error) {
         console.error(error)
       }
     },
-    location_submit: async function () {
-      try {
-        await postApartmentServices.postLocationDetails(
-          this.property_type,
-          this.documentID,
-          this.location_formData,
-          'apartment_sale'
-        )
-      } catch (error) {
-        console.error(error)
-      }
-      // //add new locality
-      // try {
-      //   await postApartmentServices.addNewLocality(
-      //     this.property_type,
-      //     this.documentID,
-      //     this.location_formData,
-      //     true
-      //   )
-      // } catch (error) {
-      //   console.error(error)
-      // }
-      // //add new sublocality
-      // try {
-      //   await postApartmentServices.addNewSubLocality(
-      //     this.property_type,
-      //     this.documentID,
-      //     this.location_formData,
-      //     true
-      //   )
-      // } catch (error) {
-      //   console.error(error)
-      // }
-    },
+    // add_locality: async function () {
+    //   //add new locality
+    //   try {
+    //     await postApartmentServices.addNewLocality(
+    //       this.property_type,
+    //       this.documentID,
+    //       this.location_formData,
+    //       true
+    //     )
+    //   } catch (error) {
+    //     console.error(error)
+    //   }
+    // },
+    // add_sublocality: async function () {
+    //   //add new sublocality
+    //   try {
+    //     await postApartmentServices.addNewSubLocality(
+    //       this.property_type,
+    //       this.documentID,
+    //       this.location_formData,
+    //       true
+    //     )
+    //   } catch (error) {
+    //     console.error(error)
+    //   }
+    // },
+    // verify_locality: async function () {
+    //   try {
+    //     await verificationServices.verifyLocality(
+    //       this.property_type,
+    //       this.documentID,
+    //       this.location_formData,
+    //       true
+    //     )
+    //   } catch (error) {
+    //     console.error(error)
+    //   }
+    // },
+    // verify_sublocality: async function () {
+    //   try {
+    //     await verificationServices.verifySublocality(
+    //       this.property_type,
+    //       this.documentID,
+    //       this.location_formData,
+    //       true
+    //     )
+    //   } catch (error) {
+    //     console.error(error)
+    //   }
+    // },
     detail_submit: async function () {
       try {
         await postApartmentServices.postPropertyDetails(

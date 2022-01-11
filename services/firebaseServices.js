@@ -12,6 +12,8 @@ import {
     arrayRemove,
     query,
     where,
+    orderBy,
+    limit,
 } from 'firebase/firestore'
 import { ref, getDownloadURL, uploadBytes } from 'firebase/storage'
 
@@ -106,4 +108,7 @@ export default {
         const q1 = query(collection(db, collectionID), where(parameter1, "==", parameter2),where(parameter3, "==", parameter4))
         return await getDocs(q1)
     }
+
+    
+
 }

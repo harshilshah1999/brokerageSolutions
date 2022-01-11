@@ -1,37 +1,54 @@
 import firebaseServices from './firebaseServices'
 
 export default {
-    async verifyLocality(documentID, newdata) {
+    async verifyLocality(localityID, cityID) {
         try {
             //update locality verification status
-            await firebaseServices.updateSingleDocument('localities', documentID, { "verified": true })
+            await firebaseServices.updateSingleDocument('localities', localityID, { "verified": true })
             //add locality to cities
-            await firebaseServices.addArrayElement('cities', newdata['location_details']['city'], 'localities', locality['id']) //update cities array
+            await firebaseServices.addArrayElement('cities', cityID, 'localities', localityID) //update cities array
             //remove locality from pending
-            await firebaseServices.deleteSingleDocument('pending_locality_verification', documentID)
+            await firebaseServices.deleteSingleDocument('pending_locality_verification', localityID)
         } catch (error) { console.error(error); return error }
     },
 
-    async verifySublocality(documentID, newdata) {
+    async verifySublocality(sublocalityID, localityID) {
         try {
-            //update sub_locality verification status
-            await firebaseServices.updateSingleDocument('sub_localities', documentID, { "verified": true })
-            //add sub_locality to localities
-            await firebaseServices.addArrayElement('localities', newdata['location_details']['locality'], 'sub_localities', sub_locality['id']) //update cities array
-            //remove sub_locality from pending
-            await firebaseServices.deleteSingleDocument('pending_sublocality_verification', documentID)
+            //update sublocality verification status
+            await firebaseServices.updateSingleDocument('sublocalities', sublocalityID, { "verified": true })
+            //add sublocality to localities
+            await firebaseServices.addArrayElement('localities', localityID, 'sublocalities', sublocalityID) //update cities array
+            //remove sublocality from pending
+            await firebaseServices.deleteSingleDocument('pending_sublocality_verification', sublocalityID)
+        } catch (error) { console.error(error); return error }
+    },
+
+    async verifyBuilding(buildingID, sublocalityID) {
+        try {
+            //update building verification status
+            await firebaseServices.updateSingleDocument('buildings', buildingID, { "verified": true })
+            //add building to localities
+            await firebaseServices.addArrayElement('sublocalities', sublocalityID, 'buildings', buildingID) //update cities array
+            //remove building from pending
+            await firebaseServices.deleteSingleDocument('pending_building_verification', buildingID)
         } catch (error) { console.error(error); return error }
     },
 
     async getAllUnverifiedLocalities() {
         try {
-            return await firebaseServices.getAllDocuments('pending_localities_verification')
+            return await firebaseServices.getAllDocuments('pending_locality_verification')
         } catch (error) { console.error(error); return error }
     },
 
     async getAllUnverifiedSublocalities() {
         try {
-            return await firebaseServices.getAllDocuments('pending_sublocalities_verification')
+            return await firebaseServices.getAllDocuments('pending_sublocality_verification')
         } catch (error) { console.error(error); return error }
     },
+    async getAllUnverifiedBuildings() {
+        try {
+            return await firebaseServices.getAllDocuments('pending_building_verification')
+        } catch (error) { console.error(error); return error }
+    },
+
 }
