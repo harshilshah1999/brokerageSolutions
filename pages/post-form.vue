@@ -122,7 +122,11 @@ export default {
 
   data: () => ({
     property_type: '',
-    property_types: ['apartments_sale', 'apartments_rent','apartments_sharing'],
+    property_types: [
+      'apartments_sale',
+      'apartments_rent',
+      'apartments_sharing',
+    ],
     results: {},
     chosenFile: null,
     CollectionID: '',
@@ -249,6 +253,9 @@ export default {
     // await postApartmentServices.getCities()
     // await postApartmentServices.getLocalities('Mumbai')
     // await postApartmentServices.getSublocalities('localityID')
+
+
+    // this.post_dummy_cities()
   },
 
   methods: {
@@ -426,6 +433,11 @@ export default {
       } catch (error) {
         console.error(error)
       }
+    },
+    post_dummy_cities: async function () {
+      cities.forEach((city) => {
+        firebaseServices.addDocumentManualID('cities', city['name'], city)
+      })
     },
     // randomfunctions: function () {
     //   postApartmentServices.getAllDocuments('cities').then((response) => {

@@ -128,7 +128,7 @@ export default {
     },
 
     async addNewFlat(collectionID, apartmentID, flatData) {
-        let flatData = {
+        let flatDataBody = {
             BHKtype: flatData['BHKtype'],
             carpet_area: flatData['carpet_area'],
             builtup_area: flatData['builtup_area'],
@@ -139,7 +139,7 @@ export default {
             balconies: flatData['balconies'],
         }
         this.updateApartmentDetails(collectionID, apartmentID, { total_floors: flatData['total_floors'] })
-        let flat = firebaseServices.addDocumentAutoIDNestedCollection(collectionID, apartmentID, 'flats', flatData)
+        let flat = firebaseServices.addDocumentAutoIDNestedCollection(collectionID, apartmentID, 'flats', flatDataBody)
         this.updateFlatDetails(collectionID, documentID, flat['id'], { flat_id: flat['id'] })
     },
     async updateFlatDetails(collectionID, documentID, flatID, flatData) {
