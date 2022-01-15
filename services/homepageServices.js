@@ -1,6 +1,6 @@
 import firebaseServices from './firebaseServices'
 export default {
-    async getMostVisitedAppartments() {
+    async getMostVisitedApartments() {
         // const collectionLocation = collection(db, 'apartments_sale')
         // try {
         //     return await getDocs(collectionLocation)//(parameter) response: DocumentReference<any>

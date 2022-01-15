@@ -34,6 +34,13 @@ export default {
         } catch (error) { console.error(error); return error }
     },
 
+    async addDocumentAutoIDNestedCollection(collectionID1, documentID, collectionID2, data) { // adds a document in the collection
+        const collectionLocation = collection(db, collectionID1, documentID, collectionID2)
+        try {
+            return await addDoc(collectionLocation, data) //(parameter) response: DocumentReference<any>
+        } catch (error) { console.error(error); return error }
+    },
+
     async getSingleDocumentByID(collectionID, documentID) { //get any single document from the collection
         const documentLocation = doc(db, collectionID, documentID);
         try {
@@ -43,6 +50,14 @@ export default {
 
     async updateSingleDocument(collectionID, documentID, newdata) { //update any document in a collection
         const documentLocation = doc(db, collectionID, documentID);
+        try {
+            await updateDoc(documentLocation, newdata)  //(parameter) response: void
+            return "Document Updated Successfully"
+        } catch (error) { console.error(error); return error }
+    },
+
+    async updateSingleNestedDocument(collectionID1, documentID1, collectionID2, documentID2, newdata) { //update any document in a collection
+        const documentLocation = doc(db, collectionID1, documentID1, collectionID2, documentID2);
         try {
             await updateDoc(documentLocation, newdata)  //(parameter) response: void
             return "Document Updated Successfully"
@@ -104,11 +119,11 @@ export default {
         return await getDocs(q)
     },
 
-    async doubleEqualsQuery(collectionID, parameter1, parameter2, parameter3, parameter4){
-        const q1 = query(collection(db, collectionID), where(parameter1, "==", parameter2),where(parameter3, "==", parameter4))
+    async doubleEqualsQuery(collectionID, parameter1, parameter2, parameter3, parameter4) {
+        const q1 = query(collection(db, collectionID), where(parameter1, "==", parameter2), where(parameter3, "==", parameter4))
         return await getDocs(q1)
     }
 
-    
+
 
 }

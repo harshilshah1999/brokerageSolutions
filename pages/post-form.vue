@@ -112,17 +112,17 @@
 </template>
 
 <script>
-import postApartmentServices from '../services/apartments/postApartmentServices'
+import postApartmentServices from '../services/postForm/apartments/postApartmentServices'
 // import verificationServices from '../services/verificationServices'
 // import cities from '../assets/cities.json'
-// import firebaseServices from '../services/firebaseServices'
+import firebaseServices from '../services/firebaseServices'
 
 export default {
   name: 'post-form',
 
   data: () => ({
     property_type: '',
-    property_types: ['apartments_sale', 'apartments_rent'],
+    property_types: ['apartments_sale', 'apartments_rent','apartments_sharing'],
     results: {},
     chosenFile: null,
     CollectionID: '',
@@ -151,7 +151,7 @@ export default {
         sublocality_id: 'ObjectID',
         sublocality_name: 'Anand Nagar',
         flat_number: '203',
-        apartment_name: 'B/43, Mayuri CHS',
+        building_name: 'B/43, Mayuri CHS',
         landmark: 'Azam Dairy',
         google_map_details: {
           google_map_coordinates: 'Point',
@@ -245,6 +245,7 @@ export default {
   }),
 
   mounted: async function () {
+    // console.log( await firebaseServices.addDocumentAutoIDNestedCollection('buildings', 'vz0jDwdNDorM01nMvtEu', 'flats', {carpet_area : '900 sq. ft.'}))
     // await postApartmentServices.getCities()
     // await postApartmentServices.getLocalities('Mumbai')
     // await postApartmentServices.getSublocalities('localityID')
@@ -277,6 +278,7 @@ export default {
       try {
         await postApartmentServices.postConstructionDetails(
           this.property_type,
+          'Mayuri CHS',
           construction_formData
         )
       } catch (error) {
