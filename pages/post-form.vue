@@ -57,7 +57,7 @@
     </div>
 
     <br />
-    <!-- <v-btn>
+    <v-btn>
       <input type="submit" value="ADD LOCALITY" v-on:click="add_locality" />
     </v-btn>
     <v-btn>
@@ -80,7 +80,7 @@
         value="VERIFY SUBLOCALITY"
         v-on:click="verify_sublocality"
       />
-    </v-btn> -->
+    </v-btn>
     <br /><br /><br /><br />
     <v-file-input
       counter
@@ -114,7 +114,7 @@
 <script>
 import postApartmentServices from '../services/postForm/apartments/postApartmentServices'
 // import verificationServices from '../services/verificationServices'
-// import cities from '../assets/cities.json'
+import cities from '../assets/cities.json'
 import firebaseServices from '../services/firebaseServices'
 
 export default {
@@ -250,18 +250,11 @@ export default {
   mounted: async function () {
     // console.log( await firebaseServices.addDocumentAutoIDNestedCollection('buildings', 'vz0jDwdNDorM01nMvtEu', 'flats', {carpet_area : '900 sq. ft.'}))
     // this.post_dummy_cities()
-    // await this.getCities()
     // this.getLocalities('Achalpur')
     // this.getSublocalities('rG7d6DZTIskKqMiUWRfB')
   },
 
   methods: {
-    getCities: async function () {
-      let response = await await postApartmentServices.getCities()
-      response.forEach((doc) => {
-        console.log(doc.id, ' => ', doc.data())
-      })
-    },
     getLocalities: async function (cityID) {
       let response = await postApartmentServices.getLocalities(cityID)
       response.forEach((doc) => {
@@ -467,19 +460,6 @@ export default {
         firebaseServices.addDocumentManualID('cities', city['name'], city)
       })
     },
-    // randomfunctions: function () {
-    //   postApartmentServices.getAllDocuments('cities').then((response) => {
-    //     console.log(response)
-    //   })
-    //   postApartmentServices.getSingleMedia(collectionIDvideo.webm').then((vid_url) => {
-    //     // console.log(vid_url)
-    //     const video = document.getElementById('vid')
-    //     video.setAttribute('src', vid_url)
-    //   })
-    //   postApartmentServices.getSingleMedia('apartments_sale/image.jpeg').then((img_src) => {
-    //     const img = document.getElementById('myimg')
-    //     img.setAttribute('src', img_src)
-    //   })
   },
 }
 </script>

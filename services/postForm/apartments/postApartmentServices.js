@@ -168,13 +168,6 @@ export default {
         } catch (error) { console.error(error); return error }
     },
 
-    async getCities() {
-        try {
-            return await firebaseServices.singleEqualsQuery('cities', 'status', 'active')
-        } catch (error) { console.error(error); return error }
-
-    },
-
     async getLocalities(cityID) {
         try {
             return await firebaseServices.doubleEqualsQuery('localities', 'city', cityID, 'verified', true)
