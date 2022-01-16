@@ -129,8 +129,7 @@ export default {
     ],
     results: {},
     chosenFile: null,
-    CollectionID: '',
-    documentID: 'cBPvEwByvBLKsV5ehuWG',
+    documentID: null,
     storage_path: '',
     sale_construction_formData: {
       construction_details: {
@@ -150,9 +149,9 @@ export default {
     location_formData: {
       location_details: {
         city: 'Achalpur',
-        locality_id: 'ObjectID',
+        locality_id: null,
         locality_name: 'Dahisar',
-        sublocality_id: 'ObjectID',
+        sublocality_id: null,
         sublocality_name: 'Anand Nagar',
         flat_number: '203',
         building_name: 'B/43, Mayuri CHS',
@@ -251,25 +250,43 @@ export default {
   mounted: async function () {
     // console.log( await firebaseServices.addDocumentAutoIDNestedCollection('buildings', 'vz0jDwdNDorM01nMvtEu', 'flats', {carpet_area : '900 sq. ft.'}))
     // await postApartmentServices.getCities()
-    // await postApartmentServices.getLocalities('Mumbai')
-    // await postApartmentServices.getSublocalities('localityID')
-
-
     // this.post_dummy_cities()
   },
 
   methods: {
+    getLocalities: async function (cityID) {
+      await postApartmentServices.getLocalities(cityID)
+    },
+    getSublocalities: async function (localityID) {
+      await postApartmentServices.getSublocalities(localityID)
+    },
     location_submit: async function () {
       try {
+        this.property_type
+        let newLocalityID = await this.add_locality()
+        let newSublocalityID = await this.add_sublocality(newLocalityID)
         const response = await postApartmentServices.postLocationDetails(
           this.property_type,
-          this.location_formData
+          this.location_formData,
+          newLocalityID,
+          newSublocalityID
         )
 
-        this.documentID = response[0]['id']
-        // this.property_type = response[0]['parent']
+        this.documentID = response[0]
         this.storage_path = response[0]['path']
-        console.log('New property Added : ', response['id'], response)
+
+        await postApartmentServices.updateLocalityID(
+          this.property_type,
+          response[0],
+          newLocalityID
+        )
+        await postApartmentServices.updateSublocalityID(
+          this.property_type,
+          response[0],
+          newSublocalityID
+        )
+
+        console.log('New property Added : ', response[0], response)
       } catch (error) {
         console.error(error)
       }
@@ -292,56 +309,53 @@ export default {
         console.error(error)
       }
     },
-    // add_locality: async function () {
-    //   //add new locality
-    //   try {
-    //     await postApartmentServices.addNewLocality(
-    //       this.property_type,
-    //       this.documentID,
-    //       this.location_formData,
-    //       true
-    //     )
-    //   } catch (error) {
-    //     console.error(error)
-    //   }
-    // },
-    // add_sublocality: async function () {
-    //   //add new sublocality
-    //   try {
-    //     await postApartmentServices.addNewSubLocality(
-    //       this.property_type,
-    //       this.documentID,
-    //       this.location_formData,
-    //       true
-    //     )
-    //   } catch (error) {
-    //     console.error(error)
-    //   }
-    // },
-    // verify_locality: async function () {
-    //   try {
-    //     await verificationServices.verifyLocality(
-    //       this.property_type,
-    //       this.documentID,
-    //       this.location_formData,
-    //       true
-    //     )
-    //   } catch (error) {
-    //     console.error(error)
-    //   }
-    // },
-    // verify_sublocality: async function () {
-    //   try {
-    //     await verificationServices.verifySublocality(
-    //       this.property_type,
-    //       this.documentID,
-    //       this.location_formData,
-    //       true
-    //     )
-    //   } catch (error) {
-    //     console.error(error)
-    //   }
-    // },
+    add_locality: async function () {
+      //add new locality
+      try {
+        return await postApartmentServices.addNewLocality(
+          this.location_formData,
+          true
+        )
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    add_sublocality: async function (localityID) {
+      //add new sublocality
+      try {
+        return await postApartmentServices.addNewSubLocality(
+          localityID,
+          this.location_formData,
+          true
+        )
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    verify_locality: async function () {
+      try {
+        await verificationServices.verifyLocality(
+          this.property_type,
+          this.documentID,
+          this.location_formData,
+          true
+        )
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    verify_sublocality: async function () {
+      try {
+        await verificationServices.verifySublocality(
+          this.property_type,
+          this.documentID,
+          this.location_formData,
+          true
+        )
+      } catch (error) {
+        console.error(error)
+      }
+    },
     detail_submit: async function () {
       try {
         await postApartmentServices.postPropertyDetails(

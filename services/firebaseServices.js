@@ -12,6 +12,7 @@ import {
     arrayRemove,
     query,
     where,
+    collectionGroup,
     orderBy,
     limit,
 } from 'firebase/firestore'
@@ -51,7 +52,7 @@ export default {
     async updateSingleDocument(collectionID, documentID, newdata) { //update any document in a collection
         const documentLocation = doc(db, collectionID, documentID);
         try {
-            await updateDoc(documentLocation, newdata)  //(parameter) response: void
+            await setDoc(documentLocation, newdata, { merge: true } )  //(parameter) response: void
             return "Document Updated Successfully"
         } catch (error) { console.error(error); return error }
     },
@@ -59,7 +60,7 @@ export default {
     async updateSingleNestedDocument(collectionID1, documentID1, collectionID2, documentID2, newdata) { //update any document in a collection
         const documentLocation = doc(db, collectionID1, documentID1, collectionID2, documentID2);
         try {
-            await updateDoc(documentLocation, newdata)  //(parameter) response: void
+            await setDoc(documentLocation, newdata, { merge: true })  //(parameter) response: void
             return "Document Updated Successfully"
         } catch (error) { console.error(error); return error }
     },
@@ -110,7 +111,8 @@ export default {
     },
 
     async singleEqualsQuery(collectionID, parameter1, parameter2) {
-        const q = query(collection(db, collectionID), where(parameter1, "==", parameter2));
+        const q = query(collection(db, collectionID),
+            where(parameter1, "==", parameter2));
         // const querySnapshot = await getDocs(q);
         // querySnapshot.forEach((doc) => {
         //     // doc.data() is never undefined for query doc snapshots
@@ -120,10 +122,20 @@ export default {
     },
 
     async doubleEqualsQuery(collectionID, parameter1, parameter2, parameter3, parameter4) {
-        const q1 = query(collection(db, collectionID), where(parameter1, "==", parameter2), where(parameter3, "==", parameter4))
+        const q1 = query(collection(db, collectionID),
+            where(parameter1, "==", parameter2),
+            where(parameter3, "==", parameter4))
+        return await getDocs(q1)
+    },
+
+    async fourEqualsQuery(collectionID, parameter1, parameter2, parameter3, parameter4, parameter5, parameter6, parameter7, parameter8) {
+        const q1 = query(collection(db, collectionID),
+            where(parameter1, "==", parameter2),
+            where(parameter3, "==", parameter4),
+            where(parameter5, "==", parameter6),
+            where(parameter7, "==", parameter8),
+            orderBy("location_details.city"), limit(10))
         return await getDocs(q1)
     }
-
-
 
 }
