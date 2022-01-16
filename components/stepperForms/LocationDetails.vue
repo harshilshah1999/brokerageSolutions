@@ -3,21 +3,46 @@
     <v-container>
       <v-row>
         <v-col
-          cols="12"
-          md="4"
+          cols="6"
         >
-          <v-text-field
-            v-model="firstname"
-            :rules="nameRules"
-            :counter="10"
-            label="First name"
-            required
-          ></v-text-field>
+        <v-select
+          v-model="city"
+          :items="cities"
+          label="Select a city"
+          @change="getLocalities(city)"
+          outlined
+          required
+        ></v-select>
         </v-col>
-
         <v-col
-          cols="12"
-          md="4"
+          cols="6"
+        >
+          <v-combobox
+            v-model="locality"
+            :items="localities"
+            item-text="value"
+            item-value="id"
+            @select="getSublocalities(locality)"
+            label="Enter a locality"
+            outlined
+            hint="Suggestions are displayed based on city selected"
+            persistent-hint
+          ></v-combobox>
+        </v-col>
+        <v-col
+          cols="6"
+        >
+          <v-combobox
+            v-model="sublocality"
+            :items="sublocalities"
+            label="Enter a sub locality"
+            outlined
+            hint="Suggestions are displayed based on locality selected"
+            persistent-hint
+          ></v-combobox>
+        </v-col>
+        <!-- <v-col
+          cols="6"
         >
           <v-text-field
             v-model="lastname"
@@ -29,8 +54,7 @@
         </v-col>
 
         <v-col
-          cols="12"
-          md="4"
+          cols="6"
         >
           <v-text-field
             v-model="email"
@@ -38,7 +62,7 @@
             label="E-mail"
             required
           ></v-text-field>
-        </v-col>
+        </v-col> -->
       </v-row>
     </v-container>
   </v-form>
@@ -46,13 +70,22 @@
 
 <script>
   import  postApartmentServices  from "../../services/postForm/apartments/postApartmentServices";
+  import cities from '../../assets/cities.json'
 
   export default {
     data: () => ({
       cities: [],
+      localities: [],
+      sublocalities: [],
+      buildings: [],
+      building: '',
+      city: '',
+      locality: '',
+      sublocality: '',
       valid: false,
       firstname: '',
       lastname: '',
+     
       nameRules: [
         v => !!v || 'Name is required',
         v => v.length <= 10 || 'Name must be less than 10 characters',
@@ -63,12 +96,27 @@
         v => /.+@.+/.test(v) || 'E-mail must be valid',
       ],
     }),
-    async mounted() {
-      this.cities = await postApartmentServices.getCities();
-      console.log(this.cities.docs)
+    mounted() {
+      this.cities = cities.filter(city => city.status === 'active').map(city => city.name)
+      //this.getLocalities('Achalpur')
     },
-    method: {
-
+    methods: {
+      getLocalities: async function (cityID) {
+        let response = await postApartmentServices.getLocalities(cityID)
+        this.localities = []
+        response.forEach(doc => this.localities.push({
+          id: doc.id,
+          value: doc.data().locality_name
+        }))
+      },
+      getSublocalities: async function (localityID) {
+        console.log('fired' + localityID)
+        let response = await postApartmentServices.getSublocalities(localityID)
+        console.log(response)
+        this.sublocalities = []
+        response.forEach(doc => this.sublocalities.push(doc.data()))
+        this.sublocalities = this.sublocalities.map(sublocality => sublocality.sublocality_name)
+      }
     }
   }
 </script>
