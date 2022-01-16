@@ -272,6 +272,11 @@ export default {
         this.property_type
         let newLocalityID = await this.add_locality()
         let newSublocalityID = await this.add_sublocality(newLocalityID)
+        let buildingID = await this.add_building(
+          newLocalityID,
+          newSublocalityID
+        )
+        console.log("Building added successfully", buildingID )
         const response = await postApartmentServices.postLocationDetails(
           this.property_type,
           this.location_formData,
@@ -292,6 +297,11 @@ export default {
           response[0],
           newSublocalityID
         )
+        await postApartmentServices.updateBuildingID(
+          this.property_type,
+          response[0],
+          buildingID
+        )
 
         console.log('New property Added : ', response[0], response)
       } catch (error) {
@@ -311,6 +321,20 @@ export default {
           this.property_type,
           'Mayuri CHS',
           construction_formData
+        )
+      } catch (error) {
+        console.error(error)
+      }
+    },
+
+    add_building: async function (localityID, sublocalityID) {
+      //add new building
+      try {
+        return await postApartmentServices.addNewBuilding(
+          localityID,
+          sublocalityID,
+          this.location_formData,
+          true
         )
       } catch (error) {
         console.error(error)

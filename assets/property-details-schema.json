@@ -231,7 +231,7 @@
             "city": "Reference - ObjectID",
             "buildings": [
                 "Mayuri CHS",
-                "Anand Sagar CHS"
+                "building_id"
             ],
             "apartment_sale": [
                 "propertyID"
