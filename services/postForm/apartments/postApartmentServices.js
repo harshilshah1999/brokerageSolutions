@@ -2,47 +2,54 @@ import firebaseServices from '../../firebaseServices'
 
 export default {
 
-    async postLocationDetails(collectionID, newdata) {
-        let apartmentID = await firebaseServices.addDocumentAutoID(collectionID, data).catch((err) => { console.error(err); })
+    async postLocationDetails(collectionID, newdata, localityID, sublocalityID) {
+        let apartment = await firebaseServices.addDocumentAutoID(collectionID, newdata).catch((err) => { console.error(err); })
         return [
-            apartmentID,
-            await firebaseServices.addArrayElement('localities', newdata['location_details']['locality_id'], collectionID, apartmentID).catch((err) => { console.error(err); }), //update localities array
-            await firebaseServices.addArrayElement('sublocalities', newdata['location_details']['sublocality_id'], collectionID, apartmentID).catch((err) => { console.error(err); }), //update sublocalities array
+            apartment['id'],
+            await firebaseServices.addArrayElement('localities', localityID, collectionID, apartment['id']).catch((err) => { console.error(err); }), //update localities array
+            await firebaseServices.addArrayElement('sublocalities', sublocalityID, collectionID, apartment['id']).catch((err) => { console.error(err); }), //update sublocalities array
         ]
     },
 
-    async addNewLocality(collectionID, apartmentID, newdata, verification_status /* depends on who is posting the property [staff=true,other=false] */) {
+    async addNewLocality(newdata, verification_status /* depends on who is posting the property [staff=true,other=false] */) {
         let localityForm = {
-            locality_name: newdata['location_details']['locality'],
+            locality_name: newdata['location_details']['locality_name'],
             city: newdata['location_details']['city'],
-            sublocality_name: newdata['location_details']['sublocality'],
+            sublocality_name: newdata['location_details']['sublocality_name'],
+            sublocality_id: null,
             verified: verification_status
         }
 
-        //adding new locality
         let locality = await firebaseServices.addDocumentAutoID('localities', localityForm).catch((err) => { console.error(err); }) //enter new locality
-        this.updateApartmentDetails(collectionID, apartmentID, { location_details: { locality_id: locality['id'] } })
         await firebaseServices.addDocumentManualID('pending_locality_verification', locality['id'], localityForm).catch((err) => { console.error(err); }) //add locality for verification
-
-        if (newdata['location_details']['sublocality']) { //user might add or not add sublocality for new locality
-            this.addNewSubLocality(collectionID, apartmentID, newdata, locality['id'], verification_status)  //adding new sublocality
-        }
+        return locality['id']
     },
     //when only new sublocality is added and not locality
-    async addNewSubLocality(collectionID, apartmentID, newdata, localityID, verification_status /* depends on who is posting the property [staff=true,other=false] */) {
+    async addNewSubLocality(localityID, newdata, verification_status /* depends on who is posting the property [staff=true,other=false] */) {
         let sublocalityForm = {
-            sublocality_name: newdata['location_details']['sublocality'],
+            sublocality_name: newdata['location_details']['sublocality_name'],
             city: newdata['location_details']['city'],
             locality_id: localityID,
-            locality_name: newdata['location_details']['locality'],
+            locality_name: newdata['location_details']['locality_name'],
             verified: verification_status
         }
 
         //adding new sublocality
         let sublocality = await firebaseServices.addDocumentAutoID('sublocalities', sublocalityForm).catch((err) => { console.error(err); }) //enter new sublocality
-        this.updateApartmentDetails(collectionID, apartmentID, { location_details: { sublocality_id: sublocality['id'] } })
+        //update sublocality_id in locality document
+        await firebaseServices.updateSingleDocument('localities', localityID, { "sublocality_id": sublocality['id'] })
+        //add sublocality for verification
         await firebaseServices.addDocumentManualID('pending_sublocality_verification', sublocality['id'], sublocalityForm).catch((err) => { console.error(err); }) //enter new sublocality
+        return sublocality['id'];
     },
+
+    async updateLocalityID(collectionID, apartmentID, localityID) {
+        return await this.updateApartmentDetails(collectionID, apartmentID, { location_details: { locality_id: localityID } }).catch((err) => { console.error(err); })
+    },
+    async updateSublocalityID(collectionID, apartmentID, sublocalityID) {
+        return await this.updateApartmentDetails(collectionID, apartmentID, { location_details: { sublocality_id: sublocalityID } }).catch((err) => { console.error(err); })
+    },
+
     // adding new building
     async addNewBuilding(newdata, localityID, sublocalityID, verification_status /* depends on who is posting the property [staff=true,other=false] */) {
         let buildingData = {
@@ -128,7 +135,7 @@ export default {
     },
 
     async addNewFlat(collectionID, apartmentID, flatData) {
-        let flatDataForm = {
+        let flatDataBody = {
             BHKtype: flatData['BHKtype'],
             carpet_area: flatData['carpet_area'],
             builtup_area: flatData['builtup_area'],
@@ -139,7 +146,7 @@ export default {
             balconies: flatData['balconies'],
         }
         this.updateApartmentDetails(collectionID, apartmentID, { total_floors: flatData['total_floors'] })
-        let flat = firebaseServices.addDocumentAutoIDNestedCollection(collectionID, apartmentID, 'flats', flatDataForm)
+        let flat = firebaseServices.addDocumentAutoIDNestedCollection(collectionID, apartmentID, 'flats', flatDataBody)
         this.updateFlatDetails(collectionID, documentID, flat['id'], { flat_id: flat['id'] })
     },
     async updateFlatDetails(collectionID, documentID, flatID, flatData) {
@@ -159,13 +166,6 @@ export default {
                 await firebaseServices.addArrayElement(collectionID, apartmentID, 'media', metadata['media'][0]), //update media array
             ]
         } catch (error) { console.error(error); return error }
-    },
-
-    async getCities() {
-        try {
-            return await firebaseServices.singleEqualsQuery('cities', 'status', 'active')
-        } catch (error) { console.error(error); return error }
-
     },
 
     async getLocalities(cityID) {

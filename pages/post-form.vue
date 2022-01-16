@@ -57,7 +57,7 @@
     </div>
 
     <br />
-    <!-- <v-btn>
+    <v-btn>
       <input type="submit" value="ADD LOCALITY" v-on:click="add_locality" />
     </v-btn>
     <v-btn>
@@ -80,7 +80,7 @@
         value="VERIFY SUBLOCALITY"
         v-on:click="verify_sublocality"
       />
-    </v-btn> -->
+    </v-btn>
     <br /><br /><br /><br />
     <v-file-input
       counter
@@ -114,7 +114,7 @@
 <script>
 import postApartmentServices from '../services/postForm/apartments/postApartmentServices'
 // import verificationServices from '../services/verificationServices'
-// import cities from '../assets/cities.json'
+import cities from '../assets/cities.json'
 import firebaseServices from '../services/firebaseServices'
 
 export default {
@@ -122,11 +122,14 @@ export default {
 
   data: () => ({
     property_type: '',
-    property_types: ['apartments_sale', 'apartments_rent','apartments_sharing'],
+    property_types: [
+      'apartments_sale',
+      'apartments_rent',
+      'apartments_sharing',
+    ],
     results: {},
     chosenFile: null,
-    CollectionID: '',
-    documentID: 'cBPvEwByvBLKsV5ehuWG',
+    documentID: null,
     storage_path: '',
     sale_construction_formData: {
       construction_details: {
@@ -146,9 +149,9 @@ export default {
     location_formData: {
       location_details: {
         city: 'Achalpur',
-        locality_id: 'ObjectID',
+        locality_id: null,
         locality_name: 'Dahisar',
-        sublocality_id: 'ObjectID',
+        sublocality_id: null,
         sublocality_name: 'Anand Nagar',
         flat_number: '203',
         building_name: 'B/43, Mayuri CHS',
@@ -246,23 +249,51 @@ export default {
 
   mounted: async function () {
     // console.log( await firebaseServices.addDocumentAutoIDNestedCollection('buildings', 'vz0jDwdNDorM01nMvtEu', 'flats', {carpet_area : '900 sq. ft.'}))
-    // await postApartmentServices.getCities()
-    // await postApartmentServices.getLocalities('Mumbai')
-    // await postApartmentServices.getSublocalities('localityID')
+    // this.post_dummy_cities()
+    // this.getLocalities('Achalpur')
+    // this.getSublocalities('rG7d6DZTIskKqMiUWRfB')
   },
 
   methods: {
+    getLocalities: async function (cityID) {
+      let response = await postApartmentServices.getLocalities(cityID)
+      response.forEach((doc) => {
+        console.log(doc.id, ' => ', doc.data())
+      })
+    },
+    getSublocalities: async function (localityID) {
+      let response = await postApartmentServices.getSublocalities(localityID)
+      response.forEach((doc) => {
+        console.log(doc.id, ' => ', doc.data())
+      })
+    },
     location_submit: async function () {
       try {
+        this.property_type
+        let newLocalityID = await this.add_locality()
+        let newSublocalityID = await this.add_sublocality(newLocalityID)
         const response = await postApartmentServices.postLocationDetails(
           this.property_type,
-          this.location_formData
+          this.location_formData,
+          newLocalityID,
+          newSublocalityID
         )
 
-        this.documentID = response[0]['id']
-        // this.property_type = response[0]['parent']
+        this.documentID = response[0]
         this.storage_path = response[0]['path']
-        console.log('New property Added : ', response['id'], response)
+
+        await postApartmentServices.updateLocalityID(
+          this.property_type,
+          response[0],
+          newLocalityID
+        )
+        await postApartmentServices.updateSublocalityID(
+          this.property_type,
+          response[0],
+          newSublocalityID
+        )
+
+        console.log('New property Added : ', response[0], response)
       } catch (error) {
         console.error(error)
       }
@@ -285,56 +316,53 @@ export default {
         console.error(error)
       }
     },
-    // add_locality: async function () {
-    //   //add new locality
-    //   try {
-    //     await postApartmentServices.addNewLocality(
-    //       this.property_type,
-    //       this.documentID,
-    //       this.location_formData,
-    //       true
-    //     )
-    //   } catch (error) {
-    //     console.error(error)
-    //   }
-    // },
-    // add_sublocality: async function () {
-    //   //add new sublocality
-    //   try {
-    //     await postApartmentServices.addNewSubLocality(
-    //       this.property_type,
-    //       this.documentID,
-    //       this.location_formData,
-    //       true
-    //     )
-    //   } catch (error) {
-    //     console.error(error)
-    //   }
-    // },
-    // verify_locality: async function () {
-    //   try {
-    //     await verificationServices.verifyLocality(
-    //       this.property_type,
-    //       this.documentID,
-    //       this.location_formData,
-    //       true
-    //     )
-    //   } catch (error) {
-    //     console.error(error)
-    //   }
-    // },
-    // verify_sublocality: async function () {
-    //   try {
-    //     await verificationServices.verifySublocality(
-    //       this.property_type,
-    //       this.documentID,
-    //       this.location_formData,
-    //       true
-    //     )
-    //   } catch (error) {
-    //     console.error(error)
-    //   }
-    // },
+    add_locality: async function () {
+      //add new locality
+      try {
+        return await postApartmentServices.addNewLocality(
+          this.location_formData,
+          true
+        )
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    add_sublocality: async function (localityID) {
+      //add new sublocality
+      try {
+        return await postApartmentServices.addNewSubLocality(
+          localityID,
+          this.location_formData,
+          true
+        )
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    verify_locality: async function () {
+      try {
+        await verificationServices.verifyLocality(
+          this.property_type,
+          this.documentID,
+          this.location_formData,
+          true
+        )
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    verify_sublocality: async function () {
+      try {
+        await verificationServices.verifySublocality(
+          this.property_type,
+          this.documentID,
+          this.location_formData,
+          true
+        )
+      } catch (error) {
+        console.error(error)
+      }
+    },
     detail_submit: async function () {
       try {
         await postApartmentServices.postPropertyDetails(
@@ -427,19 +455,11 @@ export default {
         console.error(error)
       }
     },
-    // randomfunctions: function () {
-    //   postApartmentServices.getAllDocuments('cities').then((response) => {
-    //     console.log(response)
-    //   })
-    //   postApartmentServices.getSingleMedia(collectionIDvideo.webm').then((vid_url) => {
-    //     // console.log(vid_url)
-    //     const video = document.getElementById('vid')
-    //     video.setAttribute('src', vid_url)
-    //   })
-    //   postApartmentServices.getSingleMedia('apartments_sale/image.jpeg').then((img_src) => {
-    //     const img = document.getElementById('myimg')
-    //     img.setAttribute('src', img_src)
-    //   })
+    post_dummy_cities: async function () {
+      cities.forEach((city) => {
+        firebaseServices.addDocumentManualID('cities', city['name'], city)
+      })
+    },
   },
 }
 </script>
