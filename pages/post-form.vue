@@ -249,16 +249,30 @@ export default {
 
   mounted: async function () {
     // console.log( await firebaseServices.addDocumentAutoIDNestedCollection('buildings', 'vz0jDwdNDorM01nMvtEu', 'flats', {carpet_area : '900 sq. ft.'}))
-    // await postApartmentServices.getCities()
     // this.post_dummy_cities()
+    // await this.getCities()
+    // this.getLocalities('Achalpur')
+    // this.getSublocalities('rG7d6DZTIskKqMiUWRfB')
   },
 
   methods: {
+    getCities: async function () {
+      let response = await await postApartmentServices.getCities()
+      response.forEach((doc) => {
+        console.log(doc.id, ' => ', doc.data())
+      })
+    },
     getLocalities: async function (cityID) {
-      await postApartmentServices.getLocalities(cityID)
+      let response = await postApartmentServices.getLocalities(cityID)
+      response.forEach((doc) => {
+        console.log(doc.id, ' => ', doc.data())
+      })
     },
     getSublocalities: async function (localityID) {
-      await postApartmentServices.getSublocalities(localityID)
+      let response = await postApartmentServices.getSublocalities(localityID)
+      response.forEach((doc) => {
+        console.log(doc.id, ' => ', doc.data())
+      })
     },
     location_submit: async function () {
       try {
