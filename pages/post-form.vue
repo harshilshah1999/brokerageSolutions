@@ -150,9 +150,9 @@ export default {
       location_details: {
         city: 'Achalpur',
         locality_id: null,
-        locality_name: 'Dahisar',
+        locality_name: 'Borivali',
         sublocality_id: null,
-        sublocality_name: 'Anand Nagar',
+        sublocality_name: 'Daulat Nagar',
         flat_number: '203',
         building_name: 'B/43, Mayuri CHS',
         landmark: 'Azam Dairy',

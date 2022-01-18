@@ -15,6 +15,7 @@ export default {
         let localityForm = {
             locality_name: newdata['location_details']['locality_name'],
             city: newdata['location_details']['city'],
+            sublocalities: [],
             verified: verification_status
         }
 
@@ -34,7 +35,7 @@ export default {
 
         let sublocality = await firebaseServices.addDocumentAutoID('sublocalities', sublocalityForm).catch((err) => { console.error(err); }) //enter new sublocality
         await firebaseServices.addDocumentManualID('pending_sublocality_verification', sublocality['id'], sublocalityForm).catch((err) => { console.error(err); }) //enter new sublocality
-        if (verification_status) await verificationServices.verifySublocality(localityID, sublocality['id'])
+        if (verification_status) await verificationServices.verifySublocality(sublocality['id'], localityID)
         return sublocality['id'];
     },
     async addNewBuilding(localityID, sublocalityID, newdata, verification_status /* depends on who is posting the property [staff=true,other=false] */) {
