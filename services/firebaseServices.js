@@ -37,8 +37,12 @@ export default {
 
     async addDocumentAutoIDNestedCollection(collectionID1, documentID, collectionID2, data) { // adds a document in the collection
         const collectionLocation = collection(db, collectionID1, documentID, collectionID2)
+        // const collectionLocation = collection(db, 'buildings', 'Ixe7qQgdDowRYZD0ilbR', 'flats')
         try {
-            return await addDoc(collectionLocation, data) //(parameter) response: DocumentReference<any>
+            let response = await addDoc(collectionLocation, data) //(parameter) response: DocumentReference<any>
+            console.log(response.id)
+            return response
+
         } catch (error) { console.error(error); return error }
     },
 
@@ -52,7 +56,7 @@ export default {
     async updateSingleDocument(collectionID, documentID, newdata) { //update any document in a collection
         const documentLocation = doc(db, collectionID, documentID);
         try {
-            await setDoc(documentLocation, newdata, { merge: true } )  //(parameter) response: void
+            await setDoc(documentLocation, newdata, { merge: true })  //(parameter) response: void
             return "Document Updated Successfully"
         } catch (error) { console.error(error); return error }
     },
@@ -96,6 +100,13 @@ export default {
         } catch (error) { console.error(error); return error }
     },
 
+    async getAllDocumentsNestedCollection(collectionID1, documentID1, collectionID2) { //reads all the documents in a collection
+        const collectionLocation = collection(db, collectionID1, documentID1, collectionID2)
+        try {
+            return await getDocs(collectionLocation)//(parameter) response: DocumentReference<any>
+        } catch (error) { console.error(error); return error }
+    },
+
     async getSingleMedia(media_path) { // get url for a single media file
         const downloadLocation = ref(storage, media_path);
         try {
@@ -123,6 +134,13 @@ export default {
 
     async doubleEqualsQuery(collectionID, parameter1, parameter2, parameter3, parameter4) {
         const q1 = query(collection(db, collectionID),
+            where(parameter1, "==", parameter2),
+            where(parameter3, "==", parameter4))
+        return await getDocs(q1)
+    },
+
+    async doubleEqualsQueryNestedCollection(collectionID1, documentID1, collectionID2, parameter1, parameter2, parameter3, parameter4) {
+        const q1 = query(collection(db, collectionID1, documentID1, collectionID2),
             where(parameter1, "==", parameter2),
             where(parameter3, "==", parameter4))
         return await getDocs(q1)

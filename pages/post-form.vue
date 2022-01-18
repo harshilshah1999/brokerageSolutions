@@ -252,8 +252,10 @@ export default {
     // this.post_dummy_cities()
     // this.getLocalities('Achalpur')
     // this.getSublocalities('rG7d6DZTIskKqMiUWRfB')
+    // this.getBuildings('gSuqJckN00ShSaqrFi6y')
+    // this.getFlats('Ixe7qQgdDowRYZD0ilbR')
+    // this.add_flat('Ixe7qQgdDowRYZD0ilbR')
   },
-
   methods: {
     getLocalities: async function (cityID) {
       let response = await postApartmentServices.getLocalities(cityID)
@@ -267,6 +269,18 @@ export default {
         console.log(doc.id, ' => ', doc.data())
       })
     },
+    getBuildings: async function (sublocalityID) {
+      let response = await postApartmentServices.getBuildings(sublocalityID)
+      response.forEach((doc) => {
+        console.log(doc.id, ' => ', doc.data())
+      })
+    },
+    getFlats: async function (buildingID) {
+      let response = await postApartmentServices.getFlats(buildingID)
+      response.forEach((doc) => {
+        console.log(doc.id, ' => ', doc.data())
+      })
+    },
     location_submit: async function () {
       try {
         this.property_type
@@ -276,7 +290,7 @@ export default {
           newLocalityID,
           newSublocalityID
         )
-        console.log("Building added successfully", buildingID )
+        console.log('Building added successfully', buildingID)
         const response = await postApartmentServices.postLocationDetails(
           this.property_type,
           this.location_formData,
@@ -326,20 +340,6 @@ export default {
         console.error(error)
       }
     },
-
-    add_building: async function (localityID, sublocalityID) {
-      //add new building
-      try {
-        return await postApartmentServices.addNewBuilding(
-          localityID,
-          sublocalityID,
-          this.location_formData,
-          true
-        )
-      } catch (error) {
-        console.error(error)
-      }
-    },
     add_locality: async function () {
       //add new locality
       try {
@@ -362,6 +362,33 @@ export default {
       } catch (error) {
         console.error(error)
       }
+    },
+    add_building: async function (localityID, sublocalityID) {
+      //add new building
+      try {
+        return await postApartmentServices.addNewBuilding(
+          localityID,
+          sublocalityID,
+          this.location_formData,
+          true
+        )
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    add_flat: async function (buildingID) {
+      let flatDataBody = {
+        BHKtype: 'BHKtype',
+        carpet_area: 'carpet_area',
+        builtup_area: 'builtup_area',
+        super_builtup_area: 'super_builtup_area',
+        facing: 'facing',
+        bathrooms: 'bathrooms',
+        balconies: 'balconies',
+        total_floors: 65,
+      }
+
+      await postApartmentServices.addNewFlat(buildingID, flatDataBody)
     },
     verify_locality: async function () {
       try {
@@ -394,6 +421,7 @@ export default {
           this.documentID,
           this.details_formData
         )
+        this.add_flat('Ixe7qQgdDowRYZD0ilbR') //buildingID
       } catch (error) {
         console.error(error)
       }

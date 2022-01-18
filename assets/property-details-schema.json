@@ -210,10 +210,10 @@
                 "Anand Nagar",
                 "Kandarpada"
             ],
-            "apartment": [
+            "apartment_sale": [
                 "property_id"
             ],
-            "bungalow": [
+            "apartment_rent": [
                 "property_id"
             ],
             "commercial": [
