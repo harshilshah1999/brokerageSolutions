@@ -1,6 +1,7 @@
 <template>
   <v-app dark>
-    <Header />
+    <!-- <Header /> -->
+    <TopNavigation />
     <v-main>
       <v-container>
         <Nuxt />
@@ -10,11 +11,18 @@
 </template>
 
 <script>
-import Header from "~/components/Header.vue";
+import Header from "~/components/Header";
+import topNavigation from "~/components/TopNavigation";
 
 export default {
   components: {
-    Header
+    Header,
+    topNavigation
   }
 };
 </script>
+<style>
+  html{
+    overflow-y: auto;
+  }
+</style>
