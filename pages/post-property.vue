@@ -10,7 +10,7 @@
           {{ n.title }}
         </v-stepper-step>
 
-        <v-divider v-if="n.number !== 6" :key="n"> </v-divider>
+        <v-divider v-if="n.number !== 6" :key="n.number"> </v-divider>
       </template>
     </v-stepper-header>
 
@@ -22,7 +22,6 @@
 
         <v-btn color="primary" @click="e1 = 2"> Continue </v-btn>
 
-        <v-btn text> Cancel </v-btn>
       </v-stepper-content>
 
       <v-stepper-content step="2">
