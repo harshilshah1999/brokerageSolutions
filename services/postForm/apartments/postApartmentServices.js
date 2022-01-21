@@ -10,15 +10,8 @@ export default {
             await firebaseServices.addArrayElement('sublocalities', sublocalityID, collectionID, apartment['id']).catch((err) => { console.error(err); }), //update sublocalities array
         ]
     },
-    async postConstructionDetails(collectionID, apartmentID, buildingID, newdata) {
-        // let buildingData = {
-        //     construction_type: newdata['construction_details']['construction_type'],
-        //     possesion_date: newdata['construction_details']['possesion_date'],
-        //     oc_status: newdata['construction_details']['oc_status'],
-        //     property_age: newdata['construction_details']['property_age'],
-        // }
+    async postConstructionDetails(collectionID, apartmentID, newdata) {
         this.updateApartmentDetails(collectionID, apartmentID, newdata)
-        // this.updateBuildingDetails(buildingID, buildingData)
     },
     async postPropertyDetails(collectionID, apartmentID, newdata) {
         this.updateApartmentDetails(collectionID, apartmentID, newdata)

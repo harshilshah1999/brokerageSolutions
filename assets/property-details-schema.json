@@ -1,5 +1,5 @@
 {
-    "apartment_sale": [
+    "apartments_sale": [
         {
             "location_details": {
                 "city": "Mumbai",
@@ -94,7 +94,7 @@
             }
         }
     ],
-    "apartment_rent": [
+    "apartments_rent": [
         {
             "location_details": {
                 "city": "Mumbai",

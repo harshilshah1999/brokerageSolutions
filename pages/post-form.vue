@@ -333,7 +333,6 @@ export default {
       try {
         await postApartmentServices.postConstructionDetails(
           this.property_type,
-          'Mayuri CHS',
           construction_formData
         )
       } catch (error) {
