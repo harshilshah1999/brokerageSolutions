@@ -11,7 +11,7 @@
         <v-select
           v-model="city"
           :items="cities"
-          label="Select a city"
+          label="City"
           :rules="rules"
           @change="getLocalities(city)"
           outlined
@@ -29,7 +29,7 @@
             item-value="id"
             :rules="rules"
             @input="getSublocalities(locality)"
-            label="Enter a locality"
+            label="Locality"
             outlined
             hint="Suggestions are displayed based on city selected"
             persistent-hint
@@ -46,7 +46,7 @@
             item-value="id"
             :rules="rules"
             @input="getBuildings(sublocality)"
-            label="Enter a sub locality"
+            label="Sub locality"
             outlined
             hint="Suggestions are displayed based on locality selected"
             persistent-hint
@@ -61,7 +61,7 @@
             :items="buildings"
              item-text="name"
             item-value="id"
-            label="Enter a building"
+            label="Building"
             outlined
             hint="Suggestions are displayed based on sub-locality selected"
             persistent-hint
@@ -84,20 +84,35 @@
           cols="12"
           sm="6"
         >
-           <v-text-field
+          <v-combobox
+            v-model="landmark"
+            :items="landmarks"
+            label="Landmark"
+            outlined
+            hint="Suggestions are displayed based on building selected"
+            persistent-hint
+          ></v-combobox>
+           <!-- <v-text-field
             v-model="landmark"
             label="Landmark"
             outlined
-          ></v-text-field>
+          ></v-text-field> -->
         </v-col>
         <v-col 
           cols="12"
           sm="6">
           <v-btn 
-          :disabled="!valid"
+          :disabled="!valid || loading"
+          :loading="loading"
           color="primary" 
           @click="validate"> 
             Save and Continue 
+             <v-icon
+                right
+                
+              >
+                mdi-arrow-right-thin
+              </v-icon>
           </v-btn>
         </v-col>
       </v-row>
@@ -115,6 +130,7 @@ import cities from '../../assets/cities.json'
       localities: [],
       sublocalities: [],
       buildings: [],
+      landmarks: [],
       building: '',
       landmark: '',
       city: '',
@@ -124,23 +140,15 @@ import cities from '../../assets/cities.json'
       valid: false,
       rules: [
         v => !!v || 'This is a required field'
-      ]
+      ],
+      loading: false
     }),
     mounted() {
       this.cities = cities.filter(city => city.status === 'active').map(city => city.name)
-      //this.getLocalities('Achalpur')
     },
     methods: {
-      getLocalities: async function (cityID) {
-        
-        this.locality = ''
-        this.localities = []
-        this.sublocalities = []
-        this.sublocality = ''
-        this.building = ''
-        this.buildings = []
-        this.landmark = ''
-
+      getLocalities: async function (cityID) { 
+      this.localities = []
       let response = await postApartmentServices.getLocalities(cityID)
 
       response.forEach((doc) =>
@@ -151,11 +159,6 @@ import cities from '../../assets/cities.json'
       },
       getSublocalities: async function (locality) {
         this.sublocalities = []
-        this.sublocality = ''
-        this.buildings = []
-        this.building = ''
-        this.landmark = ''
-
         if(this.localities.find(name => name.name === locality.name)) {
           let response = await postApartmentServices.getSublocalities(locality.id)
           response.forEach(doc => this.sublocalities.push({
@@ -165,10 +168,7 @@ import cities from '../../assets/cities.json'
         }
       },
       getBuildings: async function(sublocality) {
-        this.buildings = []
-        this.building = ''
-        this.landmark = ''
-        
+        this.buildings = []        
         if(this.sublocalities.find(name => name.name === sublocality.name)) {
           let response = await postApartmentServices.getBuildings(sublocality.id)
           response.forEach(doc => this.buildings.push({
@@ -178,10 +178,11 @@ import cities from '../../assets/cities.json'
           }))
         }
       },
-      setLandMark: function(building) {
-        this.landmark = ''
-        if(this.buildings.find(b => b.name === building.name)) {
-          this.landmark = building.landmark
+      setLandMark: async function(building) {
+        this.landmarks = []
+        if(await this.buildings.find(b => b.name === building.name)) {
+          console.log('found', building.landmark)
+          this.landmarks = building.landmark
         }
       },
       add_locality: async function () {
@@ -229,7 +230,7 @@ import cities from '../../assets/cities.json'
             locality_name: this.locality.name || this.locality,
             sublocality_id: sublocalityID,
             sublocality_name: this.sublocality.name || this.sublocality,
-            ...(this.landmark && {landmark : this.landmark}),
+            ...(this.landmark && {landmark : [this.landmark]}),
             verified: true
           }
         )
@@ -240,11 +241,13 @@ import cities from '../../assets/cities.json'
     validate: async function() {
         //el = 2 to parent
         if(this.$refs.form.validate()) {
-          console.log('form validated')
           try {
+            this.loading = true;
             let localityID = this.locality.id ? this.locality.id : await this.add_locality()
             let sublocalityID = this.sublocality.id ? this.sublocality.id : await this.add_sublocality(localityID)
             let buildingID = this.building.id ? this.building.id : await this.add_building(localityID, sublocalityID)
+            let flatID = await postApartmentServices.addNewFlat(buildingID, {flat_number: this.flatNumber})
+            if(!this.building.id && !this.landmarks.find(l => l === this.landmark)) await postApartmentServices.addLandmark(buildingID, this.landmark)
             const response = await postApartmentServices.postLocationDetails(
               "apartments_sale",
               {
@@ -265,12 +268,37 @@ import cities from '../../assets/cities.json'
               },
               sublocalityID
             )
-            console.log(response)
           }
           catch(e) {
             console.log(e)
           }
+          finally {
+            this.loading = false
+          }
         }
+      }
+    },
+    watch: {
+      localities: function() {
+        this.locality = '';
+      },
+      locality: function() {
+        this.sublocalities = [];
+      },
+      sublocalities: function() {
+        this.sublocality = '';
+      },
+      sublocality: function() {
+        this.buildings = [];
+      },
+      buildings: function() {
+        this.building = ''
+      },
+      building: function() {
+        this.landmarks = []
+      },
+      landmarks: function() {
+        this.landmark = ''
       }
     }
 }

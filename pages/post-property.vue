@@ -60,7 +60,7 @@ export default {
           number: 2,
         },
         {
-          title: 'Propert Details',
+          title: 'Property Details',
           number: 3,
         },
         {
