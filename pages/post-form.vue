@@ -302,21 +302,6 @@ export default {
         this.documentID = response[0]
         this.storage_path = response[0]['path']
 
-        await postApartmentServices.updateLocalityID(
-          this.property_type,
-          response[0],
-          newLocalityID
-        )
-        await postApartmentServices.updateSublocalityID(
-          this.property_type,
-          response[0],
-          newSublocalityID
-        )
-        await postApartmentServices.updateBuildingID(
-          this.property_type,
-          response[0],
-          buildingID
-        )
 
         console.log('New property Added : ', response[0], response)
       } catch (error) {
