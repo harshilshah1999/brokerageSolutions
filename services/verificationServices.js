@@ -11,7 +11,6 @@ export default {
             await firebaseServices.deleteSingleDocument('pending_locality_verification', localityID)
         } catch (error) { console.error(error); return error }
     },
-
     async verifySublocality(sublocalityID, localityID) {
         try {
             //update sublocality verification status
@@ -22,7 +21,6 @@ export default {
             await firebaseServices.deleteSingleDocument('pending_sublocality_verification', sublocalityID)
         } catch (error) { console.error(error); return error }
     },
-
     async verifyBuilding(buildingID, sublocalityID) {
         try {
             //update building verification status
@@ -39,7 +37,6 @@ export default {
             return await firebaseServices.getAllDocuments('pending_locality_verification')
         } catch (error) { console.error(error); return error }
     },
-
     async getAllUnverifiedSublocalities() {
         try {
             return await firebaseServices.getAllDocuments('pending_sublocality_verification')

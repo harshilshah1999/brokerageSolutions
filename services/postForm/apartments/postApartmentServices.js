@@ -144,6 +144,9 @@ export default {
             await firebaseServices.addDocumentAutoIDNestedCollection('buildings', buildingID, 'flats', flatDataBody)
         } catch (error) { console.error(error); return error }
     },
+    async addLandmark(buildingID, landmark) {
+        return await firebaseServices.addArrayElement('buildings', buildingID, 'landmark', landmark.catch((err) => { console.error(err); }))
+    },
     async updateLocalityID(collectionID, apartmentID, localityID) {
         return await this.updateApartmentDetails(collectionID, apartmentID, { location_details: { locality_id: localityID } }).catch((err) => { console.error(err); })
     },

@@ -8,14 +8,17 @@
                 "sublocality_name": "Anand Nagar",
                 "sublocality_id": "ObjectID",
                 "flat_number": "203",
-                "apartment_name": "B/43, Mayuri CHS",
-                "landmark": "Azam Dairy",
+                "building_id": "autoID",
+                "building_name": "B/43, Mayuri CHS",
+                "landmark": [
+                    "Azam Dairy"
+                ],
                 "google_map_details": {
                     "google_map_coordinates": "..."
                 }
             },
             "construction_details": {
-                "construction_type": "Under Construction/New/resale",
+                "construction_type": "Under Construction/New/Resale",
                 "possesion_date": "date()",
                 "oc_status": "Received/Not Received",
                 "property_age": "15 years, 7 months",
@@ -103,8 +106,11 @@
                 "sublocality_name": "Anand Nagar",
                 "sublocality_id": "ObjectID",
                 "flat_number": "203",
-                "apartment_name": "B/43, Mayuri CHS",
-                "landmark": "Azam Dairy",
+                "building_id": "autoID",
+                "building_name": "B/43, Mayuri CHS",
+                "landmark": [
+                    "Azam Dairy"
+                ],
                 "google_map_details": {
                     "google_map_coordinates": "..."
                 }
@@ -250,7 +256,9 @@
             "locality_id": "ObjectID",
             "sublocality_name": "Anand Nagar",
             "sublocality_id": "ObjectID",
-            "landmark": "Azam Dairy",
+            "landmark": [
+                "Azam Dairy"
+            ],
             "construction_type": "Under Construction/New/resale",
             "possesion_date": "date()",
             "oc_status": "Received/Not Received",
@@ -266,7 +274,7 @@
             },
             "flats": [
                 {
-                    "flat_id" : "ObjectID",
+                    "flat_id": "ObjectID",
                     "BHKtype": "2BHK",
                     "carpet_area": "706 sq.ft",
                     "builtup_area": "900 sq.ft",
