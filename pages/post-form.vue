@@ -154,8 +154,9 @@ export default {
         sublocality_id: null,
         sublocality_name: 'Daulat Nagar',
         flat_number: '203',
+        building_id: null,
         building_name: 'B/43, Mayuri CHS',
-        landmark: 'Azam Dairy',
+        landmark: ['Azam Dairy'],
         google_map_details: {
           google_map_coordinates: 'Point',
         },
@@ -333,7 +334,6 @@ export default {
       try {
         await postApartmentServices.postConstructionDetails(
           this.property_type,
-          'Mayuri CHS',
           construction_formData
         )
       } catch (error) {

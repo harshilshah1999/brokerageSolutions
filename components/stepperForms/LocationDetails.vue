@@ -106,8 +106,8 @@
 </template>
 
 <script>
-  import  postApartmentServices  from "../../services/postForm/apartments/postApartmentServices";
-  import cities from '../../assets/cities.json'
+import postApartmentServices from '../../services/postForm/apartments/postApartmentServices'
+import cities from '../../assets/cities.json'
 
   export default {
     data: () => ({
@@ -141,9 +141,10 @@
         this.buildings = []
         this.landmark = ''
 
-        let response = await postApartmentServices.getLocalities(cityID)
-        
-        response.forEach(doc => this.localities.push({
+      let response = await postApartmentServices.getLocalities(cityID)
+
+      response.forEach((doc) =>
+        this.localities.push({
           id: doc.id,
           name: doc.data().locality_name
         }))
@@ -272,9 +273,8 @@
         }
       }
     }
-  }
+}
 </script>
 
 <style>
-
 </style>
