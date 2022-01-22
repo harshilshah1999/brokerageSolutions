@@ -124,7 +124,7 @@ export default {
 
         //adding new building
         let building = await firebaseServices.addDocumentAutoID('buildings', newdata).catch((err) => { console.error(err); }) //enter new building
-        await firebaseServices.addDocumentManualID('pending_building_verification', building['id'], buildingData).catch((err) => { console.error(err); }) //enter new building
+        await firebaseServices.addDocumentManualID('pending_building_verification', building['id'], newdata).catch((err) => { console.error(err); }) //enter new building
         if (newdata['verified']) await verificationServices.verifyBuilding(building['id'], sublocalityID)
         return building['id']
     },
@@ -145,7 +145,7 @@ export default {
         } catch (error) { console.error(error); return error }
     },
     async addLandmark(buildingID, landmark) {
-        return await firebaseServices.addArrayElement('buildings', buildingID, 'landmark', landmark.catch((err) => { console.error(err); }))
+        return await firebaseServices.addArrayElement('buildings', buildingID, 'landmark', landmark).catch((err) => { console.error(err); })
     },
     async updateLocalityID(collectionID, apartmentID, localityID) {
         return await this.updateApartmentDetails(collectionID, apartmentID, { location_details: { locality_id: localityID } }).catch((err) => { console.error(err); })
