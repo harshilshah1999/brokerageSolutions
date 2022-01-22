@@ -132,6 +132,14 @@ export default {
         return building['id']
     },
     async addNewFlat(buildingID, flatData) {
+        try {
+            await firebaseServices.addDocumentAutoIDNestedCollection('buildings', buildingID, 'flats', flatData)
+        } catch (error) { console.error(error); return error }
+    },
+    async addLandmark(buildingID, landmark) {
+        return await firebaseServices.addArrayElement('buildings', buildingID, 'landmark', landmark.catch((err) => { console.error(err); }))
+    },
+    async updateFlatDetails(buildingID, flatID, flatData) {
         let flatDataBody = { //total_floors not included
             BHKtype: flatData['BHKtype'],
             carpet_area: flatData['carpet_area'],
@@ -141,16 +149,7 @@ export default {
             bathrooms: flatData['bathrooms'],
             balconies: flatData['balconies'],
         }
-
-        try {
-            await this.updateApartmentDetails('buildings', buildingID, { total_floors: flatData['total_floors'] })
-            await firebaseServices.addDocumentAutoIDNestedCollection('buildings', buildingID, 'flats', flatDataBody)
-        } catch (error) { console.error(error); return error }
-    },
-    async addLandmark(buildingID, landmark) {
-        return await firebaseServices.addArrayElement('buildings', buildingID, 'landmark', landmark.catch((err) => { console.error(err); }))
-    },
-    async updateFlatDetails(buildingID, flatID, flatData) {
+        await this.updateApartmentDetails('buildings', buildingID, { total_floors: flatData['total_floors'] })
         return await firebaseServices.updateSingleNestedDocument('buildings', buildingID, 'flats', flatID, flatData)
     },
     async getLocalities(cityID) {
