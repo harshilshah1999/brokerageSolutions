@@ -19,9 +19,6 @@
         <v-card class="mb-12" elevation="0">
           <location-details />
         </v-card>
-
-        <v-btn color="primary" @click="e1 = 2"> Continue </v-btn>
-
       </v-stepper-content>
 
       <v-stepper-content step="2">
