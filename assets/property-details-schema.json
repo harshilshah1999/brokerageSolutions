@@ -275,6 +275,7 @@
             "flats": [
                 {
                     "flat_id": "ObjectID",
+                    "flat_number":"203",
                     "BHKtype": "2BHK",
                     "carpet_area": "706 sq.ft",
                     "builtup_area": "900 sq.ft",

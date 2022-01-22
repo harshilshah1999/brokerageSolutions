@@ -6,9 +6,12 @@ export default {
         let apartment = await firebaseServices.addDocumentAutoID(collectionID, newdata).catch((err) => { console.error(err); })
         return [
             apartment['id'],
-            //await firebaseServices.addArrayElement('localities', localityID, collectionID, apartment['id']).catch((err) => { console.error(err); }), //update localities array
             await firebaseServices.addArrayElement('sublocalities', sublocalityID, collectionID, apartment['id']).catch((err) => { console.error(err); }), //update sublocalities array
         ]
+    },
+
+    async updateLocationDetails(collectionID, apartmentID, newdata) {
+        this.updateApartmentDetails(collectionID, apartmentID, newdata)
     },
     async postConstructionDetails(collectionID, apartmentID, newdata) {
         this.updateApartmentDetails(collectionID, apartmentID, newdata)
@@ -129,34 +132,15 @@ export default {
         return building['id']
     },
     async addNewFlat(buildingID, flatData) {
-        let flatDataBody = { //total_floors not included
-            BHKtype: flatData['BHKtype'],
-            carpet_area: flatData['carpet_area'],
-            builtup_area: flatData['builtup_area'],
-            super_builtup_area: flatData['super_builtup_area'],
-            facing: flatData['facing'],
-            bathrooms: flatData['bathrooms'],
-            balconies: flatData['balconies'],
-        }
-
         try {
-            await this.updateApartmentDetails('buildings', buildingID, { total_floors: flatData['total_floors'] })
-            await firebaseServices.addDocumentAutoIDNestedCollection('buildings', buildingID, 'flats', flatDataBody)
+            await firebaseServices.addDocumentAutoIDNestedCollection('buildings', buildingID, 'flats', flatData)
         } catch (error) { console.error(error); return error }
     },
     async addLandmark(buildingID, landmark) {
         return await firebaseServices.addArrayElement('buildings', buildingID, 'landmark', landmark).catch((err) => { console.error(err); })
     },
-    async updateLocalityID(collectionID, apartmentID, localityID) {
-        return await this.updateApartmentDetails(collectionID, apartmentID, { location_details: { locality_id: localityID } }).catch((err) => { console.error(err); })
-    },
-    async updateSublocalityID(collectionID, apartmentID, sublocalityID) {
-        return await this.updateApartmentDetails(collectionID, apartmentID, { location_details: { sublocality_id: sublocalityID } }).catch((err) => { console.error(err); })
-    },
-    async updateBuildingID(collectionID, apartmentID, buildingID) {
-        return await this.updateApartmentDetails(collectionID, apartmentID, { location_details: { building_id: buildingID } })
-    },
     async updateFlatDetails(buildingID, flatID, flatData) {
+        await this.updateApartmentDetails('buildings', buildingID, { total_floors: flatData['total_floors'] })
         return await firebaseServices.updateSingleNestedDocument('buildings', buildingID, 'flats', flatID, flatData)
     },
     async getLocalities(cityID) {
