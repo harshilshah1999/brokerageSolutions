@@ -19,10 +19,10 @@
             },
             "construction_details": {
                 "construction_type": "Under Construction/New/Resale",
-                "possesion_date": "date()",
+                "possesion_date": "Date and Time",
                 "oc_status": "Received/Not Received",
                 "property_age": "15 years, 7 months",
-                "property_available_from": "date()"
+                "property_available_from": "Date and Time"
             },
             "property_details": {
                 "BHKtype": "2BHK",
@@ -80,17 +80,19 @@
                 "alternate_number": "1234567890"
             },
             "other_details": {
-                "posted_date": "date()",
-                "verification_date": "date()",
+                "posted_date": "Date and Time",
+                "verification_date": "Date and Time",
                 "posting_status": "Complete/Incomplete",
-                "expiration_date": "date()",
+                "expiration_date": "Date and Time",
                 "status": "Active/Inactive",
-                "posted_by": "Somil Shah - 124567890",
+                "posted_by_user_id": "ObjectID",
+                "posted_by_user_name": "Somil Shah",
                 "verification_status?": "verified/under_verification/rejected",
                 "times_visited": "increment()",
                 "user_feedback": [
                     {
-                        "user_id": "Harshil Shah - 0987654321",
+                        "user_id": "0987654321",
+                        "user_name":"Harshil Shah",
                         "user_remark": "Nice property! Good interior!"
                     }
                 ]
@@ -141,7 +143,7 @@
                 "maintainence_included": "true/false",
                 "monthly_maintainence": "5000/month",
                 "annual_maintainence": "70000/year",
-                "available_from": "Date()",
+                "available_from": "Date and Time",
                 "tenents_preference": "None/Family/Bachelors/Company",
                 "inclusions": {
                     "parking": true,
@@ -179,12 +181,13 @@
                 "alternate_number": "1234567890"
             },
             "other_details": {
-                "posted_date": "date()",
-                "verification_date": "date()",
+                "posted_date": "Date and Time",
+                "verification_date": "Date and Time",
                 "posting_status": "Complete/Incomplete",
-                "expiration_date": "date()",
+                "expiration_date": "Date and Time",
                 "status": "Active/Inactive",
-                "posted_by": "Somil Shah - 124567890",
+                "posted_by_user_id": "ObjectID",
+                "posted_by_user_name": "Somil Shah",
                 "verification_status?": "verified/under_verification/rejected",
                 "times_visited": "increment()",
                 "user_feedback": [
@@ -216,10 +219,10 @@
                 "Anand Nagar",
                 "Kandarpada"
             ],
-            "apartment_sale": [
+            "apartments_sale": [
                 "property_id"
             ],
-            "apartment_rent": [
+            "apartments_rent": [
                 "property_id"
             ],
             "commercial": [
@@ -239,10 +242,10 @@
                 "Mayuri CHS",
                 "building_id"
             ],
-            "apartment_sale": [
+            "apartments_sale": [
                 "propertyID"
             ],
-            "apartment_rent": [
+            "apartments_rent": [
                 "propertyID"
             ]
         }
@@ -260,7 +263,7 @@
                 "Azam Dairy"
             ],
             "construction_type": "Under Construction/New/resale",
-            "possesion_date": "date()",
+            "possesion_date": "Date and Time",
             "oc_status": "Received/Not Received",
             "property_age": "15 years, 7 months",
             "verified": false,
@@ -275,7 +278,7 @@
             "flats": [
                 {
                     "flat_id": "ObjectID",
-                    "flat_number":"203",
+                    "flat_number": "203",
                     "BHKtype": "2BHK",
                     "carpet_area": "706 sq.ft",
                     "builtup_area": "900 sq.ft",
@@ -301,7 +304,7 @@
             "staff_roles(optional)": [
                 "string"
             ],
-            "date_joined": "date()",
+            "date_joined": "Date and Time",
             "favourites": [
                 "propertyID"
             ],
@@ -309,15 +312,21 @@
                 "paragraph",
                 "paragraph"
             ],
-            "properties_posted": [
-                {
-                    "property_id": "ObjectID"
-                }
-            ],
+            "properties_posted": {
+                "apartments_sale": [
+                    "property_id"
+                ],
+                "apartments_rent": [
+                    "property_id"
+                ],
+                "commercial": [
+                    "property_id"
+                ]
+            },
             "properties_seen": [
                 {
                     "property_id": "ObjectID",
-                    "seen_date": "date()"
+                    "seen_date": "Date and Time"
                 }
             ],
             "search_history": [
@@ -331,8 +340,8 @@
             "user_enquiries": [
                 {
                     "property_id": "ObjectID",
-                    "shortlisted_date": "date()",
-                    "ideal_visit_time": "date()"
+                    "shortlisted_date": "Date and Time",
+                    "ideal_visit_time": "Date and Time"
                 }
             ],
             "staff_interaction": {
@@ -346,7 +355,7 @@
             "suggested_properties": [
                 {
                     "property_id": "ObjectID",
-                    "suggested_date": "date()"
+                    "suggested_date": "Date and Time"
                 }
             ],
             "blacklisted?": "boolean"
@@ -368,11 +377,11 @@
         "manager_activities": {
             "users_called": {
                 "user_id": "ObjectID",
-                "call_time": "date()",
+                "call_time": "Date and Time",
                 "call_remarks": "string",
                 "suggested_properties": {
                     "property_id": "ObjectID",
-                    "suggestion_date": "date()"
+                    "suggestion_date": "Date and Time"
                 }
             }
         }
@@ -380,7 +389,7 @@
     "site_visits": [
         {
             "visit_id": "objectid",
-            "visit_timings": "date()",
+            "visit_timings": "Date and Time",
             "property_id": "ObjectID",
             "buyer": "user_id",
             "seller": "user_id",

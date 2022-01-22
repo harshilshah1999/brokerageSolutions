@@ -39,7 +39,17 @@ export default {
         this.updateApartmentDetails(collectionID, apartmentID, newdata)
         this.updateBuildingDetails(buildingID, newdata)
     },
-    async postVisitPreferenceDetails(collectionID, apartmentID, newdata) {
+    async postVisitPreferenceDetails(collectionID, apartmentID, newdata, other_details) {
+        other_details = {
+            posted_date: "Date and Time",
+            posting_status: "Complete",
+            posted_by_user_id: "ObjectID",
+            posted_by_user_name: "Somil Shah",
+            verification_status: "verified/under_verification/rejected",
+        }
+        //merge these two
+        await firebaseServices.updateSingleDocument(collectionID, apartmentID, newdata)
+        await firebaseServices.updateSingleDocument(collectionID, apartmentID, { other_details })
         this.updateApartmentDetails(collectionID, apartmentID, newdata)
         let flatData = {
             BHKtype: newdata['location_details']['city'],
@@ -50,8 +60,8 @@ export default {
             facing: newdata['location_details']['city'],
             bathrooms: newdata['location_details']['city'],
             balconies: newdata['location_details']['city'],
-            "monthly_maintainence": "5000/month",
-            "annual_maintainence": "70000/year"
+            monthly_maintainence: "5000/month",
+            annual_maintainence: "70000/year"
         }
         await firebaseServices.addArrayElement('buildings', buildingID, 'flats', flatData) //update flats array
     },

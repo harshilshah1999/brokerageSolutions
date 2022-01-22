@@ -1,7 +1,7 @@
 import firebaseServices from './firebaseServices'
 
 export default {
-    async verifyLocality(localityID, cityID) {
+    async verifyLocality(localityID, cityID, other_details) {
         try {
             //update locality verification status
             await firebaseServices.updateSingleDocument('localities', localityID, { "verified": true })
@@ -9,6 +9,12 @@ export default {
             await firebaseServices.addArrayElement('cities', cityID, 'localities', localityID) //update cities array
             //remove locality from pending
             await firebaseServices.deleteSingleDocument('pending_locality_verification', localityID)
+            other_details = {
+                verification_date: "Date and Time",
+                verification_status: "Verified",
+                expiration_date: "Date and Time + 6 months",
+            }
+            await firebaseServices.updateSingleDocument(collectionID, apartmentID, other_details)
         } catch (error) { console.error(error); return error }
     },
     async verifySublocality(sublocalityID, localityID) {
