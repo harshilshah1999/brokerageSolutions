@@ -136,14 +136,14 @@ export default {
         construction_type: 'Under Construction/New/resale',
         possesion_date: 'date',
         oc_status: 'string',
-        property_age: 'string',
+        building_age: 'string',
         property_available_from: 'date',
       },
     },
     rent_construction_formData: {
       construction_details: {
         construction_type: 'Under Construction/New/resale',
-        property_age: 'string',
+        building_age: 'string',
       },
     },
     location_formData: {

@@ -19,12 +19,12 @@
             },
             "construction_details": {
                 "construction_type": "Under Construction/New/Resale",
-                "possesion_date": "Date and Time",
+                "possesion_date": "Date",
                 "oc_status": "Received/Not Received",
-                "property_age": "15 years, 7 months",
-                "property_available_from": "Date and Time"
+                "building_age": "15 years, 7 months"
             },
             "property_details": {
+                "flat_available_from": "Date and Time",
                 "BHKtype": "2BHK",
                 "carpet_area": "706 sq.ft",
                 "builtup_area": "900 sq.ft",
@@ -119,7 +119,7 @@
             },
             "construction_details": {
                 "construction_type": "New/resale",
-                "property_age": "15 years, 7 months"
+                "building_age": "15 years, 7 months"
             },
             "property_details": {
                 "BHKtype": "2BHK",
@@ -265,7 +265,7 @@
             "construction_type": "Under Construction/New/resale",
             "possesion_date": "Date and Time",
             "oc_status": "Received/Not Received",
-            "property_age": "15 years, 7 months",
+            "building_age": "15 years, 7 months",
             "verified": false,
             "amenities": {
                 "lift": true,
@@ -279,6 +279,7 @@
                 {
                     "flat_id": "ObjectID",
                     "flat_number": "203",
+                    "flat_available_from": "Date and Time",
                     "BHKtype": "2BHK",
                     "carpet_area": "706 sq.ft",
                     "builtup_area": "900 sq.ft",
@@ -295,8 +296,11 @@
     ],
     "users": [
         {
-            "user_id": "string",
+            "user_id": "Mobile Number",
             "user_name": "string",
+            "mobile_number": "1234567890",
+            "user_email": "",
+            "user_alternate_email": "",
             "user_role": "string - user/agent/staff",
             "search_preferences/filter_preferences": {
                 "object": "THIS OBJECT CAN INCLUDE ALL FIELDS RELATED TO SEARCH FILTER/ used for continue last search feature"
@@ -308,7 +312,7 @@
             "favourites": [
                 "propertyID"
             ],
-            "user_remarks": [
+            "user_feedback_by_staff": [
                 "paragraph",
                 "paragraph"
             ],
