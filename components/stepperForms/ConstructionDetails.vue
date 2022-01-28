@@ -102,19 +102,23 @@
 import postApartmentServices from '../../services/postForm/apartments/postApartmentServices'
 
 export default {
-  data: () => ({
-    construction_type: '',
-    oc_status: null,
-    cc_status: null,
-    construction_types: ['Under Construction', 'New Construction', 'Resale'],
-    oc_cc_types: ['Received', 'Not Received', 'Dont Know'],
-    possession_date: null,
-    building_age: null,
-    menu: false,
-    valid: false,
-    rules: [(v) => !!v || 'This is a required field'],
-    loading: false,
-  }),
+  props: ['apartmentId'],
+  data: function() {
+      return {
+      apartmentID: this.apartmentId,
+      construction_type: '',
+      oc_status: null,
+      cc_status: null,
+      construction_types: ['Under Construction', 'New Construction', 'Resale'],
+      oc_cc_types: ['Received', 'Not Received', 'Dont Know'],
+      possession_date: null,
+      building_age: null,
+      menu: false,
+      valid: false,
+      rules: [(v) => !!v || 'This is a required field'],
+      loading: false,
+      }
+    },
   mounted() {
     //get building data
   },
@@ -127,7 +131,11 @@ export default {
       )
     },
   },
-  watch: {},
+  watch: {
+    apartmentID: function() {
+      
+    }
+  },
 }
 </script>
 

@@ -165,7 +165,6 @@ export default {
     setLandMark: async function (building) {
       this.landmarks = []
       if (await this.buildings.find((b) => b.name === building.name)) {
-        console.log('found', building.landmark)
         this.landmarks = building.landmark
       }
     },
@@ -237,7 +236,7 @@ export default {
             !this.building.id &&
             !this.landmarks.find((l) => l === this.landmark)
           )
-            await postApartmentServices.addLandmark(buildingID, this.landmark)
+          await postApartmentServices.addLandmark(buildingID, this.landmark)
           const apartmentID = await postApartmentServices.postLocationDetails(
             'apartments_sale',
             {
@@ -258,10 +257,8 @@ export default {
             },
             sublocalityID
           )
-          this.$emit('stepperChange', {
-            apartmentID,
-            buildingID
-          })
+          console.log(apartmentID)
+          this.$emit('stepperChange', apartmentID)
         } catch (e) {
           console.log(e)
         } finally {
