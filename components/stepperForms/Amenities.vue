@@ -1,5 +1,4 @@
 <template>
-  <!-- @TODO CAN WE USE V-FOR AND LOOP THSESE AMENITIES? -->
   <v-form v-model="valid" ref="form" lazy-validation>
     <v-container>
       <v-row>

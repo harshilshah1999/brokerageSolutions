@@ -1,0 +1,129 @@
+<template>
+  <!-- @TODO OC CC INFO ALERT-->
+
+  <v-form v-model="valid" ref="form" lazy-validation>
+    <v-container>
+      <v-row>
+        <v-col cols="12" sm="6">
+          <v-select
+            v-model="construction_type"
+            :items="construction_types"
+            menu-props="auto"
+            label="Construction Type"
+            :rules="rules"
+            outlined
+            required
+          >
+          </v-select>
+        </v-col>
+        <v-col
+          cols="12"
+          sm="6"
+          v-if="construction_type === 'Under Construction'"
+        >
+          <v-menu
+            ref="menu"
+            v-model="menu"
+            :close-on-content-click="false"
+            :return-value.sync="possession_date"
+            transition="fade-transition"
+            offset-y
+            min-width="auto"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field
+                v-model="possession_date"
+                :rules="rules"
+                label="Possession Date"
+                readonly
+                v-bind="attrs"
+                v-on="on"
+                outlined
+              ></v-text-field>
+            </template>
+            <v-date-picker v-model="possession_date" no-title scrollable>
+              <v-spacer></v-spacer>
+              <v-btn text color="primary" @click="menu = false"> Cancel </v-btn>
+              <v-btn
+                text
+                color="primary"
+                @click="$refs.menu.save(possession_date)"
+              >
+                OK
+              </v-btn>
+            </v-date-picker>
+          </v-menu>
+        </v-col>
+        <v-col cols="12" sm="6" v-else>
+          <v-text-field
+            label="Building Age "
+            outlined
+            v-model="building_age"
+            suffix="Years"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <v-select
+            v-model="oc_status"
+            :items="oc_cc_types"
+            menu-props="auto"
+            label="Occupancy Certificate"
+            outlined
+          >
+          </v-select>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <v-select
+            v-model="cc_status"
+            :items="oc_cc_types"
+            menu-props="auto"
+            label="Completion Certificate"
+            outlined
+          >
+          </v-select> </v-col
+        >
+        <v-col cols="12" sm="6">
+          <v-btn
+            :disabled="!valid || loading"
+            :loading="loading"
+            color="primary"
+            @click="validate"
+          >
+            Save and Continue
+            <v-icon right> mdi-arrow-right-thin </v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-form>
+</template>
+
+<script>
+import postApartmentServices from '../../services/postForm/apartments/postApartmentServices'
+
+export default {
+  data: () => ({
+    construction_type: '',
+    oc_status: null,
+    cc_status: null,
+    construction_types: ['Under Construction', 'New Construction', 'Resale'],
+    oc_cc_types: ['Received', 'Not Received', 'Dont Know'],
+    possession_date: null,
+    building_age: null,
+    menu: false,
+    valid: false,
+    rules: [(v) => !!v || 'This is a required field'],
+    loading: false,
+  }),
+  mounted() {
+    //get building data
+  },
+  methods: {
+    validate: async function () {    },
+  },
+  watch: {},
+}
+</script>
+
+<style>
+</style>

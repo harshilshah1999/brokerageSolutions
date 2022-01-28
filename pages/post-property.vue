@@ -1,6 +1,7 @@
 <template>
-<!-- @TODO MAKE STEPPER FORM COMPONENT NAME DYNAMIC -->
-  <v-stepper v-model="e1" alt-labels>
+  <!-- @TODO MAKE STEPPER FORM COMPONENT NAME DYNAMIC -->
+  <!-- @TODO remove non-linear -->
+  <v-stepper  non-linear v-model="e1" alt-labels>
     <v-stepper-header>
       <template v-for="n in stepperData">
         <v-stepper-step
@@ -18,28 +19,27 @@
     <v-stepper-items>
       <v-stepper-content step="1">
         <v-card elevation="0">
-          <location-details @stepperChange="e1 = 2"/>
+          <location-details @stepperChange="e1 = 2" />
         </v-card>
       </v-stepper-content>
 
       <v-stepper-content step="2">
         <v-card elevation="0">
-          <construction-details @stepperChange="e1 = 3"/>
+          <construction-details @stepperChange="e1 = 3" />
         </v-card>
       </v-stepper-content>
 
       <v-stepper-content step="3">
-         <v-card elevation="0">
-          <flat-details @stepperChange="e1 = 4"/>
+        <v-card elevation="0">
+          <flat-details @stepperChange="e1 = 4" />
         </v-card>
       </v-stepper-content>
 
- <v-stepper-content step="4">
-         <v-card elevation="0">
-          <amenities @stepperChange="e1 = 5"/>
+      <v-stepper-content step="4">
+        <v-card elevation="0">
+          <amenities @stepperChange="e1 = 5" />
         </v-card>
       </v-stepper-content>
-
     </v-stepper-items>
   </v-stepper>
 </template>
@@ -55,11 +55,11 @@ export default {
     LocationDetails,
     ConstructionDetails,
     FlatDetails,
-    Amenities
+    Amenities,
   },
   data() {
     return {
-      e1: 4,
+      e1: 3,
       stepperData: [
         {
           title: 'Location Details',
