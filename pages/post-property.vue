@@ -17,16 +17,14 @@
     <v-stepper-items>
       <v-stepper-content step="1">
         <v-card class="mb-12" elevation="0">
-          <location-details />
+          <location-details @stepperChange="e1 = 2"/>
         </v-card>
       </v-stepper-content>
 
       <v-stepper-content step="2">
-        <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>
-
-        <v-btn color="primary" @click="e1 = 3"> Continue </v-btn>
-
-        <v-btn text> Cancel </v-btn>
+        <v-card class="mb-12" elevation="0">
+          <construction-details @stepperChange="e1 = 3"/>
+        </v-card>
       </v-stepper-content>
 
       <v-stepper-content step="3">
@@ -41,15 +39,17 @@
 </template>
 
 <script>
+import ConstructionDetails from '../components/stepperForms/ConstructionDetails.vue'
 import LocationDetails from '../components/stepperForms/LocationDetails.vue'
 
 export default {
   components: {
     LocationDetails,
+    ConstructionDetails,
   },
   data() {
     return {
-      e1: 1,
+      e1: 2,
       stepperData: [
         {
           title: 'Location Details',

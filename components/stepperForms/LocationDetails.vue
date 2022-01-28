@@ -1,5 +1,6 @@
 <template>
   <!--@TODO RESET VALUES ON CHANGE, SEND USER ROLES INSTEAD OF VERIFICATION AND CHANGE THE API AS WELL-->
+  <!--@TODO Use Promise All for on submit -->
   <!--@TODO GET PROPERTY TYPE AS A PROP-->
   <v-form v-model="valid" ref="form" lazy-validation>
     <v-container>
@@ -11,6 +12,7 @@
         <v-select
           v-model="city"
           :items="cities"
+          menu-props="auto"
           label="City"
           :rules="rules"
           @change="getLocalities(city)"
@@ -268,6 +270,7 @@ import cities from '../../assets/cities.json'
               },
               sublocalityID
             )
+            this.$emit('stepperChange', 2);
           }
           catch(e) {
             console.log(e)
