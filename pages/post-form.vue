@@ -288,7 +288,6 @@ export default {
         let newLocalityID = await this.add_locality()
         let newSublocalityID = await this.add_sublocality(newLocalityID)
         let buildingID = await this.add_building(
-          newLocalityID,
           newSublocalityID
         )
         console.log('Building added successfully', buildingID)
@@ -348,11 +347,10 @@ export default {
         console.error(error)
       }
     },
-    add_building: async function (localityID, sublocalityID) {
+    add_building: async function (sublocalityID) {
       //add new building
       try {
         return await postApartmentServices.addNewBuilding(
-          localityID,
           sublocalityID,
           this.location_formData,
           true

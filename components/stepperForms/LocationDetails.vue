@@ -200,7 +200,6 @@ export default {
       //add new building
       try {
         return await postApartmentServices.addNewBuilding(
-          localityID,
           sublocalityID,
           {
             building_name: this.building.name || this.building,
