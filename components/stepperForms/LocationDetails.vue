@@ -258,8 +258,8 @@ export default {
             },
             sublocalityID
           )
-          console.log(apartmentID)
-          this.$emit('stepperChange', apartmentID)
+          //console.log('build:' , this.building)
+          this.$emit('stepperChange', this.building, apartmentID)
         } catch (e) {
           console.log(e)
         } finally {

@@ -56,6 +56,10 @@
         </v-col>
         <v-col cols="12" sm="6" v-else>
           <v-text-field
+            :rules="[
+                      d => ( !d || /^\d+$/.test(d)) || 'Please enter a number',
+                      d => ( !d || d <=100) || 'Age cannot be more than 100'
+                    ]"
             label="Building Age "
             outlined
             v-model="building_age"
@@ -102,15 +106,14 @@
 import postApartmentServices from '../../services/postForm/apartments/postApartmentServices'
 
 export default {
-  props: ['apartmentId'],
+  props: ['building', 'apartmentId'],
   data: function() {
       return {
-      apartmentID: this.apartmentId,
       construction_type: '',
       oc_status: null,
       cc_status: null,
       construction_types: ['Under Construction', 'New Construction', 'Resale'],
-      oc_cc_types: ['Received', 'Not Received', 'Dont Know'],
+      oc_cc_types: ['Received', 'Not Received'],
       possession_date: null,
       building_age: null,
       menu: false,
@@ -124,16 +127,41 @@ export default {
   },
   methods: {
     validate: async function () {
-      await postApartmentServices.postConstructionDetails(
-        'apartments_sale',
-        apartmentID,
-        newdata
-      )
+      if(this.$refs.form.validate()) {
+        try {
+          this.loading = true
+          await postApartmentServices.postConstructionDetails(
+            'apartments_sale',
+            this.apartmentId,
+            {
+              construction_details: {
+                ...(this.landmark && { landmark: [this.landmark] }),
+                construction_type: this.construction_type,
+                ...(this.building_age && {building_age: this.building_age}),
+                ...(this.oc_status && { oc_status: this.oc_status }),
+                ...(this.cc_status && {cc_status: this.cc_status}),
+                ...( this.possession_date && {possession_date: this.possession_date})
+              }  
+            }
+          )
+        }
+        catch(e) {
+          console.log(e)
+        }
+        finally {
+          this.loading = false
+        } 
+      }
     },
   },
   watch: {
-    apartmentID: function() {
-      
+    building: function() {
+      console.log('fired', this.building, this.apartmentId)
+      this.construction_type = this.building.construction_type
+      this.building_age = this.building.building_age
+      this.oc_status = this.building.oc_status
+      this.cc_status = this.building.cc_status
+      this.possession_date = this.building.possession_date
     }
   },
 }
