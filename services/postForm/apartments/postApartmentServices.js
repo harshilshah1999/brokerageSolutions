@@ -171,5 +171,10 @@ export default {
         try {
             return await firebaseServices.getAllDocumentsNestedCollection('buildings', buildingID, 'flats',)
         } catch (error) { console.error(error); return error }
+    },
+    async getBuildingDetails(buildingID) {
+        try {
+            return await firebaseServices.getSingleDocumentByID('buildings', buildingID)
+        } catch (error) { console.error(error); return error }
     }
 }
