@@ -8,6 +8,7 @@
           :key="`${n.number}-step`"
           :complete="e1 > n.number"
           :step="n.number"
+          editable
         >
           {{ n.title }}
         </v-stepper-step>
@@ -19,17 +20,17 @@
     <v-stepper-items>
       <v-stepper-content step="1">
         <v-card elevation="0">
-          <location-details @stepperChange="e1 = 2" />
+          <location-details @stepperChange="moveToConstructionDetails" />
         </v-card>
       </v-stepper-content>
 
       <v-stepper-content step="2">
         <v-card elevation="0">
-          <construction-details @stepperChange="e1 = 3" />
+          <construction-details :apartmentId="apartment_ID" @stepperChange="e1 = 3" />
         </v-card>
       </v-stepper-content>
 
-      <v-stepper-content step="3">
+      <!-- <v-stepper-content step="3">
         <v-card elevation="0">
           <flat-details @stepperChange="e1 = 4" />
         </v-card>
@@ -39,16 +40,16 @@
         <v-card elevation="0">
           <amenities @stepperChange="e1 = 5" />
         </v-card>
-      </v-stepper-content>
+      </v-stepper-content> -->
     </v-stepper-items>
   </v-stepper>
 </template>
 
 <script>
-import ConstructionDetails from '../components/stepperForms/ConstructionDetails.vue'
-import LocationDetails from '../components/stepperForms/LocationDetails.vue'
-import FlatDetails from '../components/stepperForms/FlatDetails.vue'
-import Amenities from '../components/stepperForms/Amenities.vue'
+const ConstructionDetails = () => import('~/components/stepperForms/ConstructionDetails.vue')
+const LocationDetails = () => import('~/components/stepperForms/LocationDetails.vue')
+const FlatDetails  = () => import( '~/components/stepperForms/FlatDetails.vue')
+const Amenities  = () => import( '~/components/stepperForms/Amenities.vue')
 
 export default {
   components: {
@@ -59,7 +60,8 @@ export default {
   },
   data() {
     return {
-      e1: 3,
+      e1: 1,
+      apartment_ID: null,
       stepperData: [
         {
           title: 'Location Details',
@@ -88,6 +90,12 @@ export default {
       ],
     }
   },
+  methods: {
+    moveToConstructionDetails: function(apartmentID) {
+      this.apartment_ID = apartmentID
+      this.e1 = 2;
+    }
+  }
 }
 </script>
 

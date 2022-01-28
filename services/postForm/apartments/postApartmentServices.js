@@ -4,10 +4,9 @@ export default {
 
     async postLocationDetails(collectionID, newdata, sublocalityID) {
         let apartment = await firebaseServices.addDocumentAutoID(collectionID, newdata).catch((err) => { console.error(err); })
-        return [
-            apartment['id'],
-            await firebaseServices.addArrayElement('sublocalities', sublocalityID, collectionID, apartment['id']).catch((err) => { console.error(err); }), //update sublocalities array
-        ]
+        await firebaseServices.addArrayElement('sublocalities', sublocalityID, collectionID, apartment['id']).catch((err) => { console.error(err); }) //update sublocalities array
+        return apartment['id']
+
     },
     async updateLocationDetails(collectionID, apartmentID, newdata) {
         this.updateApartmentDetails(collectionID, apartmentID, newdata)
