@@ -51,6 +51,13 @@ export default {
         } catch (error) { console.error(error); return error }
     },
 
+    async getSingleNestedDocumentByID(collectionID1, documentID1, collectionID2, documentID2) { //get any single document from the collection
+        const documentLocation = doc(db, collectionID1, documentID1, collectionID2, documentID2);
+        try {
+            return await getDoc(documentLocation) //(parameter) response: DocumentSnapshot<DocumentData>
+        } catch (error) { console.error(error); return error }
+    },
+
     async updateSingleDocument(collectionID, documentID, newdata) { //update any document in a collection
         const documentLocation = doc(db, collectionID, documentID);
         try {

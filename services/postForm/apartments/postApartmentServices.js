@@ -11,8 +11,10 @@ export default {
     async updateLocationDetails(collectionID, apartmentID, newdata) {
         this.updateApartmentDetails(collectionID, apartmentID, newdata)
     },
-    async postConstructionDetails(collectionID, apartmentID, newdata) {
+    async postConstructionDetails(collectionID, apartmentID,buildingID, newdata) {
         this.updateApartmentDetails(collectionID, apartmentID, newdata)
+        this.updateBuildingDetails(buildingID, newdata)
+
     },
     async postPropertyDetails(collectionID, apartmentID, newdata) {
         this.updateApartmentDetails(collectionID, apartmentID, newdata)
@@ -121,17 +123,7 @@ export default {
         if (newdata['verified']) await verificationServices.verifySublocality(sublocality['id'], localityID)
         return sublocality['id'];
     },
-    async addNewBuilding(localityID, sublocalityID, newdata /* depends on who is posting the property [staff=true,other=false] */) {
-        // let buildingData = {
-        //     building_name: newdata['building_name'],
-        //     city: newdata['city'],
-        //     locality_id: localityID,
-        //     locality_name: newdata['locality_name'],
-        //     sublocality_id: sublocalityID,
-        //     sublocality_name: newdata['sublocality_name'],
-        //     landmark: newdata['landmark'],
-        //     verified: newdata['verified'],
-        // }
+    async addNewBuilding(sublocalityID, newdata /* depends on who is posting the property [staff=true,other=false] */) {
 
         //adding new building
         let building = await firebaseServices.addDocumentAutoID('buildings', newdata).catch((err) => { console.error(err); }) //enter new building
@@ -174,6 +166,11 @@ export default {
     async getBuildingDetails(buildingID) {
         try {
             return await firebaseServices.getSingleDocumentByID('buildings', buildingID)
+        } catch (error) { console.error(error); return error }
+    },
+    async getFlatDetails(buildingID, flatID) {
+        try {
+            return await firebaseServices.getSingleNestedDocumentByID('buildings', buildingID, 'flats', flatID)
         } catch (error) { console.error(error); return error }
     }
 }
