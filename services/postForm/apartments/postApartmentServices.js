@@ -9,10 +9,6 @@ export default {
             await firebaseServices.addArrayElement('sublocalities', sublocalityID, collectionID, apartment['id']).catch((err) => { console.error(err); }), //update sublocalities array
         ]
     },
-    async addNewApartment() {
-        const apartment = await firebaseServices.addDocumentAutoID(collectionID, {}).catch((err) => { console.error(err); })
-        await firebaseServices.addArrayElement('sublocalities', sublocalityID, collectionID, apartment['id']).catch((err) => { console.error(err); }) //update sublocalities array
-    },
     async updateLocationDetails(collectionID, apartmentID, newdata) {
         this.updateApartmentDetails(collectionID, apartmentID, newdata)
     },
