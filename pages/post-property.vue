@@ -1,4 +1,5 @@
 <template>
+<!-- @TODO MAKE STEPPER FORM COMPONENT NAME DYNAMIC -->
   <v-stepper v-model="e1" alt-labels>
     <v-stepper-header>
       <template v-for="n in stepperData">
@@ -16,24 +17,29 @@
 
     <v-stepper-items>
       <v-stepper-content step="1">
-        <v-card class="mb-12" elevation="0">
+        <v-card elevation="0">
           <location-details @stepperChange="e1 = 2"/>
         </v-card>
       </v-stepper-content>
 
       <v-stepper-content step="2">
-        <v-card class="mb-12" elevation="0">
+        <v-card elevation="0">
           <construction-details @stepperChange="e1 = 3"/>
         </v-card>
       </v-stepper-content>
 
       <v-stepper-content step="3">
-        <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>
-
-        <v-btn color="primary" @click="e1 = 1"> Continue </v-btn>
-
-        <v-btn text> Cancel </v-btn>
+         <v-card elevation="0">
+          <flat-details @stepperChange="e1 = 4"/>
+        </v-card>
       </v-stepper-content>
+
+ <v-stepper-content step="4">
+         <v-card elevation="0">
+          <amenities @stepperChange="e1 = 5"/>
+        </v-card>
+      </v-stepper-content>
+
     </v-stepper-items>
   </v-stepper>
 </template>
@@ -41,15 +47,19 @@
 <script>
 import ConstructionDetails from '../components/stepperForms/ConstructionDetails.vue'
 import LocationDetails from '../components/stepperForms/LocationDetails.vue'
+import FlatDetails from '../components/stepperForms/FlatDetails.vue'
+import Amenities from '../components/stepperForms/Amenities.vue'
 
 export default {
   components: {
     LocationDetails,
     ConstructionDetails,
+    FlatDetails,
+    Amenities
   },
   data() {
     return {
-      e1: 2,
+      e1: 4,
       stepperData: [
         {
           title: 'Location Details',
@@ -60,7 +70,7 @@ export default {
           number: 2,
         },
         {
-          title: 'Property Details',
+          title: 'Flat Details',
           number: 3,
         },
         {
@@ -72,7 +82,7 @@ export default {
           number: 5,
         },
         {
-          title: 'Preferences',
+          title: 'Scheduling',
           number: 6,
         },
       ],

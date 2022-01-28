@@ -2,28 +2,23 @@
   <!--@TODO RESET VALUES ON CHANGE, SEND USER ROLES INSTEAD OF VERIFICATION AND CHANGE THE API AS WELL-->
   <!--@TODO Use Promise All for on submit -->
   <!--@TODO GET PROPERTY TYPE AS A PROP-->
+  <!--@TODO OC AND CC TOOLTIPS ON INFO ICON-->
   <v-form v-model="valid" ref="form" lazy-validation>
     <v-container>
       <v-row>
-        <v-col
-         cols="12" 
-         sm="6"
-        >
-        <v-select
-          v-model="city"
-          :items="cities"
-          menu-props="auto"
-          label="City"
-          :rules="rules"
-          @change="getLocalities(city)"
-          outlined
-          required
-        ></v-select>
+        <v-col cols="12" sm="6">
+          <v-select
+            v-model="city"
+            :items="cities"
+            menu-props="auto"
+            label="City"
+            :rules="rules"
+            @change="getLocalities(city)"
+            outlined
+            required
+          ></v-select>
         </v-col>
-        <v-col
-          cols="12"
-          sm="6"
-        >
+        <v-col cols="12" sm="6">
           <v-combobox
             v-model="locality"
             :items="localities"
@@ -37,10 +32,7 @@
             persistent-hint
           ></v-combobox>
         </v-col>
-        <v-col
-          cols="12"
-          sm="6"
-        >
+        <v-col cols="12" sm="6">
           <v-combobox
             v-model="sublocality"
             :items="sublocalities"
@@ -54,14 +46,11 @@
             persistent-hint
           ></v-combobox>
         </v-col>
-         <v-col
-          cols="12"
-          sm="6"
-        >
+        <v-col cols="12" sm="6">
           <v-combobox
             v-model="building"
             :items="buildings"
-             item-text="name"
+            item-text="name"
             item-value="id"
             label="Building"
             outlined
@@ -71,21 +60,15 @@
             @input="setLandMark(building)"
           ></v-combobox>
         </v-col>
-        <v-col
-          cols="12"
-          sm="6"
-        >
-           <v-text-field
+        <v-col cols="12" sm="6">
+          <v-text-field
             v-model="flatNumber"
             label="Flat Number"
             :rules="rules"
             outlined
           ></v-text-field>
         </v-col>
-        <v-col
-          cols="12"
-          sm="6"
-        >
+        <v-col cols="12" sm="6">
           <v-combobox
             v-model="landmark"
             :items="landmarks"
@@ -94,27 +77,21 @@
             hint="Suggestions are displayed based on building selected"
             persistent-hint
           ></v-combobox>
-           <!-- <v-text-field
+          <!-- <v-text-field
             v-model="landmark"
             label="Landmark"
             outlined
           ></v-text-field> -->
         </v-col>
-        <v-col 
-          cols="12"
-          sm="6">
-          <v-btn 
-          :disabled="!valid || loading"
-          :loading="loading"
-          color="primary" 
-          @click="validate"> 
-            Save and Continue 
-             <v-icon
-                right
-                
-              >
-                mdi-arrow-right-thin
-              </v-icon>
+        <v-col cols="12" sm="6">
+          <v-btn
+            :disabled="!valid || loading"
+            :loading="loading"
+            color="primary"
+            @click="validate"
+          >
+            Save and Continue
+            <v-icon right> mdi-arrow-right-thin </v-icon>
           </v-btn>
         </v-col>
       </v-row>
@@ -126,95 +103,95 @@
 import postApartmentServices from '../../services/postForm/apartments/postApartmentServices'
 import cities from '../../assets/cities.json'
 
-  export default {
-    data: () => ({
-      cities: [],
-      localities: [],
-      sublocalities: [],
-      buildings: [],
-      landmarks: [],
-      building: '',
-      landmark: '',
-      city: '',
-      locality: '',
-      sublocality: '',
-      flatNumber: '',
-      valid: false,
-      rules: [
-        v => !!v || 'This is a required field'
-      ],
-      loading: false
-    }),
-    mounted() {
-      this.cities = cities.filter(city => city.status === 'active').map(city => city.name)
-    },
-    methods: {
-      getLocalities: async function (cityID) { 
+export default {
+  data: () => ({
+    cities: [],
+    localities: [],
+    sublocalities: [],
+    buildings: [],
+    landmarks: [],
+    building: '',
+    landmark: '',
+    city: '',
+    locality: '',
+    sublocality: '',
+    flatNumber: '',
+    valid: false,
+    rules: [(v) => !!v || 'This is a required field'],
+    loading: false,
+  }),
+  mounted() {
+    this.cities = cities
+      .filter((city) => city.status === 'active')
+      .map((city) => city.name)
+  },
+  methods: {
+    getLocalities: async function (cityID) {
       this.localities = []
       let response = await postApartmentServices.getLocalities(cityID)
 
       response.forEach((doc) =>
         this.localities.push({
           id: doc.id,
-          name: doc.data().locality_name
-        }))
-      },
-      getSublocalities: async function (locality) {
-        this.sublocalities = []
-        if(this.localities.find(name => name.name === locality.name)) {
-          let response = await postApartmentServices.getSublocalities(locality.id)
-          response.forEach(doc => this.sublocalities.push({
+          name: doc.data().locality_name,
+        })
+      )
+    },
+    getSublocalities: async function (locality) {
+      this.sublocalities = []
+      if (this.localities.find((name) => name.name === locality.name)) {
+        let response = await postApartmentServices.getSublocalities(locality.id)
+        response.forEach((doc) =>
+          this.sublocalities.push({
             id: doc.id,
-            name: doc.data().sublocality_name
-          }))
-        }
-      },
-      getBuildings: async function(sublocality) {
-        this.buildings = []        
-        if(this.sublocalities.find(name => name.name === sublocality.name)) {
-          let response = await postApartmentServices.getBuildings(sublocality.id)
-          response.forEach(doc => this.buildings.push({
+            name: doc.data().sublocality_name,
+          })
+        )
+      }
+    },
+    getBuildings: async function (sublocality) {
+      this.buildings = []
+      if (this.sublocalities.find((name) => name.name === sublocality.name)) {
+        let response = await postApartmentServices.getBuildings(sublocality.id)
+        response.forEach((doc) =>
+          this.buildings.push({
             id: doc.id,
             name: doc.data().building_name,
-            landmark: doc.data().landmark
-          }))
-        }
-      },
-      setLandMark: async function(building) {
-        this.landmarks = []
-        if(await this.buildings.find(b => b.name === building.name)) {
-          console.log('found', building.landmark)
-          this.landmarks = building.landmark
-        }
-      },
-      add_locality: async function () {
-        //add new locality
-        try {
-          return await postApartmentServices.addNewLocality(
-            {
-              city: this.city,
-              locality_name: this.locality.name || this.locality,
-              verified: true
-            }
-          )
-        } catch (error) {
-          console.error(error)
-        }
-      },
-      add_sublocality: async function (localityID) {
+            landmark: doc.data().landmark,
+          })
+        )
+      }
+    },
+    setLandMark: async function (building) {
+      this.landmarks = []
+      if (await this.buildings.find((b) => b.name === building.name)) {
+        console.log('found', building.landmark)
+        this.landmarks = building.landmark
+      }
+    },
+    add_locality: async function () {
+      //add new locality
+      try {
+        return await postApartmentServices.addNewLocality({
+          city: this.city,
+          locality_name: this.locality.name || this.locality,
+          verified: true,
+        })
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    add_sublocality: async function (localityID) {
       //add new sublocality
       try {
-        return await postApartmentServices.addNewSubLocality(
-          localityID,
-          {
-            sublocality_name: this.sublocality.name || this.sublocality,
-            city: this.city,
-            locality_id: localityID,
-            locality_name: this.locality.name || this.locality,
-            buildings: [],
-            verified: true
-          }
-        )
+        return await postApartmentServices.addNewSubLocality(localityID, {
+          sublocality_name: this.sublocality.name || this.sublocality,
+          city: this.city,
+          locality_id: localityID,
+          locality_name: this.locality.name || this.locality,
+          buildings: [],
+          verified: true,
+        })
       } catch (error) {
         console.error(error)
       }
@@ -232,78 +209,91 @@ import cities from '../../assets/cities.json'
             locality_name: this.locality.name || this.locality,
             sublocality_id: sublocalityID,
             sublocality_name: this.sublocality.name || this.sublocality,
-            ...(this.landmark && {landmark : [this.landmark]}),
-            verified: true
+            ...(this.landmark && { landmark: [this.landmark] }),
+            verified: true,
           }
         )
       } catch (error) {
         console.error(error)
       }
     },
-    validate: async function() {
-        //el = 2 to parent
-        if(this.$refs.form.validate()) {
-          try {
-            this.loading = true;
-            let localityID = this.locality.id ? this.locality.id : await this.add_locality()
-            let sublocalityID = this.sublocality.id ? this.sublocality.id : await this.add_sublocality(localityID)
-            let buildingID = this.building.id ? this.building.id : await this.add_building(localityID, sublocalityID)
-            let flatID = await postApartmentServices.addNewFlat(buildingID, {flat_number: this.flatNumber})
-            if(!this.building.id && !this.landmarks.find(l => l === this.landmark)) await postApartmentServices.addLandmark(buildingID, this.landmark)
-            const response = await postApartmentServices.postLocationDetails(
-              "apartments_sale",
-              {
-                 location_details: {
-                  city: this.city,
-                  locality_id: localityID,
-                  locality_name: this.locality.name || this.locality,
-                  sublocality_id: sublocalityID,
-                  sublocality_name: this.sublocality.name || this.sublocality,
-                  flat_number: this.flatNumber,
-                  building_name: this.building.name || this.building,
-                  building_id: buildingID,
-                  landmark: this.landmark,
-                    google_map_details: {
-                      google_map_coordinates: 'Point'
-                    }
-                  }
+    validate: async function () {
+      //el = 2 to parent
+      if (this.$refs.form.validate()) {
+        try {
+          this.loading = true
+          let localityID = this.locality.id
+            ? this.locality.id
+            : await this.add_locality()
+          let sublocalityID = this.sublocality.id
+            ? this.sublocality.id
+            : await this.add_sublocality(localityID)
+          let buildingID = this.building.id
+            ? this.building.id
+            : await this.add_building(localityID, sublocalityID)
+          let flatID = await postApartmentServices.addNewFlat(buildingID, {
+            flat_number: this.flatNumber,
+          })
+          if (
+            !this.building.id &&
+            !this.landmarks.find((l) => l === this.landmark)
+          )
+            await postApartmentServices.addLandmark(buildingID, this.landmark)
+          const apartmentID = await postApartmentServices.postLocationDetails(
+            'apartments_sale',
+            {
+              location_details: {
+                city: this.city,
+                locality_id: localityID,
+                locality_name: this.locality.name || this.locality,
+                sublocality_id: sublocalityID,
+                sublocality_name: this.sublocality.name || this.sublocality,
+                flat_number: this.flatNumber,
+                building_name: this.building.name || this.building,
+                building_id: buildingID,
+                landmark: this.landmark,
+                google_map_details: {
+                  google_map_coordinates: 'Point',
+                },
               },
-              sublocalityID
-            )
-            this.$emit('stepperChange', 2);
-          }
-          catch(e) {
-            console.log(e)
-          }
-          finally {
-            this.loading = false
-          }
+            },
+            sublocalityID
+          )
+          this.$emit('stepperChange', {
+            apartmentID,
+            buildingID
+          })
+        } catch (e) {
+          console.log(e)
+        } finally {
+          this.loading = false
         }
       }
     },
-    watch: {
-      localities: function() {
-        this.locality = '';
-      },
-      locality: function() {
-        this.sublocalities = [];
-      },
-      sublocalities: function() {
-        this.sublocality = '';
-      },
-      sublocality: function() {
-        this.buildings = [];
-      },
-      buildings: function() {
-        this.building = ''
-      },
-      building: function() {
-        this.landmarks = []
-      },
-      landmarks: function() {
-        this.landmark = ''
-      }
-    }
+  },
+  watch: {
+    localities: function () {
+      this.locality = ''
+    },
+    locality: function () {
+      this.sublocalities = []
+    },
+    sublocalities: function () {
+      this.sublocality = ''
+    },
+    sublocality: function () {
+      this.buildings = []
+    },
+    buildings: function () {
+      this.building = ''
+    },
+    building: function () {
+      this.landmarks = []
+    },
+    landmarks: function () {
+      this.landmark = ''
+    },
+  },
 }
 </script>
 

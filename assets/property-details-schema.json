@@ -20,8 +20,9 @@
             "construction_details": {
                 "construction_type": "Under Construction/New/Resale",
                 "possesion_date": "Date",
-                "oc_status": "Received/Not Received",
-                "building_age": "15 years, 7 months"
+                "building_age": "15 years",
+                "oc_status": "Received/Not Received/Dont Know",
+                "cc_status": "Received/Not Received/Dont Know"
             },
             "flat_details": {
                 "BHKtype": "2BHK",
@@ -68,7 +69,7 @@
                     "thumbnail": true
                 }
             ],
-            "visit_preference_details": {
+            "scheduling_details": {
                 "preferred_days": [
                     "Sunday",
                     "Saturday"
@@ -92,7 +93,7 @@
                 "user_feedback": [
                     {
                         "user_id": "0987654321",
-                        "user_name":"Harshil Shah",
+                        "user_name": "Harshil Shah",
                         "user_remark": "Nice property! Good interior!"
                     }
                 ]
@@ -119,7 +120,7 @@
             },
             "construction_details": {
                 "construction_type": "New/resale",
-                "building_age": "15 years, 7 months"
+                "building_age": "15 years"
             },
             "flat_details": {
                 "BHKtype": "2BHK",
@@ -169,7 +170,7 @@
                     "thumbnail": true
                 }
             ],
-            "visit_preference_details": {
+            "scheduling_details": {
                 "preferred_days": [
                     "Sunday",
                     "Saturday"
@@ -265,6 +266,7 @@
             "construction_type": "Under Construction/New/resale",
             "possesion_date": "Date and Time",
             "oc_status": "Received/Not Received",
+            "cc_status": "Received/Not Received",
             "building_age": "15 years",
             "verified": false,
             "amenities": {

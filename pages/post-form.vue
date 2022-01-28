@@ -222,7 +222,7 @@ export default {
       },
     },
     visit_preference_formData: {
-      visit_preference_details: {
+      scheduling_details: {
         preferred_days: ['Sunday', 'Monday'],
         preferred_time: {
           from: '10am',
