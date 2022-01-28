@@ -37,10 +37,8 @@ export default {
 
     async addDocumentAutoIDNestedCollection(collectionID1, documentID, collectionID2, data) { // adds a document in the collection
         const collectionLocation = collection(db, collectionID1, documentID, collectionID2)
-        // const collectionLocation = collection(db, 'buildings', 'Ixe7qQgdDowRYZD0ilbR', 'flats')
         try {
             let response = await addDoc(collectionLocation, data) //(parameter) response: DocumentReference<any>
-            console.log(response.id)
             return response
 
         } catch (error) { console.error(error); return error }
