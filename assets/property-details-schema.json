@@ -23,8 +23,7 @@
                 "oc_status": "Received/Not Received",
                 "building_age": "15 years, 7 months"
             },
-            "property_details": {
-                "flat_available_from": "Date and Time",
+            "flat_details": {
                 "BHKtype": "2BHK",
                 "carpet_area": "706 sq.ft",
                 "builtup_area": "900 sq.ft",
@@ -35,6 +34,7 @@
                 "furnishing": "Unfurnished/Semifurnished/Unfurnished",
                 "bathrooms": "3",
                 "balconies": "0",
+                "flat_available_from": "Date and Time",
                 "description": "Auto-generate summary API - lorem ipsum"
             },
             "pricing_details": {
@@ -121,7 +121,7 @@
                 "construction_type": "New/resale",
                 "building_age": "15 years, 7 months"
             },
-            "property_details": {
+            "flat_details": {
                 "BHKtype": "2BHK",
                 "carpet_area": "706 sq.ft",
                 "builtup_area": "900 sq.ft",
@@ -265,7 +265,7 @@
             "construction_type": "Under Construction/New/resale",
             "possesion_date": "Date and Time",
             "oc_status": "Received/Not Received",
-            "building_age": "15 years, 7 months",
+            "building_age": "15 years",
             "verified": false,
             "amenities": {
                 "lift": true,

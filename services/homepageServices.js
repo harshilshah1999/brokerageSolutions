@@ -16,7 +16,7 @@ export default {
                 'location_details.city', city,
                 'location_details.locality_name', locality_name,
                 'location_details.sublocality_name', sublocality_name,
-                'property_details.BHKtype', BHKtype)
+                'flat_details.BHKtype', BHKtype)
         } catch (error) { console.error(error); return error }
     },
     // MOST Visited

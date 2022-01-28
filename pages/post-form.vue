@@ -163,7 +163,7 @@ export default {
       },
     },
     details_formData: {
-      property_details: {
+      flat_details: {
         BHKtype: '2BHK',
         carpet_area: '706 sq.ft',
         builtup_area: '900 sq.ft',
