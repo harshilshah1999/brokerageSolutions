@@ -26,7 +26,11 @@
 
       <v-stepper-content step="2">
         <v-card elevation="0">
-          <construction-details :apartmentId="apartment_ID" @stepperChange="e1 = 3" />
+          <construction-details 
+            :building="building"
+            :apartmentId="apartmentID"
+            @stepperChange="e1 = 3" 
+          />
         </v-card>
       </v-stepper-content>
 
@@ -61,7 +65,14 @@ export default {
   data() {
     return {
       e1: 1,
-      apartment_ID: null,
+      building: {
+        construction_type: '',
+        possesion_date: null,
+        oc_status: null,
+        cc_status: null,
+        building_age: null,
+      },
+      apartmentID: null,
       stepperData: [
         {
           title: 'Location Details',
@@ -91,8 +102,9 @@ export default {
     }
   },
   methods: {
-    moveToConstructionDetails: function(apartmentID) {
-      this.apartment_ID = apartmentID
+    moveToConstructionDetails: function(building, apartmentID) {
+      this.building = {...this.building, ...building}
+      this.apartmentID = apartmentID
       this.e1 = 2;
     }
   }
