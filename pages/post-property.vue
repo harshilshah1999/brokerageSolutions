@@ -1,7 +1,7 @@
 <template>
   <!-- @TODO MAKE STEPPER FORM COMPONENT NAME DYNAMIC -->
-  <!-- @TODO remove non-linear -->
-  <v-stepper  non-linear v-model="e1" alt-labels>
+  <!-- @TODO ADD ICONS IN FORM-->
+  <v-stepper non-linear v-model="e1" alt-labels>
     <v-stepper-header>
       <template v-for="n in stepperData">
         <v-stepper-step
@@ -26,15 +26,15 @@
 
       <v-stepper-content step="2">
         <v-card elevation="0">
-          <construction-details 
+          <construction-details
             :building="building"
             :apartmentId="apartmentID"
-            @stepperChange="e1 = 3" 
+            @stepperChange="e1 = 3"
           />
         </v-card>
       </v-stepper-content>
 
-      <!-- <v-stepper-content step="3">
+      <v-stepper-content step="3">
         <v-card elevation="0">
           <flat-details @stepperChange="e1 = 4" />
         </v-card>
@@ -44,16 +44,32 @@
         <v-card elevation="0">
           <amenities @stepperChange="e1 = 5" />
         </v-card>
-      </v-stepper-content> -->
+      </v-stepper-content>
+
+      <v-stepper-content step="5">
+        <v-card elevation="0">
+          <media @stepperChange="e1 = 6" />
+        </v-card>
+      </v-stepper-content>
+
+      <v-stepper-content step="6">
+        <v-card elevation="0">
+          <scheduling @stepperChange="e1 = 7" />
+        </v-card>
+      </v-stepper-content>
     </v-stepper-items>
   </v-stepper>
 </template>
 
 <script>
-const ConstructionDetails = () => import('~/components/stepperForms/ConstructionDetails.vue')
-const LocationDetails = () => import('~/components/stepperForms/LocationDetails.vue')
-const FlatDetails  = () => import( '~/components/stepperForms/FlatDetails.vue')
-const Amenities  = () => import( '~/components/stepperForms/Amenities.vue')
+const ConstructionDetails = () =>
+  import('~/components/stepperForms/ConstructionDetails.vue')
+const LocationDetails = () =>
+  import('~/components/stepperForms/LocationDetails.vue')
+const FlatDetails = () => import('~/components/stepperForms/FlatDetails.vue')
+const Amenities = () => import('~/components/stepperForms/Amenities.vue')
+const Media = () => import('~/components/stepperForms/Media.vue')
+const Scheduling = () => import('~/components/stepperForms/Scheduling.vue')
 
 export default {
   components: {
@@ -61,6 +77,8 @@ export default {
     ConstructionDetails,
     FlatDetails,
     Amenities,
+    Media,
+    Scheduling,
   },
   data() {
     return {
@@ -102,12 +120,12 @@ export default {
     }
   },
   methods: {
-    moveToConstructionDetails: function(building, apartmentID) {
-      this.building = {...this.building, ...building}
+    moveToConstructionDetails: function (building, apartmentID) {
+      this.building = { ...this.building, ...building }
       this.apartmentID = apartmentID
-      this.e1 = 2;
-    }
-  }
+      this.e1 = 2
+    },
+  },
 }
 </script>
 

@@ -64,6 +64,7 @@
             },
             "media": [
                 {
+                    "media_id" : "ObjectID",
                     "storage_path": "apartments_sale/DocID/image.jpeg",
                     "media_type": "Living Room/Bedroom/Kitchen/...",
                     "thumbnail": true

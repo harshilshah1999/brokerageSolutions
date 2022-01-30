@@ -256,6 +256,11 @@ export default {
     // this.getBuildings('gSuqJckN00ShSaqrFi6y')
     // this.getFlats('Ixe7qQgdDowRYZD0ilbR')
     // this.add_flat('Ixe7qQgdDowRYZD0ilbR')
+    // const response =  await postApartmentServices.addNewBuilding(
+    //     'YQDvTYvtduZ49W1e2VkQ',
+    //     { somil: 'hfkf' }
+    //   )
+    //   console.log(response,response.id,response['id'])
   },
   methods: {
     getLocalities: async function (cityID) {
@@ -287,9 +292,7 @@ export default {
         this.property_type
         let newLocalityID = await this.add_locality()
         let newSublocalityID = await this.add_sublocality(newLocalityID)
-        let buildingID = await this.add_building(
-          newSublocalityID
-        )
+        let buildingID = await this.add_building(newSublocalityID)
         console.log('Building added successfully', buildingID)
         const response = await postApartmentServices.postLocationDetails(
           this.property_type,
@@ -300,7 +303,6 @@ export default {
 
         this.documentID = response[0]
         this.storage_path = response[0]['path']
-
 
         console.log('New property Added : ', response[0], response)
       } catch (error) {
@@ -447,14 +449,9 @@ export default {
       try {
         this.chosenFile.forEach(async (element, index) => {
           ;(this.media_formData = {
-            media: [
-              {
-                storage_path:
-                  this.storage_path + '/' + index + '_' + element.name, //need image name validation here
-                media_type: 'Living Room/Bedroom/Kitchen/...',
-                thumbnail: true,
-              },
-            ],
+            storage_path: this.storage_path + '/' + index + '_' + element.name, //need image name validation here
+            media_type: 'Living Room/Bedroom/Kitchen/...',
+            thumbnail: true,
           }),
             await postApartmentServices.postMedia(
               this.property_type,
