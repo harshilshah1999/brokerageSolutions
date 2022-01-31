@@ -1,7 +1,7 @@
 // ~/plugins/firebase.js
 
 import { initializeApp } from "firebase/app"
-import { getAuth } from 'firebase/auth'
+import { getAuth, signInWithPhoneNumber, RecaptchaVerifier } from 'firebase/auth'
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from 'firebase/storage'
 
@@ -21,5 +21,5 @@ const db = getFirestore(firebaseApp);
 const auth = getAuth();
 const storage = getStorage(firebaseApp)
 
-export { auth, db, storage }
+export { auth, db, storage, signInWithPhoneNumber, RecaptchaVerifier }
 export default firebaseApp

@@ -89,7 +89,7 @@
                 "status": "Active/Inactive",
                 "posted_by_user_id": "ObjectID",
                 "posted_by_user_name": "Somil Shah",
-                "verification_status?": "verified/under_verification/rejected",
+                "verification_status": "Verified/Under Verification/Rejected",
                 "times_visited": "increment()",
                 "user_feedback": [
                     {
@@ -190,7 +190,7 @@
                 "status": "Active/Inactive",
                 "posted_by_user_id": "ObjectID",
                 "posted_by_user_name": "Somil Shah",
-                "verification_status?": "verified/under_verification/rejected",
+                "verification_status": "Verified/Under Verification/Rejected",
                 "times_visited": "increment()",
                 "user_feedback": [
                     {
