@@ -64,23 +64,12 @@
             },
             "media": [
                 {
-                    "media_id" : "ObjectID",
+                    "media_id": "ObjectID",
                     "storage_path": "apartments_sale/DocID/image.jpeg",
-                    "media_type": "Living Room/Bedroom/Kitchen/...",
+                    "media_type": "Living Room/Bedroom/Kitchen/Brochure/...",
                     "thumbnail": true
                 }
             ],
-            "scheduling_details": {
-                "preferred_days": [
-                    "Sunday",
-                    "Saturday"
-                ],
-                "preferred_time": {
-                    "from": "10am",
-                    "to": "9pm"
-                },
-                "alternate_number": "1234567890"
-            },
             "other_details": {
                 "posted_date": "Date and Time",
                 "verification_date": "Date and Time",
@@ -90,7 +79,9 @@
                 "posted_by_user_id": "ObjectID",
                 "posted_by_user_name": "Somil Shah",
                 "verification_status": "Verified/Under Verification/Rejected",
-                "times_visited": "increment()",
+                "enquired_by": [],
+                "shortlisted_by": [],
+                "visited_by": [],
                 "user_feedback": [
                     {
                         "user_id": "0987654321",
@@ -302,6 +293,7 @@
             "user_id": "Mobile Number",
             "user_name": "string",
             "mobile_number": "1234567890",
+            "alternate_mobile_number": "1234567890",
             "user_email": "",
             "user_alternate_email": "",
             "user_role": "string - user/agent/staff",
