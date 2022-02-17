@@ -16,8 +16,7 @@ import {
     orderBy,
     limit,
 } from 'firebase/firestore'
-import { ref, getDownloadURL, uploadBytes } from 'firebase/storage'
-
+import { ref, deleteObject, getDownloadURL, uploadBytes } from 'firebase/storage'
 export default {
 
     async addDocumentAutoID(collectionID, data) { // adds a document in the collection
@@ -98,6 +97,14 @@ export default {
         } catch (error) { console.error(error); return error }
     },
 
+    async deleteSingleNestedDocument(collectionID1, documentID1, collectionID2, documentID2) { //deletes a specific document from the collection
+        const documentLocation = doc(db, collectionID1, documentID1, collectionID2, documentID2);
+        try {
+            await deleteDoc(documentLocation) //(parameter) response: void
+            return "Document Deleted Successfully"
+        } catch (error) { console.error(error); return error }
+    },
+
     async getAllDocuments(collectionID) { //reads all the documents in a collection
         const collectionLocation = collection(db, collectionID)
         try {
@@ -123,6 +130,13 @@ export default {
         const uploadLocation = ref(storage, media_path);
         try {
             return await uploadBytes(uploadLocation, file) //(parameter) snapshot: UploadResult
+        } catch (error) { console.error(error); return error }
+    },
+
+    async deleteSingleMedia(media_path) { // add single media to storage
+        const deleteLocation = ref(storage, media_path);
+        try {
+            return await deleteObject(deleteLocation)
         } catch (error) { console.error(error); return error }
     },
 

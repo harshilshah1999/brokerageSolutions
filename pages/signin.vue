@@ -1,54 +1,111 @@
 <template>
- <div>
-    <form @submit.prevent="userSignIn">
-      <h2>Sign Up</h2>
-
-      <div class="mb-4">
-        <label for="email">Email</label>
-        <input type="text" id="email"  v-model="email"/>
-      </div>
-
-      <div>
-        <label for="password">Password</label>
-        <input type="password" id="password" v-model="password"/>
-      </div>
-      <button>Sign In</button>
-    </form>
+  <div>
+    <h1>Login</h1>
+    <br />
+    <div>
+      <v-text-field
+        v-model="phoneNumber"
+        label="Phone Number"
+        id="phonenumber"
+        maxlength="13"
+        placeholder="+919876543210"
+        required
+        outlined
+      ></v-text-field>
+      <div
+        id="recaptcha-container"
+        style="background-color: #1b1a1a; width: 300px; margin: auto"
+      ></div>
+      <v-btn id="log-in" @click="submit">Login</v-btn>
+    </div>
+    <br />
+    <v-divider></v-divider>
+    <br />
+    <div>
+      <v-otp-input
+        v-model="OTP"
+        required
+        length="6"
+        type="number"
+      ></v-otp-input>
+      <v-btn @click="verifyCode" id="otp-btn"> Confirm OTP </v-btn>
+    </div>
   </div>
 </template>
 
-<!-- The script tag of ~/pages/signin.vue -->
-
 <script>
+import {
+  auth,
+  signInWithPhoneNumber,
+  RecaptchaVerifier,
+} from '../plugins/firebase'
+
 export default {
-  name: "signin",
-
-  data: function() {
+  name: 'login',
+  data() {
     return {
-      email: "",
-      password: ""
-    };
-  },
-
-  methods: {
-    userSignIn: function(err) {
-      this.$store
-        .dispatch("signInWithEmail", {
-          email: this.email,
-          password: this.password
-        })
-        .then(() => {
-          this.email = "";
-          this.password = "";
-        })
-        .catch(err => {
-          alert(err.message);
-        });
+      testNumber: '+19999999999',
+      phoneNumber: '+19999999999',
+      confirmationResult: null,
+      testOTP: '000000',
+      OTP: '000000',
+      recaptchaVerifier: null,
+      recaptchaWidgetId: null,
+      confirmResult: null,
+      smsSent: false,
     }
-  }
-};
+  },
+  mounted() {
+    this.recaptchaVerifier = new RecaptchaVerifier(
+      'log-in',
+      {
+        size: 'invisible',
+        callback: (response) => {
+          alert('reCAPTCHA cleared')
+        },
+        'expired-callback': () => {
+          // Response expired. Ask user to solve reCAPTCHA again.
+          this.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
+            'recaptcha-container',
+            {},
+            auth
+          )
+        },
+      },
+      auth
+    )
+  },
+  methods: {
+    submit() {
+      signInWithPhoneNumber(auth, this.phoneNumber, this.recaptchaVerifier)
+        .then((confirmationResult) => {
+          this.confirmResult = confirmationResult
+          console.log(this.confirmResult)
+          alert('Sms Sent!')
+          this.smsSent = true
+        })
+        .catch((error) => {
+          console.log('Sms not sent', error.message)
+        })
+    },
+    verifyCode() {
+      this.confirmResult
+        .confirm(this.OTP)
+        .then((result) => {
+          alert('Registeration Successfull!', result)
+          this.redirectFunction()
+          var user = result.user
+          console.log(user)
+        })
+        .catch((error) => {
+          alert('Invalid OTP')
+          console.error(error)
+        })
+    },
+    redirectFunction() {
+      alert('You will be redirected')
+      // this.$router.replace({ name: 'home' })
+    },
+  },
+}
 </script>
-
-<style lang="scss" scoped>
-
-</style>
