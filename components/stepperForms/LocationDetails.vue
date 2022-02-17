@@ -3,6 +3,8 @@
   <!--@TODO Use Promise All for on submit -->
   <!--@TODO GET PROPERTY TYPE AS A PROP-->
   <!--@TODO OC AND CC TOOLTIPS ON INFO ICON-->
+  <!--@TODO CHECK if THE SAME FLAT NUMBER ALREADY EXISTS IN THE BUILDING-->
+
   <v-form v-model="valid" ref="form" lazy-validation>
     <v-container>
       <v-row>
@@ -198,19 +200,16 @@ export default {
     add_building: async function (localityID, sublocalityID) {
       //add new building
       try {
-        return await postApartmentServices.addNewBuilding(
-          sublocalityID,
-          {
-            building_name: this.building.name || this.building,
-            city: this.city,
-            locality_id: localityID,
-            locality_name: this.locality.name || this.locality,
-            sublocality_id: sublocalityID,
-            sublocality_name: this.sublocality.name || this.sublocality,
-            ...(this.landmark && { landmark: [this.landmark] }),
-            verified: true,
-          }
-        )
+        return await postApartmentServices.addNewBuilding(sublocalityID, {
+          building_name: this.building.name || this.building,
+          city: this.city,
+          locality_id: localityID,
+          locality_name: this.locality.name || this.locality,
+          sublocality_id: sublocalityID,
+          sublocality_name: this.sublocality.name || this.sublocality,
+          ...(this.landmark && { landmark: [this.landmark] }),
+          verified: true,
+        })
       } catch (error) {
         console.error(error)
       }
@@ -236,7 +235,7 @@ export default {
             !this.building.id &&
             !this.landmarks.find((l) => l === this.landmark)
           )
-          await postApartmentServices.addLandmark(buildingID, this.landmark)
+            await postApartmentServices.addLandmark(buildingID, this.landmark)
           const apartmentID = await postApartmentServices.postLocationDetails(
             'apartments_sale',
             {
@@ -293,5 +292,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>
