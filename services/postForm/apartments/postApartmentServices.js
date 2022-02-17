@@ -1,5 +1,6 @@
 import firebaseServices from '../../firebaseServices'
 import verificationServices from '../../verificationServices';
+// @TODO - CREATE NESTED COLLECTIONS TO SAVE READS
 export default {
     // CREATE
     async postLocationDetails(collectionID, newdata, sublocalityID) {

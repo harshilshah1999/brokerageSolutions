@@ -11,6 +11,7 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/pwa": "^3.3.5",
+    "browser-image-compression": "^1.0.17",
     "core-js": "^3.15.1",
     "firebase": "^9.6.5",
     "nuxt": "^2.15.7",
