@@ -136,27 +136,31 @@ export default {
                 ...(this.cc_status && { cc_status: this.cc_status }),
                 ...(this.possession_date && { possession_date: this.possession_date }),
               },
+            },
+            {
+              city: "",
+              localityID: "",
+              sublocalityID: "",
             }
-          )
-           this.$emit('stepperChange')
-        }
-        catch(e) {
-          console.log(e)
+          );
+          this.$emit("stepperChange");
+        } catch (e) {
+          console.log(e);
         }
       }
     },
   },
   watch: {
-    buildingId: async function() {
-      let building_details = null
-      building_details = await postApartmentServices.getBuildingDetails(this.buildingId)
-      building_details = building_details.data()
-      this.construction_type = building_details.construction_type
-      this.building_age = building_details.building_age
-      this.oc_status = building_details.oc_status
-      this.cc_status = building_details.cc_status
-      this.possession_date = building_details.possession_date
-    }
+    buildingId: async function () {
+      let building_details = null;
+      building_details = await postApartmentServices.getBuildingDetails(this.buildingId);
+      building_details = building_details.data();
+      this.construction_type = building_details.construction_type;
+      this.building_age = building_details.building_age;
+      this.oc_status = building_details.oc_status;
+      this.cc_status = building_details.cc_status;
+      this.possession_date = building_details.possession_date;
+    },
   },
 };
 </script>

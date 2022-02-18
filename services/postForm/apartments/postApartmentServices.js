@@ -11,10 +11,9 @@ export default {
     async updateLocationDetails(collectionID, apartmentID, newdata) {
         this.updateApartmentDetails(collectionID, apartmentID, newdata)
     },
-    async postConstructionDetails(collectionID, apartmentID, buildingID, newdata) {
+    async postConstructionDetails(collectionID, apartmentID, buildingID, newdata, location) {
         this.updateApartmentDetails(collectionID, apartmentID, newdata)
-        this.updateBuildingDetails(buildingID, newdata['construction_details'])
-
+        this.updateBuildingDetails(location, buildingID, newdata['construction_details'])
     },
     async postPropertyDetails(collectionID, apartmentID, newdata) {
         this.updateApartmentDetails(collectionID, apartmentID, newdata)
@@ -177,9 +176,9 @@ export default {
             return await firebaseServices.updateSingleDocument('sublocalities', sublocalityID, newdata)
         } catch (error) { console.error(error); return error }
     },
-    async updateBuildingDetails(buildingID, newdata) {
+    async updateBuildingDetails(location, buildingID, newdata) {
         try {
-            return await firebaseServices.updateSingleDocument('buildings', buildingID, newdata) //update property
+            return await firebaseServices.updateSingleDocument('cities', location['city'], 'localites', location['localityID'], 'sublocality', location['sublocalityID'], 'buildings', buildingID, newdata) //update property
         } catch (error) { console.error(error); return error }
     },
     async updateFlatDetails(buildingID, flatID, flatData) {
