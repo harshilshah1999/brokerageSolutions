@@ -1,0 +1,26 @@
+[
+    {
+        "name": "Lift",
+        "icon": "mdi-elevator-passenger-outline"
+    },
+    {
+        "name": "Gas Pipeline",
+        "icon": "mdi-pipe"
+    },
+    {
+        "name": "Visitor Parking",
+        "icon":"mdi-car-brake-parking"
+    },
+    {
+        "name":"Gym",
+        "icon": "mdi-weight-lifter"
+    },
+    {
+        "name": "Swimming Pool",
+        "icon":"mdi-pool"
+    },
+    {
+        "name": "Club House",
+        "icon": "mdi-greenhouse"
+    }
+]

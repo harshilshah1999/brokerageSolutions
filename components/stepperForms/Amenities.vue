@@ -2,37 +2,11 @@
   <v-form v-model="valid" ref="form" lazy-validation>
     <v-container>
       <v-row>
-        <v-col cols="12" sm="4">
-          <v-checkbox v-model="lift" label="Lift" color="indigo"></v-checkbox>
-        </v-col>
-        <v-col cols="12" sm="4">
+        <v-col cols="12" sm="4" v-for="amenity in amenities" :key="amenity.name"> 
           <v-checkbox
-            v-model="gas_pipeline"
-            label="Gas Pipeline"
-            color="indigo"
-          ></v-checkbox>
-        </v-col>
-        <v-col cols="12" sm="4">
-          <v-checkbox
-            v-model="visitor_parking"
-            label="Visitor Parking"
-            color="indigo"
-          ></v-checkbox>
-        </v-col>
-        <v-col cols="12" sm="4">
-          <v-checkbox v-model="gym" label="Gym" color="indigo"></v-checkbox>
-        </v-col>
-        <v-col cols="12" sm="4">
-          <v-checkbox
-            v-model="swimming_pool"
-            label="Swimming Pool"
-            color="indigo"
-          ></v-checkbox>
-        </v-col>
-        <v-col cols="12" sm="4">
-          <v-checkbox
-            v-model="clubhouse"
-            label="Clubhouse"
+            v-model="amenity.selected"
+            :label="amenity.name"
+            :append-icon="amenity.icon"
             color="indigo"
           ></v-checkbox>
         </v-col>
@@ -53,23 +27,19 @@
 </template>
 
 <script>
-import postApartmentServices from '../../services/postForm/apartments/postApartmentServices'
+import postApartmentServices from '../../services/postForm/apartments/postApartmentServices';
+import amenities from "../../assets/amenities.json";
 
 export default {
   data: () => ({
-    lift: true,
-    gas_pipeline: false,
-    visitor_parking: true,
-    gym: false,
-    swimming_pool: true,
-    clubhouse: false,
-
-    menu: false,
+    amenities: [],
     valid: false,
-    rules: [(v) => !!v || 'This is a required field'],
     loading: false,
   }),
-  mounted() {},
+  mounted() {
+    this.amenities = amenities
+    this.amenities.forEach(amenity => amenity.selected = false)
+  },
   methods: {},
   watch: {},
 }
