@@ -178,7 +178,7 @@ export default {
     },
     async updateBuildingDetails(location, buildingID, newdata) {
         try {
-            return await firebaseServices.updateSingleDocument('cities', location['city'], 'localities', location['localityID'], 'sublocalities', location['sublocalityID'], 'buildings', buildingID, newdata) //update property
+            return await firebaseServices.updateSingleDocument4D('cities', location['city'], 'localities', location['localityID'], 'sublocalities', location['sublocalityID'], 'buildings', buildingID, newdata) //update property
         } catch (error) { console.error(error); return error }
     },
     async updateFlatDetails(location, buildingID, flatID, flatData) {
