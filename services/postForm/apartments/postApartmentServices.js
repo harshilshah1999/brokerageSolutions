@@ -18,13 +18,13 @@ export default {
     async postPropertyDetails(collectionID, apartmentID, newdata) {
         this.updateApartmentDetails(collectionID, apartmentID, newdata)
     },
-    async postPricingDetails(collectionID, apartmentID, flatID, newdata) {
+    async postPricingDetails(location, collectionID, apartmentID, flatID, newdata) {
         this.updateApartmentDetails(collectionID, apartmentID, newdata)
         let maintenanceData = {
             monthly_maintainence: newdata['monthly_maintainence'],
             annual_maintainence: newdata['annual_maintenance']
         }
-        this.updateFlatDetails(buildingID, flatID, maintenanceData)
+        this.updateFlatDetails(location, buildingID, flatID, maintenanceData)
     },
     async postRentalDetails(collectionID, apartmentID, flatID, newdata) {
         this.updateApartmentDetails(collectionID, apartmentID, newdata)
@@ -32,13 +32,13 @@ export default {
             monthly_maintainence: newdata['monthly_maintainence'],
             annual_maintainence: newdata['annual_maintenance']
         }
-        this.updateFlatDetails(buildingID, flatID, maintenanceData)
+        this.updateFlatDetails(location, buildingID, flatID, maintenanceData)
     },
     async postAmenitiesDetails(collectionID, apartmentID, newdata) {
         this.updateApartmentDetails(collectionID, apartmentID, newdata)
         this.updateBuildingDetails(buildingID, newdata)
     },
-    async postVisitPreferenceDetails(collectionID, apartmentID, newdata, other_details) {
+    async postVisitPreferenceDetails(location, collectionID, apartmentID, newdata, other_details) {
         other_details = {
             posted_date: "Date and Time",
             posting_status: "Complete",
@@ -62,7 +62,7 @@ export default {
             monthly_maintainence: "5000/month",
             annual_maintainence: "70000/year"
         }
-        this.updateFlatDetails(buildingID, flatID, flatData)
+        this.updateFlatDetails(location, buildingID, flatID, flatData)
     },
     async postMedia(collectionID, apartmentID, file, mediaData, image_path) {
         try {
@@ -178,11 +178,11 @@ export default {
     },
     async updateBuildingDetails(location, buildingID, newdata) {
         try {
-            return await firebaseServices.updateSingleDocument('cities', location['city'], 'localites', location['localityID'], 'sublocality', location['sublocalityID'], 'buildings', buildingID, newdata) //update property
+            return await firebaseServices.updateSingleDocument('cities', location['city'], 'localities', location['localityID'], 'sublocalities', location['sublocalityID'], 'buildings', buildingID, newdata) //update property
         } catch (error) { console.error(error); return error }
     },
-    async updateFlatDetails(buildingID, flatID, flatData) {
-        await this.updateApartmentDetails('buildings', buildingID, { total_floors: flatData['total_floors'] })
+    async updateFlatDetails(location, buildingID, flatID, flatData) {
+        await this.updateApartmentDetails('cities', location.city, 'localities', location.localityID, 'sublocalities', location.sublocalityID, 'buildings', buildingID, { total_floors: flatData['total_floors'] })
         return await firebaseServices.updateSingleDocument2D('buildings', buildingID, 'flats', flatID, flatData)
     },
     async updateMedia(collectionID, apartmentID, mediaID, mediaData) { //don't update image path,wont be updated in storage
