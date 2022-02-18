@@ -20,9 +20,7 @@
     <v-stepper-items>
       <v-stepper-content step="1">
         <v-card elevation="0">
-          <location-details 
-            @stepperChange="moveToConstructionDetails" 
-          />
+          <location-details @stepperChange="moveToBuildingDetails" />
         </v-card>
       </v-stepper-content>
 
@@ -41,10 +39,7 @@
 
       <v-stepper-content step="3">
         <v-card elevation="0">
-          <flat-details 
-            :apartmentId="apartmentID"
-            @stepperChange="e1 = 4" 
-          />
+          <flat-details :apartmentId="apartmentID" @stepperChange="e1 = 4" />
         </v-card>
       </v-stepper-content>
 
@@ -70,17 +65,17 @@
 </template>
 
 <script>
-const ConstructionDetails = () => import('~/components/stepperForms/ConstructionDetails.vue')
-const LocationDetails = () => import('~/components/stepperForms/LocationDetails.vue')
-const FlatDetails = () => import('~/components/stepperForms/FlatDetails.vue')
-const Amenities = () => import('~/components/stepperForms/Amenities.vue')
-const Media = () => import('~/components/stepperForms/Media.vue')
-const Scheduling = () => import('~/components/stepperForms/Scheduling.vue')
+const BuildingDetails = () => import("~/components/stepperForms/BuildingDetails.vue");
+const LocationDetails = () => import("~/components/stepperForms/LocationDetails.vue");
+const FlatDetails = () => import("~/components/stepperForms/FlatDetails.vue");
+const Amenities = () => import("~/components/stepperForms/Amenities.vue");
+const Media = () => import("~/components/stepperForms/Media.vue");
+const Scheduling = () => import("~/components/stepperForms/Scheduling.vue");
 
 export default {
   components: {
     LocationDetails,
-    ConstructionDetails,
+    BuildingDetails,
     FlatDetails,
     Amenities,
     Media,
@@ -96,45 +91,49 @@ export default {
       city: null,
       stepperData: [
         {
-          title: 'Location Details',
+          title: "Location Details",
           number: 1,
         },
         {
-          title: 'Construction Details',
+          title: "Construction Details",
           number: 2,
         },
         {
-          title: 'Flat Details',
+          title: "Flat Details",
           number: 3,
         },
         {
-          title: 'Amenities',
+          title: "Amenities",
           number: 4,
         },
         {
-          title: 'Media',
+          title: "Media",
           number: 5,
         },
         {
-          title: 'Scheduling',
+          title: "Scheduling",
           number: 6,
         },
       ],
-    }
+    };
   },
   methods: {
-    moveToConstructionDetails: function ( city, localityID, sublocalityID, buildingID, apartmentID) {
-      console.log(buildingID)
-      this.city = city
-      this.localityID = localityID
-      this.sublocalityID = sublocalityID
-      this.buildingID = buildingID
-      this.apartmentID = apartmentID
-      this.e1 = 2
+    moveToBuildingDetails: function (
+      city,
+      localityID,
+      sublocalityID,
+      buildingID,
+      apartmentID
+    ) {
+      this.city = city;
+      this.localityID = localityID;
+      this.sublocalityID = sublocalityID;
+      this.buildingID = buildingID;
+      this.apartmentID = apartmentID;
+      this.e1 = 2;
     },
   },
-}
+};
 </script>
 
-<style>
-</style>
+<style></style>

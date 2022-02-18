@@ -11,11 +11,11 @@ export default {
     async updateLocationDetails(collectionID, apartmentID, newdata) {
         this.updateApartmentDetails(collectionID, apartmentID, newdata)
     },
-    async postConstructionDetails(collectionID, apartmentID, buildingID, newdata, location) {
+    async postBuildingDetails(collectionID, apartmentID, buildingID, newdata, location) {
         this.updateApartmentDetails(collectionID, apartmentID, newdata)
-        this.updateBuildingDetails(location, buildingID, newdata['construction_details'])
+        this.updateBuildingDetails(location, buildingID, newdata['building_details'])
     },
-    async postPropertyDetails(collectionID, apartmentID, newdata) {
+    async postFlatDetails(collectionID, apartmentID, newdata) {
         this.updateApartmentDetails(collectionID, apartmentID, newdata)
     },
     async postPricingDetails(location, collectionID, apartmentID, flatID, newdata) {
@@ -149,9 +149,9 @@ export default {
             return await firebaseServices.getSingleDocumentByID4D('cities', city, 'localities', localityID, 'sublocalities', sublocalityID, 'buildings', buildingID)
         } catch (error) { console.error(error); return error }
     },
-    async getFlatDetails(buildingID, flatID) {
+    async getFlatDetails(city, localityID, sublocalityID, buildingID, flatID) {
         try {
-            return await firebaseServices.getSingleDocumentByID2D('buildings', buildingID, 'flats', flatID)
+            return await firebaseServices.getSingleDocumentByID5D('cities', city, 'localities', localityID, 'sublocalities', sublocalityID, 'buildings', buildingID, 'flats', flatID)
         } catch (error) { console.error(error); return error }
     },
     async getMedia(media_path) {
@@ -182,11 +182,15 @@ export default {
         } catch (error) { console.error(error); return error }
     },
     async updateFlatDetails(location, buildingID, flatID, flatData) {
-        await this.updateApartmentDetails('cities', location.city, 'localities', location.localityID, 'sublocalities', location.sublocalityID, 'buildings', buildingID, { total_floors: flatData['total_floors'] })
-        return await firebaseServices.updateSingleDocument2D('buildings', buildingID, 'flats', flatID, flatData)
+        try {
+            return await firebaseServices.updateSingleDocument5D('cities', location['city'], 'localities', location['localityID'], 'sublocalities', location['sublocalityID'], 'buildings', buildingID, 'flats', flatID, flatData)
+        } catch (error) { console.error(error); return error }
+
     },
     async updateMedia(collectionID, apartmentID, mediaID, mediaData) { //don't update image path,wont be updated in storage
-        return await firebaseServices.updateSingleDocument2D(collectionID, apartmentID, 'media', mediaID, mediaData).catch((err) => { console.error(err); })
+        try {
+            return await firebaseServices.updateSingleDocument2D(collectionID, apartmentID, 'media', mediaID, mediaData).catch((err) => { console.error(err); })
+        } catch (error) { console.error(error); return error }
     },
 
     //DELETE

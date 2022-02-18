@@ -152,6 +152,13 @@ export default {
             return "Document Updated Successfully"
         } catch (error) { console.error(error); return error }
     },
+    async updateSingleDocument5D(collectionID1, documentID1, collectionID2, documentID2, collectionID3, documentID3, collectionID4, documentID4, collectionID5, documentID5, newdata) { //update any document in a collection
+        const documentLocation = doc(db, collectionID1, documentID1, collectionID2, documentID2, collectionID3, documentID3, collectionID4, documentID4, collectionID5, documentID5);
+        try {
+            await setDoc(documentLocation, newdata, { merge: true })  //(parameter) response: void
+            return "Document Updated Successfully"
+        } catch (error) { console.error(error); return error }
+    },
 
     async addArrayElement(collectionID, documentID, key, value) {
         const documentLocation = doc(db, collectionID, documentID);

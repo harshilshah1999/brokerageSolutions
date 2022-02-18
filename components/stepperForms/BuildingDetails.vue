@@ -124,12 +124,12 @@ export default {
       if (this.$refs.form.validate()) {
         try {
           this.loading = true;
-          await postApartmentServices.postConstructionDetails(
+          await postApartmentServices.postBuildingDetails(
             "apartments_sale",
             this.apartmentId,
             this.buildingId,
             {
-              construction_details: {
+              building_details: {
                 ...(this.landmark && { landmark: [this.landmark] }),
                 construction_type: this.construction_type,
                 ...(this.building_age && { building_age: this.building_age }),

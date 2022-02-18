@@ -97,7 +97,7 @@ export default {
     documentID: null,
     storage_path: "",
     sale_construction_formData: {
-      construction_details: {
+      building_details: {
         construction_type: "Under Construction/New/resale",
         possesion_date: "date",
         oc_status: "string",
@@ -106,7 +106,7 @@ export default {
       },
     },
     rent_construction_formData: {
-      construction_details: {
+      building_details: {
         construction_type: "Under Construction/New/resale",
         building_age: "string",
       },
@@ -283,7 +283,7 @@ export default {
         construction_formData = this.rent_construction_formData;
       }
       try {
-        await postApartmentServices.postConstructionDetails(
+        await postApartmentServices.postBuildingDetails(
           this.property_type,
           construction_formData
         );
@@ -363,7 +363,7 @@ export default {
     },
     detail_submit: async function () {
       try {
-        await postApartmentServices.postPropertyDetails(
+        await postApartmentServices.postFlatDetails(
           this.property_type,
           this.documentID,
           this.details_formData

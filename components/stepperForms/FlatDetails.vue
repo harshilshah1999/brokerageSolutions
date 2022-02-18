@@ -151,17 +151,11 @@
             Save and Continue
             <v-icon right> mdi-arrow-right-thin </v-icon>
           </v-btn>
-          <v-snackbar
-            v-model="snackbar"
-          >
-            Please enter atleast one of the following areas - Carpet Area, Builtup Area, Super Builtup Area
+          <v-snackbar v-model="snackbar">
+            Please enter atleast one of the following areas - Carpet Area,
+            Builtup Area, Super Builtup Area
             <template v-slot:action="{ attrs }">
-              <v-btn
-                color="pink"
-                text
-                v-bind="attrs"
-                @click="snackbar = false"
-              >
+              <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
                 Close
               </v-btn>
             </template>
@@ -210,20 +204,19 @@ export default {
   }),
   mounted() {},
   methods: {
-    validate: async function() {
-      if(!this.carpet_area && !this.builtup_area && !this.super_builtup_area) {
-        this.valid = false;
-        this.snackbar = true;
-      }
-      else if(this.$refs.form.validate()) {
+    validate: async function () {
+      if (!this.carpet_area && !this.builtup_area && !this.super_builtup_area) {
+        this.valid = false
+        this.snackbar = true
+      } else if (this.$refs.form.validate()) {
         try {
           this.loading = true
           console.log(this.apartmentId)
-          await postApartmentServices.postPropertyDetails(
-            "apartments_sale",
+          await postApartmentServices.postFlatDetails(
+            'apartments_sale',
             this.apartmentId,
             {
-               flat_details: {
+              flat_details: {
                 BHKtype: this.BHKtype,
                 carpet_area: this.carpet_area,
                 builtup_area: this.builtup_area,
@@ -235,23 +228,20 @@ export default {
                 bathrooms: this.bathrooms,
                 balconies: this.balconies,
                 description: this.description,
-                flat_available_from: this.flat_available_from
-              }
+                flat_available_from: this.flat_available_from,
+              },
             }
           )
-        }
-        catch(e) {
+        } catch (e) {
           console.log(e)
-        }
-        finally {
+        } finally {
           this.loading = false
         }
       }
-    }
+    },
   },
   watch: {},
 }
 </script>
 
-<style>
-</style>
+<style></style>

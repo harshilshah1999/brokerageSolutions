@@ -17,7 +17,7 @@
                     "google_map_coordinates": "..."
                 }
             },
-            "construction_details": {
+            "building_details": {
                 "construction_type": "Under Construction/New/Resale",
                 "possesion_date": "Date",
                 "building_age": "15 years",
@@ -110,7 +110,7 @@
                     "google_map_coordinates": "..."
                 }
             },
-            "construction_details": {
+            "building_details": {
                 "construction_type": "New/resale",
                 "building_age": "15 years"
             },
