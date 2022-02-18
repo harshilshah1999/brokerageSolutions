@@ -59,7 +59,7 @@
             suffix="Years"
           ></v-text-field>
         </v-col>
-        <v-col cols="12" sm="6">
+        <v-col cols="12" sm="4">
           <v-select
             v-model="oc_status"
             :items="oc_cc_types"
@@ -69,12 +69,21 @@
           >
           </v-select>
         </v-col>
-        <v-col cols="12" sm="6">
+        <v-col cols="12" sm="4">
           <v-select
             v-model="cc_status"
             :items="oc_cc_types"
             menu-props="auto"
             label="Completion Certificate"
+            outlined
+          >
+          </v-select>
+        </v-col>
+        <v-col cols="12" sm="4">
+          <v-select
+            v-model="total_floors"
+            :items="Array.from({ length: 100 }, (_, index) => index + 1)"
+            label="Total Floors"
             outlined
           >
           </v-select>
@@ -102,6 +111,7 @@ export default {
   props: ["buildingId", "apartmentId", "city", "sublocalityId", "localityId"],
   data: function () {
     return {
+      total_floors: null,
       construction_type: "",
       oc_status: null,
       cc_status: null,
@@ -136,6 +146,7 @@ export default {
                 ...(this.oc_status && { oc_status: this.oc_status }),
                 ...(this.cc_status && { cc_status: this.cc_status }),
                 ...(this.possession_date && { possession_date: this.possession_date }),
+                ...(this.total_floors && { total_floors: this.total_floors })
               },
             },
             {
@@ -156,11 +167,9 @@ export default {
   },
   watch: {
     buildingId: async function() {
-      let building_details = null
-      console.log(this.city, this.localityId, this.sublocalityId, this.buildingId)
+      let building_details = null 
       building_details = await postApartmentServices.getBuildingDetails(this.city, this.localityId, this.sublocalityId, this.buildingId)
       building_details = building_details.data()
-      console.log(building_details)
       if(building_details.hasOwnProperty('construction_type')) { 
         this.construction_type = building_details.construction_type
         this.building_age = building_details.building_age

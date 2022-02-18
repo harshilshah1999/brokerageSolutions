@@ -5,7 +5,7 @@
   <v-form v-model="valid" ref="form" lazy-validation>
     <v-container>
       <v-row>
-        <v-col cols="12" sm="4">
+        <v-col cols="12" sm="6">
           <v-select
             v-model="BHKtype"
             :items="Array.from({ length: 10 }, (_, index) => index + 1)"
@@ -17,22 +17,13 @@
           >
           </v-select>
         </v-col>
-        <v-col cols="12" sm="4">
+        <v-col cols="12" sm="6">
           <v-select
             v-model="floor_number"
             :items="Array.from({ length: 100 }, (_, index) => index + 1)"
             label="Your Floor"
             outlined
             required
-          >
-          </v-select>
-        </v-col>
-        <v-col cols="12" sm="4">
-          <v-select
-            v-model="total_floors"
-            :items="Array.from({ length: 100 }, (_, index) => index + 1)"
-            label="Total Floors"
-            outlined
           >
           </v-select>
         </v-col>
@@ -183,8 +174,7 @@ export default {
     carpet_area: '',
     builtup_area: '',
     super_builtup_area: '',
-    floor_number: '19',
-    total_floors: '42',
+    floor_number: '',
     facing: '',
     facing_values: [
       'East',
@@ -211,14 +201,14 @@ export default {
   mounted() {},
   methods: {
     validate: async function() {
-      if(!this.carpet_area && !this.builtup_area && !this.super_builtup_area) {
-        this.valid = false;
-        this.snackbar = true;
-      }
-      else if(this.$refs.form.validate()) {
+      if(this.$refs.form.validate()) {
+        if(!this.carpet_area && !this.builtup_area && !this.super_builtup_area) {
+          this.valid = false;
+          this.snackbar = true;
+          return;
+        }
         try {
           this.loading = true
-          console.log(this.apartmentId)
           await postApartmentServices.postPropertyDetails(
             "apartments_sale",
             this.apartmentId,
@@ -229,7 +219,6 @@ export default {
                 builtup_area: this.builtup_area,
                 super_builtup_area: this.super_builtup_area,
                 floor_number: this.floor_number,
-                total_floors: this.total_floors,
                 facing: this.facing,
                 furnishing: this.furnishing,
                 bathrooms: this.bathrooms,
