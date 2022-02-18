@@ -136,7 +136,7 @@
                 "maintainence_included": "true/false",
                 "monthly_maintainence": "5000/month",
                 "annual_maintainence": "70000/year",
-                "available_from": "Date and Time",
+                "flat_available_from": "Date and Time",
                 "tenents_preference": "None/Family/Bachelors/Company",
                 "inclusions": {
                     "parking": true,

@@ -1,5 +1,6 @@
 <template>
   <!-- @TODO OC CC INFO ALERT-->
+  <!-- @TODO CHANGE DATE FORMAT IN POSESSION DATE-->
 
   <v-form v-model="valid" ref="form" lazy-validation>
     <v-container>
@@ -16,11 +17,7 @@
           >
           </v-select>
         </v-col>
-        <v-col
-          cols="12"
-          sm="6"
-          v-if="construction_type === 'Under Construction'"
-        >
+        <v-col cols="12" sm="6" v-if="construction_type === 'Under Construction'">
           <v-menu
             ref="menu"
             v-model="menu"
@@ -44,11 +41,7 @@
             <v-date-picker v-model="possession_date" no-title scrollable>
               <v-spacer></v-spacer>
               <v-btn text color="primary" @click="menu = false"> Cancel </v-btn>
-              <v-btn
-                text
-                color="primary"
-                @click="$refs.menu.save(possession_date)"
-              >
+              <v-btn text color="primary" @click="$refs.menu.save(possession_date)">
                 OK
               </v-btn>
             </v-date-picker>
@@ -57,9 +50,9 @@
         <v-col cols="12" sm="6" v-else>
           <v-text-field
             :rules="[
-                      d => ( !d || /^\d+$/.test(d)) || 'Please enter a number',
-                      d => ( !d || d <=100) || 'Age cannot be more than 100'
-                    ]"
+              (d) => !d || /^\d+$/.test(d) || 'Please enter a number',
+              (d) => !d || d <= 100 || 'Age cannot be more than 100',
+            ]"
             label="Building Age "
             outlined
             v-model="building_age"
@@ -84,8 +77,8 @@
             label="Completion Certificate"
             outlined
           >
-          </v-select> </v-col
-        >
+          </v-select>
+        </v-col>
         <v-col cols="12" sm="6">
           <v-btn
             :disabled="!valid || loading"
@@ -103,43 +96,46 @@
 </template>
 
 <script>
-import postApartmentServices from '../../services/postForm/apartments/postApartmentServices'
+import postApartmentServices from "../../services/postForm/apartments/postApartmentServices";
 
 export default {
-  props: ['buildingId', 'apartmentId'],
-  data: function() {
-      return {
-      construction_type: '',
+  props: ["building", "apartmentId"],
+  data: function () {
+    return {
+      construction_type: "",
       oc_status: null,
       cc_status: null,
-      construction_types: ['Under Construction', 'New Construction', 'Resale'],
-      oc_cc_types: ['Received', 'Not Received'],
+      construction_types: ["Under Construction", "New Construction", "Resale"],
+      oc_cc_types: ["Received", "Not Received"],
       possession_date: null,
       building_age: null,
       menu: false,
       valid: false,
-      rules: [(v) => !!v || 'This is a required field'],
+      rules: [(v) => !!v || "This is a required field"],
       loading: false,
-      }
+    };
+  },
+  mounted() {
+    //get building data
   },
   methods: {
     validate: async function () {
-      if(this.$refs.form.validate()) {
+      if (this.$refs.form.validate()) {
         try {
-          this.loading = true
+          this.loading = true;
           await postApartmentServices.postConstructionDetails(
-            'apartments_sale',
+            "apartments_sale",
             this.apartmentId,
             this.buildingId,
             {
               construction_details: {
                 ...(this.landmark && { landmark: [this.landmark] }),
                 construction_type: this.construction_type,
-                ...(this.building_age && {building_age: this.building_age}),
+                ...(this.building_age && { building_age: this.building_age }),
                 ...(this.oc_status && { oc_status: this.oc_status }),
-                ...(this.cc_status && {cc_status: this.cc_status}),
-                ...( this.possession_date && {possession_date: this.possession_date})
-              }  
+                ...(this.cc_status && { cc_status: this.cc_status }),
+                ...(this.possession_date && { possession_date: this.possession_date }),
+              },
             }
           )
            this.$emit('stepperChange')
@@ -147,9 +143,6 @@ export default {
         catch(e) {
           console.log(e)
         }
-        finally {
-          this.loading = false
-        } 
       }
     },
   },
@@ -165,8 +158,7 @@ export default {
       this.possession_date = building_details.possession_date
     }
   },
-}
+};
 </script>
 
-<style>
-</style>
+<style></style>

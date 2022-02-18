@@ -25,6 +25,37 @@ export default {
             return await addDoc(collectionLocation, data) //(parameter) response: DocumentReference<any>
         } catch (error) { console.error(error); return error }
     },
+    async addDocumentAutoID2D(collectionID1, documentID, collectionID2, data) { // adds a document in the collection
+        const collectionLocation = collection(db, collectionID1, documentID, collectionID2)
+        try {
+            let response = await addDoc(collectionLocation, data) //(parameter) response: DocumentReference<any>
+            return response
+
+        } catch (error) { console.error(error); return error }
+    },
+    async addDocumentAutoID3D(collectionID1, documentID1, collectionID2, documentID2, collectionID3, data) { // adds a document in the collection
+        const collectionLocation = collection(db, collectionID1, documentID1, collectionID2, documentID2, collectionID3)
+        try {
+            let response = await addDoc(collectionLocation, data) //(parameter) response: DocumentReference<any>
+            return response
+
+        } catch (error) { console.error(error); return error }
+    },
+    async addDocumentAutoID4D(collectionID1, documentID1, collectionID2, documentID2, collectionID3, documentID3, collectionID4, data) { // adds a document in the collection
+        const collectionLocation = collection(db, collectionID1, documentID1, collectionID2, documentID2, collectionID3, documentID3, collectionID4)
+        try {
+            let response = await addDoc(collectionLocation, data) //(parameter) response: DocumentReference<any>
+            return response
+
+        } catch (error) { console.error(error); return error }
+    },
+    async addDocumentAutoID5D(collectionID1, documentID1, collectionID2, documentID2, collectionID3, documentID3, collectionID4, documentID4, collectionID5, data) { // adds a document in the collection
+        const collectionLocation = collection(db, collectionID1, documentID1, collectionID2, documentID2, collectionID3, documentID3, collectionID4, documentID4, collectionID5)
+        try {
+            let response = await addDoc(collectionLocation, data) //(parameter) response: DocumentReference<any>
+            return response
+        } catch (error) { console.error(error); return error }
+    },
 
     async addDocumentManualID(collectionID, custom_documentID, data) { // adds a document with ID in the collection
         const documentLocation = doc(db, collectionID, custom_documentID)
@@ -33,13 +64,32 @@ export default {
             return "Document Added Successfully With Manual ID"
         } catch (error) { console.error(error); return error }
     },
-
-    async addDocumentAutoIDNestedCollection(collectionID1, documentID, collectionID2, data) { // adds a document in the collection
-        const collectionLocation = collection(db, collectionID1, documentID, collectionID2)
+    async addDocumentManualID2D(collectionID1, documentID1, collectionID2, custom_documentID, data) { // adds a document with ID in the collection
+        const documentLocation = doc(db, collectionID1, documentID1, collectionID2, custom_documentID)
         try {
-            let response = await addDoc(collectionLocation, data) //(parameter) response: DocumentReference<any>
-            return response
-
+            await setDoc(documentLocation, data)
+            return "Document Added Successfully With Manual ID"
+        } catch (error) { console.error(error); return error }
+    },
+    async addDocumentManualID3D(collectionID1, documentID1, collectionID2, documentID2, collectionID3, custom_documentID, data) { // adds a document with ID in the collection
+        const documentLocation = doc(db, collectionID1, documentID1, collectionID2, documentID2, collectionID3, custom_documentID)
+        try {
+            await setDoc(documentLocation, data)
+            return "Document Added Successfully With Manual ID"
+        } catch (error) { console.error(error); return error }
+    },
+    async addDocumentManualID4D(collectionID1, documentID1, collectionID2, documentID2, collectionID3, documentID3, collectionID4, custom_documentID, data) { // adds a document with ID in the collection
+        const documentLocation = doc(db, collectionID1, documentID1, collectionID2, documentID2, collectionID3, documentID3, collectionID4, custom_documentID)
+        try {
+            await setDoc(documentLocation, data)
+            return "Document Added Successfully With Manual ID"
+        } catch (error) { console.error(error); return error }
+    },
+    async addDocumentManualID5D(collectionID1, documentID1, collectionID2, documentID2, collectionID3, documentID3, collectionID4, documentID4, collectionID5, custom_documentID, data) { // adds a document with ID in the collection
+        const documentLocation = doc(db, collectionID1, documentID1, collectionID2, documentID2, collectionID3, documentID3, collectionID4, documentID4, collectionID5, custom_documentID)
+        try {
+            await setDoc(documentLocation, data)
+            return "Document Added Successfully With Manual ID"
         } catch (error) { console.error(error); return error }
     },
 
@@ -49,9 +99,26 @@ export default {
             return await getDoc(documentLocation) //(parameter) response: DocumentSnapshot<DocumentData>
         } catch (error) { console.error(error); return error }
     },
-
-    async getSingleNestedDocumentByID(collectionID1, documentID1, collectionID2, documentID2) { //get any single document from the collection
+    async getSingleDocumentByID2D(collectionID1, documentID1, collectionID2, documentID2) { //get any single document from the collection
         const documentLocation = doc(db, collectionID1, documentID1, collectionID2, documentID2);
+        try {
+            return await getDoc(documentLocation) //(parameter) response: DocumentSnapshot<DocumentData>
+        } catch (error) { console.error(error); return error }
+    },
+    async getSingleDocumentByID3D(collectionID1, documentID1, collectionID2, documentID2, collectionID3, documentID3) { //get any single document from the collection
+        const documentLocation = doc(db, collectionID1, documentID1, collectionID2, documentID2, collectionID3, documentID3);
+        try {
+            return await getDoc(documentLocation) //(parameter) response: DocumentSnapshot<DocumentData>
+        } catch (error) { console.error(error); return error }
+    },
+    async getSingleDocumentByID4D(collectionID1, documentID1, collectionID2, documentID2, collectionID3, documentID3, collectionID4, documentID4) { //get any single document from the collection
+        const documentLocation = doc(db, collectionID1, documentID1, collectionID2, documentID2, collectionID3, documentID3, collectionID4, documentID4);
+        try {
+            return await getDoc(documentLocation) //(parameter) response: DocumentSnapshot<DocumentData>
+        } catch (error) { console.error(error); return error }
+    },
+    async getSingleDocumentByID5D(collectionID1, documentID1, collectionID2, documentID2, collectionID3, documentID3, collectionID4, documentID4, collectionID5, documentID5) { //get any single document from the collection
+        const documentLocation = doc(db, collectionID1, documentID1, collectionID2, documentID2, collectionID3, documentID3, collectionID4, documentID4, collectionID5, documentID5);
         try {
             return await getDoc(documentLocation) //(parameter) response: DocumentSnapshot<DocumentData>
         } catch (error) { console.error(error); return error }
@@ -64,8 +131,7 @@ export default {
             return "Document Updated Successfully"
         } catch (error) { console.error(error); return error }
     },
-
-    async updateSingleNestedDocument(collectionID1, documentID1, collectionID2, documentID2, newdata) { //update any document in a collection
+    async updateSingleDocument2D(collectionID1, documentID1, collectionID2, documentID2, newdata) { //update any document in a collection
         const documentLocation = doc(db, collectionID1, documentID1, collectionID2, documentID2);
         try {
             await setDoc(documentLocation, newdata, { merge: true })  //(parameter) response: void
@@ -75,6 +141,13 @@ export default {
 
     async addArrayElement(collectionID, documentID, key, value) {
         const documentLocation = doc(db, collectionID, documentID);
+        try {
+            await updateDoc(documentLocation, { [key]: arrayUnion(value) }) //(parameter) response: void
+            return "Item Added Successfully"
+        } catch (error) { console.error(error); return error }
+    },
+    async addArrayElement4D(collectionID1, documentID1, collectionID2, documentID2, collectionID3, documentID3, collectionID4, documentID4, key, value) {
+        const documentLocation = doc(db, collectionID1, documentID1, collectionID2, documentID2, collectionID3, documentID3, collectionID4, documentID4);
         try {
             await updateDoc(documentLocation, { [key]: arrayUnion(value) }) //(parameter) response: void
             return "Item Added Successfully"
@@ -96,8 +169,7 @@ export default {
             return "Document Deleted Successfully"
         } catch (error) { console.error(error); return error }
     },
-
-    async deleteSingleNestedDocument(collectionID1, documentID1, collectionID2, documentID2) { //deletes a specific document from the collection
+    async deleteSingleDocument2D(collectionID1, documentID1, collectionID2, documentID2) { //deletes a specific document from the collection
         const documentLocation = doc(db, collectionID1, documentID1, collectionID2, documentID2);
         try {
             await deleteDoc(documentLocation) //(parameter) response: void
@@ -111,9 +183,26 @@ export default {
             return await getDocs(collectionLocation)//(parameter) response: DocumentReference<any>
         } catch (error) { console.error(error); return error }
     },
-
-    async getAllDocumentsNestedCollection(collectionID1, documentID1, collectionID2) { //reads all the documents in a collection
+    async getAllDocuments2D(collectionID1, documentID1, collectionID2) { //reads all the documents in a collection
         const collectionLocation = collection(db, collectionID1, documentID1, collectionID2)
+        try {
+            return await getDocs(collectionLocation)//(parameter) response: DocumentReference<any>
+        } catch (error) { console.error(error); return error }
+    },
+    async getAllDocuments3D(collectionID1, documentID1, collectionID2, documentID2, collectionID3) { //reads all the documents in a collection
+        const collectionLocation = collection(db, collectionID1, documentID1, collectionID2, documentID2, collectionID3)
+        try {
+            return await getDocs(collectionLocation)//(parameter) response: DocumentReference<any>
+        } catch (error) { console.error(error); return error }
+    },
+    async getAllDocuments4D(collectionID1, documentID1, collectionID2, documentID2, collectionID3, documentID3, collectionID4) { //reads all the documents in a collection
+        const collectionLocation = collection(db, collectionID1, documentID1, collectionID2, documentID2, collectionID3, documentID3, collectionID4)
+        try {
+            return await getDocs(collectionLocation)//(parameter) response: DocumentReference<any>
+        } catch (error) { console.error(error); return error }
+    },
+    async getAllDocuments5D(collectionID1, documentID1, collectionID2, documentID2, collectionID3, documentID3, collectionID4, documentID4, collectionID5) { //reads all the documents in a collection
+        const collectionLocation = collection(db, collectionID1, documentID1, collectionID2, documentID2, collectionID3, documentID3, collectionID4, documentID4, collectionID5)
         try {
             return await getDocs(collectionLocation)//(parameter) response: DocumentReference<any>
         } catch (error) { console.error(error); return error }
@@ -158,7 +247,7 @@ export default {
         return await getDocs(q1)
     },
 
-    async doubleEqualsQueryNestedCollection(collectionID1, documentID1, collectionID2, parameter1, parameter2, parameter3, parameter4) {
+    async doubleEqualsQuery2D(collectionID1, documentID1, collectionID2, parameter1, parameter2, parameter3, parameter4) {
         const q1 = query(collection(db, collectionID1, documentID1, collectionID2),
             where(parameter1, "==", parameter2),
             where(parameter3, "==", parameter4))

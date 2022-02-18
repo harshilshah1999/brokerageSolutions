@@ -3,6 +3,8 @@
   <!--@TODO Use Promise All for on submit -->
   <!--@TODO GET PROPERTY TYPE AS A PROP-->
   <!--@TODO OC AND CC TOOLTIPS ON INFO ICON-->
+  <!--@TODO CHECK if THE SAME FLAT NUMBER ALREADY EXISTS IN THE BUILDING-->
+
   <v-form v-model="valid" ref="form" lazy-validation>
     <v-container>
       <v-row>
@@ -100,8 +102,8 @@
 </template>
 
 <script>
-import postApartmentServices from '../../services/postForm/apartments/postApartmentServices'
-import cities from '../../assets/cities.json'
+import postApartmentServices from "../../services/postForm/apartments/postApartmentServices";
+import cities from "../../assets/cities.json";
 
 export default {
   data: () => ({
@@ -110,62 +112,72 @@ export default {
     sublocalities: [],
     buildings: [],
     landmarks: [],
-    building: '',
-    landmark: '',
-    city: '',
-    locality: '',
-    sublocality: '',
-    flatNumber: '',
+    building: "",
+    landmark: "",
+    city: "",
+    locality: "",
+    sublocality: "",
+    flatNumber: "",
     valid: false,
-    rules: [(v) => !!v || 'This is a required field'],
+    rules: [(v) => !!v || "This is a required field"],
     loading: false,
   }),
   mounted() {
     this.cities = cities
-      .filter((city) => city.status === 'active')
-      .map((city) => city.name)
+      .filter((city) => city.status === "active")
+      .map((city) => city.name);
   },
   methods: {
-    getLocalities: async function (cityID) {
-      this.localities = []
-      let response = await postApartmentServices.getLocalities(cityID)
-
-      response.forEach((doc) =>
+    getLocalities: async function (city) {
+      this.localities = [];
+      let response = await postApartmentServices.getLocalities(city);
+      response.forEach((doc) => {
         this.localities.push({
           id: doc.id,
           name: doc.data().locality_name,
-        })
-      )
+        });
+      });
     },
     getSublocalities: async function (locality) {
-      this.sublocalities = []
+      this.sublocalities = [];
+
       if (this.localities.find((name) => name.name === locality.name)) {
-        let response = await postApartmentServices.getSublocalities(locality.id)
-        response.forEach((doc) =>
+        let response = await postApartmentServices.getSublocalities(
+          this.city,
+          locality.id
+        );
+
+        response.forEach((doc) => {
           this.sublocalities.push({
             id: doc.id,
             name: doc.data().sublocality_name,
-          })
-        )
+          });
+        });
       }
     },
     getBuildings: async function (sublocality) {
-      this.buildings = []
+
+      this.buildings = [];
       if (this.sublocalities.find((name) => name.name === sublocality.name)) {
-        let response = await postApartmentServices.getBuildings(sublocality.id)
-        response.forEach((doc) =>
+        let response = await postApartmentServices.getBuildings(
+          this.city,
+          this.locality.id,
+          sublocality.id
+        );
+
+        response.forEach((doc) => {
           this.buildings.push({
             id: doc.id,
             name: doc.data().building_name,
             landmark: doc.data().landmark,
-          })
-        )
+          });
+        });
       }
     },
     setLandMark: async function (building) {
-      this.landmarks = []
+      this.landmarks = [];
       if (await this.buildings.find((b) => b.name === building.name)) {
-        this.landmarks = building.landmark
+        this.landmarks = building.landmark;
       }
     },
     add_locality: async function () {
@@ -175,9 +187,9 @@ export default {
           city: this.city,
           locality_name: this.locality.name || this.locality,
           verified: true,
-        })
+        });
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
     },
     add_sublocality: async function (localityID) {
@@ -188,11 +200,10 @@ export default {
           city: this.city,
           locality_id: localityID,
           locality_name: this.locality.name || this.locality,
-          buildings: [],
           verified: true,
-        })
+        });
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
     },
     add_building: async function (localityID, sublocalityID) {
@@ -214,33 +225,42 @@ export default {
         this.building = response
         return response.id
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
     },
     validate: async function () {
       //el = 2 to parent
       if (this.$refs.form.validate()) {
         try {
-          this.loading = true
+          this.loading = true;
           let localityID = this.locality.id
             ? this.locality.id
-            : await this.add_locality()
+            : await this.add_locality();
           let sublocalityID = this.sublocality.id
             ? this.sublocality.id
-            : await this.add_sublocality(localityID)
+            : await this.add_sublocality(localityID);
           let buildingID = this.building.id
             ? this.building.id
-            : await this.add_building(localityID, sublocalityID)
-          let flatID = await postApartmentServices.addNewFlat(buildingID, {
-            flat_number: this.flatNumber,
-          })
-          if (
-            !this.building.id &&
-            !this.landmarks.find((l) => l === this.landmark)
-          )
-          await postApartmentServices.addLandmark(buildingID, this.landmark)
+            : await this.add_building(localityID, sublocalityID);
+          let flatID = await postApartmentServices.addNewFlat(
+            this.city,
+            localityID,
+            sublocalityID,
+            buildingID,
+            {
+              flat_number: this.flatNumber,
+            }
+          );
+          if (!this.building.id && !this.landmarks.find((l) => l === this.landmark))
+            await postApartmentServices.addLandmark(
+              this.city,
+              localityID,
+              sublocalityID,
+              buildingID,
+              this.landmark
+            );
           const apartmentID = await postApartmentServices.postLocationDetails(
-            'apartments_sale',
+            "apartments_sale",
             {
               location_details: {
                 city: this.city,
@@ -253,47 +273,46 @@ export default {
                 building_id: buildingID,
                 landmark: this.landmark,
                 google_map_details: {
-                  google_map_coordinates: 'Point',
+                  google_map_coordinates: "Point",
                 },
               },
             },
             sublocalityID
-          )
+          );
           //console.log('build:' , this.building)
           this.$emit('stepperChange', buildingID, apartmentID)
         } catch (e) {
-          console.log(e)
+          console.log(e);
         } finally {
-          this.loading = false
+          this.loading = false;
         }
       }
     },
   },
   watch: {
     localities: function () {
-      this.locality = ''
+      this.locality = "";
     },
     locality: function () {
-      this.sublocalities = []
+      this.sublocalities = [];
     },
     sublocalities: function () {
-      this.sublocality = ''
+      this.sublocality = "";
     },
     sublocality: function () {
-      this.buildings = []
+      this.buildings = [];
     },
     buildings: function () {
-      this.building = ''
+      this.building = "";
     },
     building: function () {
-      this.landmarks = []
+      this.landmarks = [];
     },
     landmarks: function () {
-      this.landmark = ''
+      this.landmark = "";
     },
   },
-}
+};
 </script>
 
-<style>
-</style>
+<style></style>
