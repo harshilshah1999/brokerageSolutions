@@ -112,7 +112,7 @@
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
                 v-model="flat_available_from"
-                label="Possession Date"
+                label="Flat Available From"
                 readonly
                 v-bind="attrs"
                 v-on="on"
@@ -160,6 +160,7 @@
 import postApartmentServices from '../../services/postForm/apartments/postApartmentServices'
 
 export default {
+  props: ['apartmentId'],
   data: () => ({
     BHKtype: '',
     carpet_area: '',
@@ -191,7 +192,42 @@ export default {
     loading: false,
   }),
   mounted() {},
-  methods: {},
+  methods: {
+    validate: async function() {
+      if(this.$refs.form.validate()) {
+        try {
+          this.loading = true
+          console.log(this.apartmentId)
+          await postApartmentServices.postPropertyDetails(
+            "apartments_sale",
+            this.apartmentId,
+            {
+               flat_details: {
+                BHKtype: this.BHKtype,
+                carpet_area: this.carpet_area,
+                builtup_area: this.builtup_area,
+                super_builtup_area: this.super_builtup_area,
+                floor_number: this.floor_number,
+                total_floors: this.total_floors,
+                facing: this.facing,
+                furnishing: this.furnishing,
+                bathrooms: this.bathrooms,
+                balconies: this.balconies,
+                description: this.description,
+                flat_available_from: this.flat_available_from
+              }
+            }
+          )
+        }
+        catch(e) {
+          console.log(e)
+        }
+        finally {
+          this.loading = false
+        }
+      }
+    }
+  },
   watch: {},
 }
 </script>

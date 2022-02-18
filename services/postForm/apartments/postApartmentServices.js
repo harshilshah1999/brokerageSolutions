@@ -13,7 +13,7 @@ export default {
     },
     async postConstructionDetails(collectionID, apartmentID, buildingID, newdata) {
         this.updateApartmentDetails(collectionID, apartmentID, newdata)
-        this.updateBuildingDetails(buildingID, newdata)
+        this.updateBuildingDetails(buildingID, newdata['construction_details'])
 
     },
     async postPropertyDetails(collectionID, apartmentID, newdata) {
