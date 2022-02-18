@@ -161,11 +161,13 @@ export default {
       building_details = await postApartmentServices.getBuildingDetails(this.city, this.localityId, this.sublocalityId, this.buildingId)
       building_details = building_details.data()
       console.log(building_details)
-      this.construction_type = building_details.construction_type
-      this.building_age = building_details.building_age
-      this.oc_status = building_details.oc_status
-      this.cc_status = building_details.cc_status
-      this.possession_date = building_details.possession_date
+      if(building_details.hasOwnProperty('construction_type')) { 
+        this.construction_type = building_details.construction_type
+        this.building_age = building_details.building_age
+        this.oc_status = building_details.oc_status
+        this.cc_status = building_details.cc_status
+        this.possession_date = building_details.possession_date
+      }
     }
   },
 };

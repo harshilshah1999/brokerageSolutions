@@ -213,7 +213,7 @@ export default {
     add_building: async function (localityID, sublocalityID) {
       //add new building
       try {
-        const response = await postApartmentServices.addNewBuilding(
+        return await postApartmentServices.addNewBuilding(
           sublocalityID,
           {
             building_name: this.building.name || this.building,
@@ -226,8 +226,6 @@ export default {
             verified: true,
           }
         )
-        this.building = response
-        return response.id
       } catch (error) {
         console.error(error);
       }
