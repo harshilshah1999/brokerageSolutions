@@ -11,6 +11,7 @@
             :items="Array.from({ length: 10 }, (_, index) => index + 1)"
             label="BHK Type"
             suffix="BHK"
+            :rules="[(v) => !!v || 'This is a required field']"
             required
             outlined
           >
@@ -150,6 +151,21 @@
             Save and Continue
             <v-icon right> mdi-arrow-right-thin </v-icon>
           </v-btn>
+          <v-snackbar
+            v-model="snackbar"
+          >
+            Please enter atleast one of the following areas - Carpet Area, Builtup Area, Super Builtup Area
+            <template v-slot:action="{ attrs }">
+              <v-btn
+                color="pink"
+                text
+                v-bind="attrs"
+                @click="snackbar = false"
+              >
+                Close
+              </v-btn>
+            </template>
+          </v-snackbar>
         </v-col>
       </v-row>
     </v-container>
@@ -162,6 +178,7 @@ import postApartmentServices from '../../services/postForm/apartments/postApartm
 export default {
   props: ['apartmentId'],
   data: () => ({
+    snackbar: false,
     BHKtype: '',
     carpet_area: '',
     builtup_area: '',
@@ -194,7 +211,11 @@ export default {
   mounted() {},
   methods: {
     validate: async function() {
-      if(this.$refs.form.validate()) {
+      if(!this.carpet_area && !this.builtup_area && !this.super_builtup_area) {
+        this.valid = false;
+        this.snackbar = true;
+      }
+      else if(this.$refs.form.validate()) {
         try {
           this.loading = true
           console.log(this.apartmentId)
