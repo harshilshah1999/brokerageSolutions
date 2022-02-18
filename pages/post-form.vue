@@ -214,7 +214,7 @@ export default {
   }),
 
   mounted: async function () {
-    // console.log( await firebaseServices.addDocumentAutoIDNestedCollection('buildings', 'vz0jDwdNDorM01nMvtEu', 'flats', {carpet_area : '900 sq. ft.'}))
+    // console.log( await firebaseServices.addDocumentAutoID2D('buildings', 'vz0jDwdNDorM01nMvtEu', 'flats', {carpet_area : '900 sq. ft.'}))
     // this.post_dummy_cities()
     // this.getLocalities('Achalpur')
     // this.getSublocalities('rG7d6DZTIskKqMiUWRfB')
