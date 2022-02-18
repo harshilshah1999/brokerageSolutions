@@ -244,15 +244,15 @@ export default {
           let buildingID = this.building.id
             ? this.building.id
             : await this.add_building(localityID, sublocalityID);
-          let flatID = await postApartmentServices.addNewFlat(
-            this.city,
-            localityID,
-            sublocalityID,
-            buildingID,
-            {
-              flat_number: this.flatNumber,
-            }
-          );
+          // let flatID = await postApartmentServices.addNewFlat(
+          //   this.city,
+          //   localityID,
+          //   sublocalityID,
+          //   buildingID,
+          //   {
+          //     flat_number: this.flatNumber,
+          //   }
+          // );
           if (!this.building.id && !this.landmarks.find((l) => l === this.landmark))
             await postApartmentServices.addLandmark(
               this.city,

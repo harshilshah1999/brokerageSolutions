@@ -17,7 +17,11 @@
           >
           </v-select>
         </v-col>
-        <v-col cols="12" sm="6" v-if="construction_type === 'Under Construction'">
+        <v-col
+          cols="12"
+          sm="6"
+          v-if="construction_type === 'Under Construction'"
+        >
           <v-menu
             ref="menu"
             v-model="menu"
@@ -41,7 +45,11 @@
             <v-date-picker v-model="possession_date" no-title scrollable>
               <v-spacer></v-spacer>
               <v-btn text color="primary" @click="menu = false"> Cancel </v-btn>
-              <v-btn text color="primary" @click="$refs.menu.save(possession_date)">
+              <v-btn
+                text
+                color="primary"
+                @click="$refs.menu.save(possession_date)"
+              >
                 OK
               </v-btn>
             </v-date-picker>
@@ -96,36 +104,36 @@
 </template>
 
 <script>
-import postApartmentServices from "../../services/postForm/apartments/postApartmentServices";
+import postApartmentServices from '../../services/postForm/apartments/postApartmentServices'
 
 export default {
-  props: ["buildingId", "apartmentId", "city", "sublocalityId", "localityId"],
+  props: ['buildingId', 'apartmentId', 'city', 'sublocalityId', 'localityId'],
   data: function () {
     return {
-      construction_type: "",
+      construction_type: '',
       oc_status: null,
       cc_status: null,
-      construction_types: ["Under Construction", "New Construction", "Resale"],
-      oc_cc_types: ["Received", "Not Received"],
+      construction_types: ['Under Construction', 'New Construction', 'Resale'],
+      oc_cc_types: ['Received', 'Not Received'],
       possession_date: null,
       building_age: null,
       menu: false,
       valid: false,
-      rules: [(v) => !!v || "This is a required field"],
+      rules: [(v) => !!v || 'This is a required field'],
       loading: false,
-    };
+    }
   },
   mounted() {
     //get building data
-    console.log(this.buildingId);
+    console.log(this.buildingId)
   },
   methods: {
     validate: async function () {
       if (this.$refs.form.validate()) {
         try {
-          this.loading = true;
+          this.loading = true
           await postApartmentServices.postBuildingDetails(
-            "apartments_sale",
+            'apartments_sale',
             this.apartmentId,
             this.buildingId,
             {
@@ -135,7 +143,9 @@ export default {
                 ...(this.building_age && { building_age: this.building_age }),
                 ...(this.oc_status && { oc_status: this.oc_status }),
                 ...(this.cc_status && { cc_status: this.cc_status }),
-                ...(this.possession_date && { possession_date: this.possession_date }),
+                ...(this.possession_date && {
+                  possession_date: this.possession_date,
+                }),
               },
             },
             {
@@ -143,34 +153,43 @@ export default {
               localityID: this.localityId,
               sublocalityID: this.sublocalityId,
             }
-          );
-          this.$emit("stepperChange");
+          )
+          this.$emit('stepperChange')
         } catch (e) {
-          console.log(e);
+          console.log(e)
+        } finally {
+          this.loading = false
         }
-         finally {
-          this.loading = false;
-         }
       }
     },
   },
   watch: {
-    buildingId: async function() {
+    buildingId: async function () {
       let building_details = null
-      console.log(this.city, this.localityId, this.sublocalityId, this.buildingId)
-      building_details = await postApartmentServices.getBuildingDetails(this.city, this.localityId, this.sublocalityId, this.buildingId)
+      console.log(
+        this.city,
+        this.localityId,
+        this.sublocalityId,
+        this.buildingId
+      )
+      building_details = await postApartmentServices.getBuildingDetails(
+        this.city,
+        this.localityId,
+        this.sublocalityId,
+        this.buildingId
+      )
       building_details = building_details.data()
       console.log(building_details)
-      if(building_details.hasOwnProperty('construction_type')) { 
+      if (building_details.hasOwnProperty('construction_type')) {
         this.construction_type = building_details.construction_type
         this.building_age = building_details.building_age
         this.oc_status = building_details.oc_status
         this.cc_status = building_details.cc_status
         this.possession_date = building_details.possession_date
       }
-    }
+    },
   },
-};
+}
 </script>
 
 <style></style>
