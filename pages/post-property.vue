@@ -20,14 +20,16 @@
     <v-stepper-items>
       <v-stepper-content step="1">
         <v-card elevation="0">
-          <location-details @stepperChange="moveToConstructionDetails" />
+          <location-details 
+            @stepperChange="moveToConstructionDetails" 
+          />
         </v-card>
       </v-stepper-content>
 
       <v-stepper-content step="2">
         <v-card elevation="0">
           <construction-details
-            :building="building"
+            :buildingId="buildingID"
             :apartmentId="apartmentID"
             @stepperChange="e1 = 3"
           />
@@ -36,7 +38,10 @@
 
       <v-stepper-content step="3">
         <v-card elevation="0">
-          <flat-details @stepperChange="e1 = 4" />
+          <flat-details 
+            :apartmentId="apartmentID"
+            @stepperChange="e1 = 4" 
+          />
         </v-card>
       </v-stepper-content>
 
@@ -62,10 +67,8 @@
 </template>
 
 <script>
-const ConstructionDetails = () =>
-  import('~/components/stepperForms/ConstructionDetails.vue')
-const LocationDetails = () =>
-  import('~/components/stepperForms/LocationDetails.vue')
+const ConstructionDetails = () => import('~/components/stepperForms/ConstructionDetails.vue')
+const LocationDetails = () => import('~/components/stepperForms/LocationDetails.vue')
 const FlatDetails = () => import('~/components/stepperForms/FlatDetails.vue')
 const Amenities = () => import('~/components/stepperForms/Amenities.vue')
 const Media = () => import('~/components/stepperForms/Media.vue')
@@ -83,13 +86,7 @@ export default {
   data() {
     return {
       e1: 1,
-      building: {
-        construction_type: '',
-        possesion_date: null,
-        oc_status: null,
-        cc_status: null,
-        building_age: null,
-      },
+      buildingID: null,
       apartmentID: null,
       stepperData: [
         {
@@ -120,8 +117,8 @@ export default {
     }
   },
   methods: {
-    moveToConstructionDetails: function (building, apartmentID) {
-      this.building = { ...this.building, ...building }
+    moveToConstructionDetails: function (buildingID, apartmentID) {
+      this.buildingID = buildingID
       this.apartmentID = apartmentID
       this.e1 = 2
     },

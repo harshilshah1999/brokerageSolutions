@@ -198,7 +198,7 @@ export default {
     add_building: async function (localityID, sublocalityID) {
       //add new building
       try {
-        return await postApartmentServices.addNewBuilding(
+        const response = await postApartmentServices.addNewBuilding(
           sublocalityID,
           {
             building_name: this.building.name || this.building,
@@ -211,6 +211,8 @@ export default {
             verified: true,
           }
         )
+        this.building = response
+        return response.id
       } catch (error) {
         console.error(error)
       }
@@ -258,7 +260,7 @@ export default {
             sublocalityID
           )
           //console.log('build:' , this.building)
-          this.$emit('stepperChange', this.building, apartmentID)
+          this.$emit('stepperChange', buildingID, apartmentID)
         } catch (e) {
           console.log(e)
         } finally {

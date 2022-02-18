@@ -106,7 +106,7 @@
 import postApartmentServices from '../../services/postForm/apartments/postApartmentServices'
 
 export default {
-  props: ['building', 'apartmentId'],
+  props: ['buildingId', 'apartmentId'],
   data: function() {
       return {
       construction_type: '',
@@ -121,9 +121,6 @@ export default {
       rules: [(v) => !!v || 'This is a required field'],
       loading: false,
       }
-    },
-  mounted() {
-    //get building data
   },
   methods: {
     validate: async function () {
@@ -133,6 +130,7 @@ export default {
           await postApartmentServices.postConstructionDetails(
             'apartments_sale',
             this.apartmentId,
+            this.buildingId,
             {
               construction_details: {
                 ...(this.landmark && { landmark: [this.landmark] }),
@@ -144,6 +142,7 @@ export default {
               }  
             }
           )
+           this.$emit('stepperChange')
         }
         catch(e) {
           console.log(e)
@@ -155,13 +154,15 @@ export default {
     },
   },
   watch: {
-    building: function() {
-      console.log('fired', this.building, this.apartmentId)
-      this.construction_type = this.building.construction_type
-      this.building_age = this.building.building_age
-      this.oc_status = this.building.oc_status
-      this.cc_status = this.building.cc_status
-      this.possession_date = this.building.possession_date
+    buildingId: async function() {
+      let building_details = null
+      building_details = await postApartmentServices.getBuildingDetails(this.buildingId)
+      building_details = building_details.data()
+      this.construction_type = building_details.construction_type
+      this.building_age = building_details.building_age
+      this.oc_status = building_details.oc_status
+      this.cc_status = building_details.cc_status
+      this.possession_date = building_details.possession_date
     }
   },
 }

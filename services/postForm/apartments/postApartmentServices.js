@@ -12,7 +12,7 @@ export default {
     },
     async postConstructionDetails(collectionID, apartmentID, buildingID, newdata) {
         this.updateApartmentDetails(collectionID, apartmentID, newdata)
-        this.updateBuildingDetails(buildingID, newdata)
+        this.updateBuildingDetails(buildingID, newdata['construction_details'])
 
     },
     async postPropertyDetails(collectionID, apartmentID, newdata) {
@@ -114,7 +114,7 @@ export default {
     },
     async addNewFlat(buildingID, flatData) {
         try {
-            await firebaseServices.addDocumentAutoIDNestedCollection('buildings', buildingID, 'flats', flatData)
+            return await firebaseServices.addDocumentAutoIDNestedCollection('buildings', buildingID, 'flats', flatData)
         } catch (error) { console.error(error); return error }
     },
     async addLandmark(buildingID, landmark) {
