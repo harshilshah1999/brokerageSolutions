@@ -32,6 +32,7 @@
             outlined
             hint="Suggestions are displayed based on city selected"
             persistent-hint
+            :loading="locality_loader"
           ></v-combobox>
         </v-col>
         <v-col cols="12" sm="6">
@@ -121,6 +122,7 @@ export default {
     valid: false,
     rules: [(v) => !!v || "This is a required field"],
     loading: false,
+    locality_loader: false
   }),
   mounted() {
     this.cities = cities
@@ -130,7 +132,9 @@ export default {
   methods: {
     getLocalities: async function (city) {
       this.localities = [];
+      this.input_loader = true;
       let response = await postApartmentServices.getLocalities(city);
+      this.input_loader = false;
       response.forEach((doc) => {
         this.localities.push({
           id: doc.id,
@@ -280,7 +284,7 @@ export default {
             sublocalityID
           );
           //console.log('build:' , this.building)
-          this.$emit('stepperChange', buildingID, apartmentID)
+          this.$emit('stepperChange', this.city, localityID, sublocalityID, buildingID, apartmentID)
         } catch (e) {
           console.log(e);
         } finally {

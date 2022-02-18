@@ -31,6 +31,9 @@
           <construction-details
             :buildingId="buildingID"
             :apartmentId="apartmentID"
+            :city="city"
+            :localityId="localityID"
+            :sublocalityId="sublocalityID"
             @stepperChange="e1 = 3"
           />
         </v-card>
@@ -88,6 +91,9 @@ export default {
       e1: 1,
       buildingID: null,
       apartmentID: null,
+      localityID: null,
+      sublocalityID: null,
+      city: null,
       stepperData: [
         {
           title: 'Location Details',
@@ -117,7 +123,11 @@ export default {
     }
   },
   methods: {
-    moveToConstructionDetails: function (buildingID, apartmentID) {
+    moveToConstructionDetails: function ( city, localityID, sublocalityID, buildingID, apartmentID) {
+      console.log(buildingID)
+      this.city = city
+      this.localityID = localityID
+      this.sublocalityID = sublocalityID
       this.buildingID = buildingID
       this.apartmentID = apartmentID
       this.e1 = 2

@@ -99,7 +99,7 @@
 import postApartmentServices from "../../services/postForm/apartments/postApartmentServices";
 
 export default {
-  props: ["building", "apartmentId"],
+  props: ["buildingId", "apartmentId", "city", "sublocalityId", "localityId"],
   data: function () {
     return {
       construction_type: "",
@@ -117,6 +117,7 @@ export default {
   },
   mounted() {
     //get building data
+    console.log(this.buildingId);
   },
   methods: {
     validate: async function () {
@@ -138,29 +139,34 @@ export default {
               },
             },
             {
-              city: "",
-              localityID: "",
-              sublocalityID: "",
+              city: this.city,
+              localityID: this.localityId,
+              sublocalityID: this.sublocalityId,
             }
           );
           this.$emit("stepperChange");
         } catch (e) {
           console.log(e);
         }
+         finally {
+          this.loading = false;
+         }
       }
     },
   },
   watch: {
-    buildingId: async function () {
-      let building_details = null;
-      building_details = await postApartmentServices.getBuildingDetails(this.buildingId);
-      building_details = building_details.data();
-      this.construction_type = building_details.construction_type;
-      this.building_age = building_details.building_age;
-      this.oc_status = building_details.oc_status;
-      this.cc_status = building_details.cc_status;
-      this.possession_date = building_details.possession_date;
-    },
+    buildingId: async function() {
+      let building_details = null
+      console.log(this.city, this.localityId, this.sublocalityId, this.buildingId)
+      building_details = await postApartmentServices.getBuildingDetails(this.city, this.localityId, this.sublocalityId, this.buildingId)
+      building_details = building_details.data()
+      console.log(building_details)
+      this.construction_type = building_details.construction_type
+      this.building_age = building_details.building_age
+      this.oc_status = building_details.oc_status
+      this.cc_status = building_details.cc_status
+      this.possession_date = building_details.possession_date
+    }
   },
 };
 </script>
