@@ -9,7 +9,7 @@
 </template>
 <script>
 import homepageServices from "../services/homepageServices";
-
+import firebaseServices from "../services/firebaseServices";
 export default {
   name: "index",
 
@@ -17,13 +17,23 @@ export default {
 
   data() {
     return {
+      searchquery: "",
       dropdown: [],
-      bool: true,
+      bool: true, //
     };
   },
 
   async mounted() {
-    if (this.bool) {
+    let response = await firebaseServices.startWithQuery(
+      "cities",
+      "name",
+      "ach"[0].toUpperCase()
+    );
+    response.forEach((element) => {
+      console.log(element.data());
+    });
+
+    if (this.searchquery.length == 3) {
       this.fillDropdown();
       this.bool = false;
     }

@@ -278,6 +278,12 @@ export default {
         return await getDocs(q)
     },
 
+    async startWithQuery(collectionID, parameter1, parameter2) { //returns all results that start with parameter2
+        const q = query(collection(db, collectionID),
+            where(parameter1, "<=", parameter2 + '\uf8ff'));
+        return await getDocs(q)
+    },
+
     async doubleEqualsQuery(collectionID, parameter1, parameter2, parameter3, parameter4) {
         const q1 = query(collection(db, collectionID),
             where(parameter1, "==", parameter2),
