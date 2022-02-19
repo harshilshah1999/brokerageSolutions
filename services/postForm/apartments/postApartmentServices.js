@@ -10,34 +10,24 @@ export default {
     async updateLocationDetails(collectionID, apartmentID, newdata) {
         this.updateApartmentDetails(collectionID, apartmentID, newdata)
     },
-    async postBuildingDetails(collectionID, apartmentID, buildingID, newdata, location) {
+    async postBuildingDetails(collectionID, apartmentID, buildingID, newdata) {
         this.updateApartmentDetails(collectionID, apartmentID, newdata)
-        this.updateBuildingDetails(location, buildingID, newdata['building_details'])
+        this.updateBuildingDetails(buildingID, newdata['building_details'])
     },
     async postFlatDetails(collectionID, apartmentID, newdata) {
         this.updateApartmentDetails(collectionID, apartmentID, newdata)
     },
-    async postPricingDetails(location, collectionID, apartmentID, flatID, newdata) {
+    async postPricingDetails(collectionID, apartmentID, flatID, newdata) {
         this.updateApartmentDetails(collectionID, apartmentID, newdata)
-        let maintenanceData = {
-            monthly_maintainence: newdata['monthly_maintainence'],
-            annual_maintainence: newdata['annual_maintenance']
-        }
-        this.updateFlatDetails(location, buildingID, flatID, maintenanceData)
     },
     async postRentalDetails(collectionID, apartmentID, flatID, newdata) {
         this.updateApartmentDetails(collectionID, apartmentID, newdata)
-        let maintenanceData = {
-            monthly_maintainence: newdata['monthly_maintainence'],
-            annual_maintainence: newdata['annual_maintenance']
-        }
-        this.updateFlatDetails(location, buildingID, flatID, maintenanceData)
     },
     async postAmenitiesDetails(collectionID, apartmentID, newdata) {
         this.updateApartmentDetails(collectionID, apartmentID, newdata)
         this.updateBuildingDetails(buildingID, newdata)
     },
-    async postVisitPreferenceDetails(location, collectionID, apartmentID, newdata, other_details) {
+    async postOtherDetails(collectionID, apartmentID, other_details) {
         other_details = {
             posted_date: "Date and Time",
             posting_status: "Complete",
@@ -45,23 +35,7 @@ export default {
             posted_by_user_name: "Somil Shah",
             verification_status: "verified/under_verification/rejected",
         }
-        //merge these two
-        await firebaseServices.updateSingleDocument(collectionID, apartmentID, newdata)
-        await firebaseServices.updateSingleDocument(collectionID, apartmentID, { other_details })
-        this.updateApartmentDetails(collectionID, apartmentID, newdata)
-        let flatData = {
-            BHKtype: newdata['location_details']['city'],
-            carpet_area: newdata['location_details']['city'],
-            builtup_area: newdata['location_details']['city'],
-            super_builtup_area: newdata['location_details']['city'],
-            total_floors: newdata['location_details']['city'],
-            facing: newdata['location_details']['city'],
-            bathrooms: newdata['location_details']['city'],
-            balconies: newdata['location_details']['city'],
-            monthly_maintainence: "5000/month",
-            annual_maintainence: "70000/year"
-        }
-        this.updateFlatDetails(location, buildingID, flatID, flatData)
+        this.updateApartmentDetails(collectionID, apartmentID, { other_details })
     },
     async postMedia(collectionID, apartmentID, file, mediaData, image_path) {
         try {
@@ -75,84 +49,79 @@ export default {
         this.updateApartmentDetails(collectionID, apartmentID, newdata)
     },
 
-    async addNewLocality(newdata /* depends on who is posting the property [staff=true,other=false] */) {
+    async addNewLocality(newdata) {
         let localityForm = {
             locality_name: newdata['locality_name'],
             city: newdata['city'],
-            verified: newdata['verified']
+            verified: newdata['verified']/* depends on who is posting the property [staff=true,other=false] */
         }
 
-        let locality = await firebaseServices.addDocumentAutoID2D('cities', newdata['city'], 'localities', localityForm).catch((err) => { console.error(err); }) //enter new locality
-        if (newdata['verified']) { await verificationServices.verifyLocality(locality['id'], newdata['city'], true) }
-        else { await firebaseServices.addDocumentManualID('pending_locality_verification', locality['id'], localityForm).catch((err) => { console.error(err); }) } //add locality for verification
+        let locality = await firebaseServices.addDocumentAutoID('localities', localityForm).catch((err) => { console.error(err); }) //enter new locality
+        if (!newdata['verified']) { await firebaseServices.addDocumentManualID('pending_locality_verification', locality['id'], localityForm).catch((err) => { console.error(err); }) } //add locality for verification
         return locality['id']
     },
-    async addNewSubLocality(localityID, newdata /* depends on who is posting the property [staff=true,other=false] */) {
+    async addNewSubLocality(newdata) {
         let sublocalityForm = {
             sublocality_name: newdata['sublocality_name'],
             city: newdata['city'],
-            locality_id: localityID,
+            locality_id: newdata['locality_id'],
             locality_name: newdata['locality_name'],
-            verified: newdata['verified']
+            verified: newdata['verified'] /* depends on who is posting the property [staff=true,other=false] */
         }
 
-        let sublocality = await firebaseServices.addDocumentAutoID3D('cities', newdata['city'], 'localities', localityID, 'sublocalities', sublocalityForm).catch((err) => { console.error(err); }) //enter new sublocality
-        if (newdata['verified']) { await verificationServices.verifySublocality(sublocality['id'], localityID, true) }
-        else { await firebaseServices.addDocumentManualID('pending_sublocality_verification', sublocality['id'], sublocalityForm).catch((err) => { console.error(err); }) }//enter new sublocality
-        return sublocality['id'];
+        let sublocality = await firebaseServices.addDocumentAutoID('sublocalities', sublocalityForm).catch((err) => { console.error(err); }) //enter new sublocality
+        if (!newdata['verified']) { await firebaseServices.addDocumentManualID('pending_sublocality_verification', sublocality['id'], sublocalityForm).catch((err) => { console.error(err); }) }//enter new sublocality
+        return sublocality['id']
     },
-    async addNewBuilding(sublocalityID, newdata /* depends on who is posting the property [staff=true,other=false] */) {
-
-        //adding new building
-        let building = await firebaseServices.addDocumentAutoID4D('cities', newdata['city'], 'localities', newdata['locality_id'], 'sublocalities', newdata['sublocality_id'], 'buildings', newdata).catch((err) => { console.error(err); }) //enter new building
-        if (newdata['verified']) { await verificationServices.verifyBuilding(building['id'], sublocalityID, true) }
-        else { await firebaseServices.addDocumentManualID('pending_building_verification', building['id'], newdata).catch((err) => { console.error(err); }) }//enter new building
+    async addNewBuilding(newdata) {
+        let building = await firebaseServices.addDocumentAutoID('buildings', newdata).catch((err) => { console.error(err); }) //enter new building
+        if (!newdata['verified']) { await firebaseServices.addDocumentManualID('pending_building_verification', building['id'], newdata).catch((err) => { console.error(err); }) }//enter new building
         return building['id']
     },
-    async addNewFlat(city, localityID, sublocalityID, buildingID, flatData) {
-        let flat = await firebaseServices.addDocumentAutoID5D('cities', city, 'localities', localityID, 'sublocalities', sublocalityID, 'buildings', buildingID, 'flats', flatData).catch((err) => { console.error(err); }) //enter new falt
-        return flat
-    },
-    async addLandmark(city, localityID, sublocalityID, buildingID, landmark) {
-        return await firebaseServices.addArrayElement4D('cities', city, 'localities', localityID, 'sublocalities', sublocalityID, 'buildings', buildingID, 'landmark', landmark).catch((err) => { console.error(err); })
+    // async addNewFlat(buildingID, flatData) {
+    //     let flat = await firebaseServices.addDocumentAutoID2D('buildings', buildingID, 'flats', flatData).catch((err) => { console.error(err); }) //enter new falt
+    //     return flat
+    // },
+    async addLandmark(buildingID, landmark) {
+        return await firebaseServices.addArrayElement('buildings', buildingID, 'landmark', landmark).catch((err) => { console.error(err); })
     },
     // READ
-    async getLocalities(city) {
+    async getLocalities(cityID) { //get localities within a city
         try {
-            return await firebaseServices.getAllDocuments2D('cities', city, 'localities')
+            return await firebaseServices.singleEqualsQuery('localities', 'city', cityID)
         } catch (error) { console.error(error); return error }
     },
-    async getSublocalities(city, localityID) {
+    async getSublocalities(localityID) { //get subloaclities within a locality
         try {
-            return await firebaseServices.getAllDocuments3D('cities', city, 'localities', localityID, 'sublocalities')
+            return await firebaseServices.singleEqualsQuery('sublocalities', 'locality_id', localityID)
         } catch (error) { console.error(error); return error }
     },
-    async getBuildings(city, localityID, sublocalityID) {
+    async getBuildings(sublocalityID) { //get buildings within a sublocality
         try {
-            return await firebaseServices.getAllDocuments4D('cities', city, 'localities', localityID, 'sublocalities', sublocalityID, 'buildings')
+            return await firebaseServices.singleEqualsQuery('buildings', 'sublocality_id', sublocalityID)
         } catch (error) { console.error(error); return error }
     },
-    async getFlats(city, localityID, sublocalityID, buildingID) {
-        try {
-            return await firebaseServices.getAllDocuments5D('cities', city, 'localities', localityID, 'sublocalities', sublocalityID, 'buildings', buildingID, 'flats')
-        } catch (error) { console.error(error); return error }
-    },
+    // async getFlats(buildingID) {
+    //     try {
+    //         return await firebaseServices.getAllDocuments2D('buildings', buildingID, 'flats')
+    //     } catch (error) { console.error(error); return error }
+    // },
 
     async getApartmentDetails(collectionID, apartmentID) {
         try {
             return await firebaseServices.getSingleDocumentByID(collectionID, apartmentID)
         } catch (error) { console.error(error); return error }
     },
-    async getBuildingDetails(city, localityID, sublocalityID, buildingID) {
+    async getBuildingDetails(buildingID) {
         try {
-            return await firebaseServices.getSingleDocumentByID4D('cities', city, 'localities', localityID, 'sublocalities', sublocalityID, 'buildings', buildingID)
+            return await firebaseServices.getSingleDocumentByID('buildings', buildingID)
         } catch (error) { console.error(error); return error }
     },
-    async getFlatDetails(city, localityID, sublocalityID, buildingID, flatID) {
-        try {
-            return await firebaseServices.getSingleDocumentByID5D('cities', city, 'localities', localityID, 'sublocalities', sublocalityID, 'buildings', buildingID, 'flats', flatID)
-        } catch (error) { console.error(error); return error }
-    },
+    // async getFlatDetails(buildingID, flatID) {
+    //     try {
+    //         return await firebaseServices.getSingleDocumentByID2D('buildings', buildingID, 'flats', flatID)
+    //     } catch (error) { console.error(error); return error }
+    // },
     async getMedia(media_path) {
         try {
             return await firebaseServices.getSingleMedia(media_path)
@@ -175,14 +144,14 @@ export default {
             return await firebaseServices.updateSingleDocument('sublocalities', sublocalityID, newdata)
         } catch (error) { console.error(error); return error }
     },
-    async updateBuildingDetails(location, buildingID, newdata) {
+    async updateBuildingDetails(buildingID, newdata) {
         try {
-            return await firebaseServices.updateSingleDocument4D('cities', location['city'], 'localities', location['localityID'], 'sublocalities', location['sublocalityID'], 'buildings', buildingID, newdata) //update property
+            return await firebaseServices.updateSingleDocument('buildings', buildingID, newdata)
         } catch (error) { console.error(error); return error }
     },
-    async updateFlatDetails(location, buildingID, flatID, flatData) {
+    async updateFlatDetails(buildingID, flatID, flatData) {
         try {
-            return await firebaseServices.updateSingleDocument5D('cities', location['city'], 'localities', location['localityID'], 'sublocalities', location['sublocalityID'], 'buildings', buildingID, 'flats', flatID, flatData)
+            return await firebaseServices.updateSingleDocument2D('buildings', buildingID, 'flats', flatID, flatData)
         } catch (error) { console.error(error); return error }
 
     },

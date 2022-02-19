@@ -122,7 +122,7 @@ export default {
     valid: false,
     rules: [(v) => !!v || "This is a required field"],
     loading: false,
-    locality_loader: false
+    locality_loader: false,
   }),
   mounted() {
     this.cities = cities
@@ -146,11 +146,7 @@ export default {
       this.sublocalities = [];
 
       if (this.localities.find((name) => name.name === locality.name)) {
-        let response = await postApartmentServices.getSublocalities(
-          this.city,
-          locality.id
-        );
-
+        let response = await postApartmentServices.getSublocalities(locality.id);
         response.forEach((doc) => {
           this.sublocalities.push({
             id: doc.id,
@@ -160,14 +156,9 @@ export default {
       }
     },
     getBuildings: async function (sublocality) {
-
       this.buildings = [];
       if (this.sublocalities.find((name) => name.name === sublocality.name)) {
-        let response = await postApartmentServices.getBuildings(
-          this.city,
-          this.locality.id,
-          sublocality.id
-        );
+        let response = await postApartmentServices.getBuildings(sublocality.id);
 
         response.forEach((doc) => {
           this.buildings.push({
@@ -189,7 +180,7 @@ export default {
       try {
         return await postApartmentServices.addNewLocality({
           city: this.city,
-          locality_name: this.locality.name || this.locality,
+          locality_name: this.locality["name"] || this.locality,
           verified: true,
         });
       } catch (error) {
@@ -199,11 +190,11 @@ export default {
     add_sublocality: async function (localityID) {
       //add new sublocality
       try {
-        return await postApartmentServices.addNewSubLocality(localityID, {
-          sublocality_name: this.sublocality.name || this.sublocality,
+        return await postApartmentServices.addNewSubLocality({
+          sublocality_name: this.sublocality["name"] || this.sublocality,
           city: this.city,
           locality_id: localityID,
-          locality_name: this.locality.name || this.locality,
+          locality_name: this.locality["name"] || this.locality,
           verified: true,
         });
       } catch (error) {
@@ -213,19 +204,16 @@ export default {
     add_building: async function (localityID, sublocalityID) {
       //add new building
       try {
-        return await postApartmentServices.addNewBuilding(
-          sublocalityID,
-          {
-            building_name: this.building.name || this.building,
-            city: this.city,
-            locality_id: localityID,
-            locality_name: this.locality.name || this.locality,
-            sublocality_id: sublocalityID,
-            sublocality_name: this.sublocality.name || this.sublocality,
-            ...(this.landmark && { landmark: [this.landmark] }),
-            verified: true,
-          }
-        )
+        return await postApartmentServices.addNewBuilding({
+          building_name: this.building["name"] || this.building,
+          city: this.city,
+          locality_id: localityID,
+          locality_name: this.locality["name"] || this.locality,
+          sublocality_id: sublocalityID,
+          sublocality_name: this.sublocality["name"] || this.sublocality,
+          ...(this.landmark && { landmark: [this.landmark] }),
+          verified: true,
+        });
       } catch (error) {
         console.error(error);
       }
@@ -244,23 +232,8 @@ export default {
           let buildingID = this.building.id
             ? this.building.id
             : await this.add_building(localityID, sublocalityID);
-          // let flatID = await postApartmentServices.addNewFlat(
-          //   this.city,
-          //   localityID,
-          //   sublocalityID,
-          //   buildingID,
-          //   {
-          //     flat_number: this.flatNumber,
-          //   }
-          // );
           if (!this.building.id && !this.landmarks.find((l) => l === this.landmark))
-            await postApartmentServices.addLandmark(
-              this.city,
-              localityID,
-              sublocalityID,
-              buildingID,
-              this.landmark
-            );
+            await postApartmentServices.addLandmark(buildingID, this.landmark);
           const apartmentID = await postApartmentServices.postLocationDetails(
             "apartments_sale",
             {
@@ -282,7 +255,14 @@ export default {
             sublocalityID
           );
           //console.log('build:' , this.building)
-          this.$emit('stepperChange', this.city, localityID, sublocalityID, buildingID, apartmentID)
+          this.$emit(
+            "stepperChange",
+            this.city,
+            localityID,
+            sublocalityID,
+            buildingID,
+            apartmentID
+          );
         } catch (e) {
           console.log(e);
         } finally {

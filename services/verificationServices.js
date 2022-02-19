@@ -1,13 +1,11 @@
 import firebaseServices from './firebaseServices'
 
 export default {
-    async verifyLocality(localityID, cityID,/* other_details, */ already_true) {
+    async verifyLocality(localityID /* other_details, */) {
         //update locality verification status to true
         await firebaseServices.updateSingleDocument('localities', localityID, { "verified": true }).catch((err) => { console.error(err); })
-
-        //add locality to cities
+        //remove locality from pending
         await firebaseServices.deleteSingleDocument('pending_locality_verification', localityID).catch((err) => { console.error(err); })
-
 
         // other_details = {
         //     verification_date: "Date and Time",
@@ -17,17 +15,15 @@ export default {
         // await firebaseServices.updateSingleDocument('apartments_sale', apartmentID, other_details)
 
     },
-    async verifySublocality(sublocalityID, localityID, already_true) {
+    async verifySublocality(sublocalityID) {
         //update sublocality verification status
         await firebaseServices.updateSingleDocument('sublocalities', sublocalityID, { "verified": true }).catch((err) => { console.error(err); })
-
         //remove sublocality from pending
         await firebaseServices.deleteSingleDocument('pending_sublocality_verification', sublocalityID).catch((err) => { console.error(err); })
     },
-    async verifyBuilding(buildingID, sublocalityID, already_true) {
+    async verifyBuilding(buildingID) {
         //update building verification status
         await firebaseServices.updateSingleDocument('buildings', buildingID, { "verified": true }).catch((err) => { console.error(err); })
-
         //remove building from pending
         await firebaseServices.deleteSingleDocument('pending_building_verification', buildingID).catch((err) => { console.error(err); })
     },

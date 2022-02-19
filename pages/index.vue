@@ -25,7 +25,7 @@ export default {
 
   async mounted() {
     let query =
-      this.searchquery[0].toUpperCase() + this.searchquery[1] + this.searchquery[2];
+      this.searchquery[0].toUpperCase() + this.searchquery[1];
 
     let response = await firebaseServices.startWithQuery("cities", "name", query);
     response.forEach((element) => {
@@ -33,10 +33,10 @@ export default {
     });
 
     if (this.searchquery.length == 3) {
-      let query =
+      let query = //because query is Case sensitive and we need 1st char in uppercase
         this.searchquery[0].toUpperCase() + this.searchquery[1] + this.searchquery[2];
-      this.fillDropdown(query); //because query is Case sensitive, need 1st char in uppercase
-      this.bool = false;
+      this.fillDropdown(query);
+      this.bool = false; //database query only once...rest front end javascript to reduce cost.
     }
   },
   methods: {

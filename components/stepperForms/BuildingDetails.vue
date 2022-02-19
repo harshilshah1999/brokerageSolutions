@@ -125,7 +125,7 @@ export default {
   },
   mounted() {
     //get building data
-    console.log(this.buildingId)
+    // console.log(this.buildingId)
   },
   methods: {
     validate: async function () {
@@ -173,9 +173,6 @@ export default {
         this.buildingId
       )
       building_details = await postApartmentServices.getBuildingDetails(
-        this.city,
-        this.localityId,
-        this.sublocalityId,
         this.buildingId
       )
       building_details = building_details.data()

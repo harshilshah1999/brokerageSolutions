@@ -26,7 +26,7 @@
 
       <v-stepper-content step="2">
         <v-card elevation="0">
-          <construction-details
+          <building-details
             :buildingId="buildingID"
             :apartmentId="apartmentID"
             :city="city"

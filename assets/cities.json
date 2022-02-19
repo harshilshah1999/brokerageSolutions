@@ -6,6 +6,12 @@
         "status": "active"
     },
     {
+        "id": "Achalpur",
+        "name": "Achalpur",
+        "state": "Maharashtra",
+        "status": "active"
+    },
+    {
         "id": "Delhi",
         "name": "Delhi",
         "state": "Delhi",
@@ -1750,12 +1756,6 @@
         "name": "Hardoi ",
         "state": "Uttar Pradesh",
         "status": "inactive"
-    },
-    {
-        "id": "Achalpur",
-        "name": "Achalpur",
-        "state": "Maharashtra",
-        "status": "active"
     },
     {
         "id": "Osmanabad",
