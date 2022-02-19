@@ -149,12 +149,12 @@ export default {
             return await firebaseServices.updateSingleDocument('buildings', buildingID, newdata)
         } catch (error) { console.error(error); return error }
     },
-    async updateFlatDetails(buildingID, flatID, flatData) {
-        try {
-            return await firebaseServices.updateSingleDocument2D('buildings', buildingID, 'flats', flatID, flatData)
-        } catch (error) { console.error(error); return error }
+    // async updateFlatDetails(buildingID, flatID, flatData) {
+    //     try {
+    //         return await firebaseServices.updateSingleDocument2D('buildings', buildingID, 'flats', flatID, flatData)
+    //     } catch (error) { console.error(error); return error }
 
-    },
+    // },
     async updateMedia(collectionID, apartmentID, mediaID, mediaData) { //don't update image path,wont be updated in storage
         try {
             return await firebaseServices.updateSingleDocument2D(collectionID, apartmentID, 'media', mediaID, mediaData).catch((err) => { console.error(err); })
@@ -185,9 +185,9 @@ export default {
         await firebaseServices.deleteSingleDocument('buildings', buildingID).catch((err) => { console.error(err); })
         await firebaseServices.removeArrayElement('sublocalities', sublocalityID, 'buildings', buildingID)
     },
-    async removeFlat(buildingID, flatID) {
-        await firebaseServices.deleteSingleDocument2D('buildings', buildingID, 'flats', flatID).catch((err) => { console.error(err); })
-    },
+    // async removeFlat(buildingID, flatID) {
+    //     await firebaseServices.deleteSingleDocument2D('buildings', buildingID, 'flats', flatID).catch((err) => { console.error(err); })
+    // },
 
     async removeLandmark(buildingID, landmark) {
         return await firebaseServices.removeArrayElement('buildings', buildingID, 'landmark', landmark).catch((err) => { console.error(err); })
