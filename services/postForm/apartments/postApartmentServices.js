@@ -1,6 +1,5 @@
 import firebaseServices from '../../firebaseServices'
 import verificationServices from '../../verificationServices';
-// @TODO - CREATE NESTED COLLECTIONS TO SAVE READS
 export default {
     // CREATE
     async postLocationDetails(collectionID, newdata, sublocalityID) {
@@ -195,6 +194,7 @@ export default {
 
     //DELETE
     async removeApartment(collectionID, apartmentID) {
+        //remove all occurances of that property not just one collection.
         await firebaseServices.deleteSingleDocument(collectionID, apartmentID).catch((err) => { console.error(err); })
         await firebaseServices.removeArrayElement('sublocalities', sublocalityID, collectionID, apartmentID).catch((err) => { console.error(err); }) //update sublocalities array
     },

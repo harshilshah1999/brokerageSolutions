@@ -1,5 +1,41 @@
 import firebaseServices from './firebaseServices'
+import postApartmentServices from './postForm/apartments/postApartmentServices'
 export default {
+
+    async getLocationsDropdown(city) {
+        let dropdown = []
+        let localities = []
+        let sublocalities = []
+        let buildings = []
+
+        localities = await postApartmentServices.getLocalities(city)
+        localities.forEach(async (locality) => {
+            dropdown.push({
+                id: locality.id,
+                name: locality.data().locality_name,
+                type: 'locality'
+            })
+            sublocalities = await postApartmentServices.getSublocalities(city, locality.id)
+            sublocalities.forEach(async (sublocality) => {
+                dropdown.push({
+                    id: sublocality.id,
+                    name: sublocality.data().sublocality_name + ' , ' + locality.data().locality_name,
+                    type: 'sublocality'
+                })
+                buildings = await postApartmentServices.getBuildings(city, locality.id, sublocality.id)
+                buildings.forEach(building => {
+                    dropdown.push({
+                        id: building.id,
+                        name: building.data().building_name + ' , ' + sublocality.data().sublocality_name + ' , ' + locality.data().locality_name,
+                        type: 'building'
+                    })
+                })
+            });
+        });
+        console.log(dropdown)
+        return dropdown
+    },
+
     async getMostVisitedApartments() {
         // const collectionLocation = collection(db, 'apartments_sale')
         // try {

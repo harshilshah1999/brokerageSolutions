@@ -1,91 +1,41 @@
 <template>
-<div>
-    <v-app-bar
-      color="deep-purple accent-4"
-      dark
-      app
-    >
+  <div>
+    <v-app-bar color="deep-purple accent-4" dark app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
       <v-toolbar-title>Whiteline Realtors</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
-      <v-btn
-        class="ma-1"
-        to="/"
-        plain
-      >
-        
-        <v-icon
-          
-          left
-        >
-          mdi-home
-        </v-icon>
+      <v-btn class="ma-1" plain to="/" >
+        <v-icon left> mdi-home </v-icon>
         Home
       </v-btn>
-            <v-btn
-        class="ma-1"
-       plain
-       to="/post-property"
-      >
-       
-        <v-icon
-          
-          left
-        >
-          mdi-archive-plus
-        </v-icon>
-         Post Property
+      <v-btn class="ma-1" plain to="/post-property">
+        <v-icon left> mdi-archive-plus </v-icon>
+        Post Property
       </v-btn>
-        <v-btn
-        class="ma-1"
-        plain
-      >
-        
-        <v-icon
-          
-          left
-        >
-          mdi-phone
-        </v-icon>
+      <v-btn class="ma-1" plain>
+        <v-icon left> mdi-phone </v-icon>
         Contact Us
       </v-btn>
 
-       <v-menu offset-y>
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn
-         
-          icon
-          
-          v-bind="attrs"
-          v-on="on"
-        >
-          <v-icon>mdi-face-man</v-icon>
-        </v-btn>
-      </template>
-      <v-list>
-        <v-list-item
-          v-for="(item, index) in items"
-          :key="index"
-        >
-          <v-list-item-title>{{ item.title }}</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
+      <v-menu offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn icon v-bind="attrs" v-on="on">
+            <v-icon>mdi-face-man</v-icon>
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item v-for="(item, index) in items" :key="index">
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-app-bar>
 
-    <v-navigation-drawer
-      v-model="drawer"
-      absolute
-      bottom
-      temporary
-    >
-      <v-list
-        nav
-        dense
-      >
+    <v-navigation-drawer v-model="drawer" absolute bottom temporary>
+      <v-list nav dense>
         <v-list-item-group
           v-model="group"
           active-class="deep-purple--text text--accent-4"
@@ -108,31 +58,29 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-</div>
+  </div>
 </template>
 <script>
-  export default {
-    data: () => ({
-      drawer: false,
-      group: null,
-       items: [
-        { title: 'Favourites' },
-        { title: 'Viewed Properties' },
-        { title: 'Visited Propeties' },
-        { title: 'Enquired Properties' },
-        { title: 'Suggested Propeties' },
-        { title: 'Logout' },
-      ]
-    }),
+export default {
+  data: () => ({
+    drawer: false,
+    group: null,
+    items: [
+      { title: "Favourites" },
+      { title: "Viewed Properties" },
+      { title: "Visited Propeties" },
+      { title: "Enquired Properties" },
+      { title: "Suggested Propeties" },
+      { title: "Logout" },
+    ],
+  }),
 
-    watch: {
-      group () {
-        this.drawer = false
-      },
+  watch: {
+    group() {
+      this.drawer = false;
     },
-  }
+  },
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

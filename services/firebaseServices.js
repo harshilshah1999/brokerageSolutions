@@ -12,9 +12,11 @@ import {
     arrayRemove,
     query,
     where,
+    increment,
     collectionGroup,
     orderBy,
     limit,
+    enableIndexedDbPersistence
 } from 'firebase/firestore'
 import { ref, deleteObject, getDownloadURL, uploadBytes } from 'firebase/storage'
 export default {
@@ -157,6 +159,14 @@ export default {
         try {
             await setDoc(documentLocation, newdata, { merge: true })  //(parameter) response: void
             return "Document Updated Successfully"
+        } catch (error) { console.error(error); return error }
+    },
+
+    async incrementElement(collectionID, documentID, key, incrementBy) {
+        const documentLocation = doc(db, collectionID, documentID);
+        try {
+            await updateDoc(documentLocation, { [key]: increment(incrementBy) }) //(parameter) response: void
+            return "Item Added Successfully"
         } catch (error) { console.error(error); return error }
     },
 

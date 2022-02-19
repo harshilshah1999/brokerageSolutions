@@ -55,11 +55,6 @@
         </v-card>
       </v-stepper-content>
 
-      <v-stepper-content step="6">
-        <v-card elevation="0">
-          <scheduling @stepperChange="e1 = 7" />
-        </v-card>
-      </v-stepper-content>
     </v-stepper-items>
   </v-stepper>
 </template>
@@ -70,7 +65,6 @@ const LocationDetails = () => import("~/components/stepperForms/LocationDetails.
 const FlatDetails = () => import("~/components/stepperForms/FlatDetails.vue");
 const Amenities = () => import("~/components/stepperForms/Amenities.vue");
 const Media = () => import("~/components/stepperForms/Media.vue");
-const Scheduling = () => import("~/components/stepperForms/Scheduling.vue");
 
 export default {
   components: {
@@ -79,7 +73,6 @@ export default {
     FlatDetails,
     Amenities,
     Media,
-    Scheduling,
   },
   data() {
     return {
@@ -109,10 +102,6 @@ export default {
         {
           title: "Media",
           number: 5,
-        },
-        {
-          title: "Scheduling",
-          number: 6,
         },
       ],
     };

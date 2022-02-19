@@ -1,19 +1,14 @@
 <template>
-    <div>
-        <hr>
-
-    </div>
+  <div>
+    <hr />
+    HOME
+  </div>
 </template>
 
 <script>
 export default {
-  name: "home",
-  data: function() {
-  },
-    mounted:{
-
-    },
-  methods: {
-  }
+  data: function () {},
+  mounted: {},
+  methods: {},
 };
 </script>

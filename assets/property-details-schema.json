@@ -13,9 +13,7 @@
                 "landmark": [
                     "Azam Dairy"
                 ],
-                "google_map_details": {
-                    "google_map_coordinates": "..."
-                }
+                "location_cordinates" : "geopoint in firebase"
             },
             "building_details": {
                 "construction_type": "Under Construction/New/Resale",
@@ -360,6 +358,9 @@
             "blacklisted?": "boolean"
         }
     ],
+    "global_metadata": {
+        "homepage_least_enquiries_count" : 5
+    },
     "staff_roles": [
         "admin",
         "delivery_boy",
