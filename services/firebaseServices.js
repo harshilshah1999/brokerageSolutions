@@ -280,7 +280,9 @@ export default {
 
     async startWithQuery(collectionID, parameter1, parameter2) { //returns all results that start with parameter2
         const q = query(collection(db, collectionID),
-            where(parameter1, "<=", parameter2 + '\uf8ff'));
+            where(parameter1, ">=", parameter2),
+            where(parameter1, "<=", parameter2 + '\uf8ff')
+        );
         return await getDocs(q)
     },
 

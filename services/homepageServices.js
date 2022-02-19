@@ -2,7 +2,7 @@ import firebaseServices from './firebaseServices'
 import postApartmentServices from './postForm/apartments/postApartmentServices'
 export default {
 
-    async getLocationsDropdown(city) {
+    async getLocationsDropdown(city,query) {
         let dropdown = []
         let localities = []
         let sublocalities = []
