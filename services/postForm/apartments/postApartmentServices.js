@@ -83,8 +83,8 @@ export default {
         }
 
         let locality = await firebaseServices.addDocumentAutoID2D('cities', newdata['city'], 'localities', localityForm).catch((err) => { console.error(err); }) //enter new locality
-        await firebaseServices.addDocumentManualID('pending_locality_verification', locality['id'], localityForm).catch((err) => { console.error(err); }) //add locality for verification
-        if (newdata['verified']) await verificationServices.verifyLocality(locality['id'], newdata['city'], true)
+        if (newdata['verified']) { await verificationServices.verifyLocality(locality['id'], newdata['city'], true) }
+        else { await firebaseServices.addDocumentManualID('pending_locality_verification', locality['id'], localityForm).catch((err) => { console.error(err); }) } //add locality for verification
         return locality['id']
     },
     async addNewSubLocality(localityID, newdata /* depends on who is posting the property [staff=true,other=false] */) {
@@ -97,16 +97,16 @@ export default {
         }
 
         let sublocality = await firebaseServices.addDocumentAutoID3D('cities', newdata['city'], 'localities', localityID, 'sublocalities', sublocalityForm).catch((err) => { console.error(err); }) //enter new sublocality
-        await firebaseServices.addDocumentManualID('pending_sublocality_verification', sublocality['id'], sublocalityForm).catch((err) => { console.error(err); }) //enter new sublocality
-        if (newdata['verified']) await verificationServices.verifySublocality(sublocality['id'], localityID, true)
+        if (newdata['verified']) { await verificationServices.verifySublocality(sublocality['id'], localityID, true) }
+        else { await firebaseServices.addDocumentManualID('pending_sublocality_verification', sublocality['id'], sublocalityForm).catch((err) => { console.error(err); }) }//enter new sublocality
         return sublocality['id'];
     },
     async addNewBuilding(sublocalityID, newdata /* depends on who is posting the property [staff=true,other=false] */) {
 
         //adding new building
         let building = await firebaseServices.addDocumentAutoID4D('cities', newdata['city'], 'localities', newdata['locality_id'], 'sublocalities', newdata['sublocality_id'], 'buildings', newdata).catch((err) => { console.error(err); }) //enter new building
-        await firebaseServices.addDocumentManualID('pending_building_verification', building['id'], newdata).catch((err) => { console.error(err); }) //enter new building
-        if (newdata['verified']) await verificationServices.verifyBuilding(building['id'], sublocalityID, true)
+        if (newdata['verified']) { await verificationServices.verifyBuilding(building['id'], sublocalityID, true) }
+        else { await firebaseServices.addDocumentManualID('pending_building_verification', building['id'], newdata).catch((err) => { console.error(err); }) }//enter new building
         return building['id']
     },
     async addNewFlat(city, localityID, sublocalityID, buildingID, flatData) {

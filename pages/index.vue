@@ -1,19 +1,37 @@
 <template>
-  <div>HOME</div>
+  <div>
+    HOME
+    <hr />
+    <div v-for="element in dropdown" :key="element">
+      {{ element }}
+    </div>
+  </div>
 </template>
 <script>
 import homepageServices from "../services/homepageServices";
 
 export default {
+  name: "index",
+
   components: {},
 
-  data: function () {
-    return {};
+  data() {
+    return {
+      dropdown: [],
+      bool: true,
+    };
   },
 
   async mounted() {
-    // await homepageServices.getLocationsDropdown("Achalpur");
+    if (this.bool) {
+      this.fillDropdown();
+      this.bool = false;
+    }
   },
-  methods: {},
+  methods: {
+    async fillDropdown() {
+      this.dropdown = await homepageServices.getLocationsDropdown("Achalpur");
+    },
+  },
 };
 </script>

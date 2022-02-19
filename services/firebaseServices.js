@@ -13,10 +13,10 @@ import {
     query,
     where,
     increment,
-    collectionGroup,
+    collectionGroup, //collection group queries
     orderBy,
     limit,
-    enableIndexedDbPersistence
+    enableIndexedDbPersistence //for offline data and caching
 } from 'firebase/firestore'
 import { ref, deleteObject, getDownloadURL, uploadBytes } from 'firebase/storage'
 export default {
@@ -214,10 +214,11 @@ export default {
             return await getDocs(collectionLocation)//(parameter) response: DocumentReference<any>
         } catch (error) { console.error(error); return error }
     },
-    async getAllDocuments2D(collectionID1, documentID1, collectionID2) { //reads all the documents in a collection
+    async getAllDocuments2D(collectionID1, documentID1, collectionID2, doc_limit) { //reads all the documents in a collection
+
         const collectionLocation = collection(db, collectionID1, documentID1, collectionID2)
         try {
-            return await getDocs(collectionLocation)//(parameter) response: DocumentReference<any>
+            return await getDocs(query(collectionLocation, limit(doc_limit || Infinity)))//(parameter) response: DocumentReference<any>
         } catch (error) { console.error(error); return error }
     },
     async getAllDocuments3D(collectionID1, documentID1, collectionID2, documentID2, collectionID3) { //reads all the documents in a collection
@@ -238,6 +239,12 @@ export default {
             return await getDocs(collectionLocation)//(parameter) response: DocumentReference<any>
         } catch (error) { console.error(error); return error }
     },
+
+    /*
+    For searching records starting with name queryText
+    collectionRef.where('name', '>=', queryText).where('name', '<=', queryText+ '\uf8ff').
+    Because it is after most regular characters in Unicode, the query matches all values that start with queryText.
+    */
 
     async getSingleMedia(media_path) { // get url for a single media file
         const downloadLocation = ref(storage, media_path);
