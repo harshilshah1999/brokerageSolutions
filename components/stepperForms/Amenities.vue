@@ -8,6 +8,7 @@
             :label="amenity.name"
             :append-icon="amenity.icon"
             color="indigo"
+            class="custom-icon-spacing"
           ></v-checkbox>
         </v-col>
          <v-col cols="12" sm="4">
@@ -31,6 +32,7 @@ import postApartmentServices from '../../services/postForm/apartments/postApartm
 import amenities from "../../assets/amenities.json";
 
 export default {
+  props: ['buildingId', 'apartmentId'],
   data: () => ({
     amenities: [],
     valid: false,
@@ -40,10 +42,40 @@ export default {
     this.amenities = amenities
     this.amenities.forEach(amenity => amenity.selected = false)
   },
-  methods: {},
-  watch: {},
+  methods: {
+    validate: async function() {
+      try {
+        this.loading = true;
+        let amenities = {}
+        this.amenities.forEach(amenity => {
+          if (amenity.selected) {
+            amenities[amenity.property_name] = true
+          }
+        })
+        await postApartmentServices.postAmenitiesDetails(
+          'apartments_sale',
+          this.buildingId,
+          this.apartmentId,
+          {
+            amenity_details: amenities
+          }
+        )
+        this.$emit('stepperChange')
+      }
+      catch(e) {
+        console.log(e)
+      }
+      finally {
+        this.loading = false;
+      }
+    }
+  }
 }
 </script>
 
-<style>
+<style lang="scss">
+.custom-icon-spacing > .v-input__control{
+  flex-grow: unset;
+  width: unset;
+}
 </style>

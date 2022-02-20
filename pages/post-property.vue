@@ -13,7 +13,7 @@
           {{ n.title }}
         </v-stepper-step>
 
-        <v-divider v-if="n.number !== 6" :key="n.number"> </v-divider>
+        <v-divider v-if="n.number !== 5" :key="n.number"> </v-divider>
       </template>
     </v-stepper-header>
 
@@ -45,7 +45,11 @@
 
       <v-stepper-content step="4">
         <v-card elevation="0">
-          <amenities @stepperChange="e1 = 5" />
+          <amenities 
+            :buildingId="buildingID"
+            :apartmentId="apartmentID" 
+            @stepperChange="e1 = 5" 
+          />
         </v-card>
       </v-stepper-content>
 

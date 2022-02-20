@@ -3,6 +3,7 @@
   <!-- @TODO ERROR IF TOTAL FLOORS IS LESS THAN YOUR FLOOR -->
   <!-- @TODO stepper should be fixed at the top, make flatdetails scrollable -->
   <!-- @TODO add unit dropdown and while saving convert to a base unit and of type number for three carpet areas-->
+  <!--@TODO add bhk types 1 room kitchen , etc -->
   <v-form v-model="valid" ref="form" lazy-validation>
     <v-container>
       <v-row>

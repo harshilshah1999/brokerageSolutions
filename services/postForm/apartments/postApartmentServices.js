@@ -23,7 +23,7 @@ export default {
     async postRentalDetails(collectionID, apartmentID, flatID, newdata) {
         this.updateApartmentDetails(collectionID, apartmentID, newdata)
     },
-    async postAmenitiesDetails(collectionID, apartmentID, newdata) {
+    async postAmenitiesDetails(collectionID, buildingID, apartmentID, newdata) {
         this.updateApartmentDetails(collectionID, apartmentID, newdata)
         this.updateBuildingDetails(buildingID, newdata)
     },

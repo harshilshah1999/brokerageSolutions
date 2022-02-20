@@ -1,26 +1,32 @@
 [
     {
         "name": "Lift",
-        "icon": "mdi-elevator-passenger-outline"
+        "icon": "mdi-elevator-passenger-outline",
+        "property_name": "lift"
     },
     {
         "name": "Gas Pipeline",
-        "icon": "mdi-pipe"
+        "icon": "mdi-pipe",
+        "property_name": "gas_pipeline"
     },
     {
         "name": "Visitor Parking",
-        "icon":"mdi-car-brake-parking"
+        "icon":"mdi-car-brake-parking",
+        "property_name": "visitor_parking"
     },
     {
         "name":"Gym",
-        "icon": "mdi-weight-lifter"
+        "icon": "mdi-weight-lifter",
+        "property_name": "gym"
     },
     {
         "name": "Swimming Pool",
-        "icon":"mdi-pool"
+        "icon":"mdi-pool",
+        "property_name": "swimming_pool"
     },
     {
         "name": "Club House",
-        "icon": "mdi-greenhouse"
+        "icon": "mdi-greenhouse",
+        "property_name": "club_house"
     }
 ]
