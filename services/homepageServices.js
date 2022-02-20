@@ -1,37 +1,37 @@
 import firebaseServices from './firebaseServices'
-import postApartmentServices from './postForm/apartments/postApartmentServices'
 export default {
 
-    async getLocationsDropdown(city,query) {
+    async getLocationsDropdown(city, query) {
         let dropdown = []
         let localities = []
         let sublocalities = []
         let buildings = []
 
-        localities = await postApartmentServices.getLocalities(city)
+        localities = await firebaseServices.startWithQuery('localities', 'locality_name', query, 'city', city).catch((err) => { console.error(err); })
         localities.forEach(async (locality) => {
             dropdown.push({
                 id: locality.id,
                 name: locality.data().locality_name,
                 type: 'locality'
             })
-            sublocalities = await postApartmentServices.getSublocalities(city, locality.id)
-            sublocalities.forEach(async (sublocality) => {
-                dropdown.push({
-                    id: sublocality.id,
-                    name: sublocality.data().sublocality_name + ' , ' + locality.data().locality_name,
-                    type: 'sublocality'
-                })
-                buildings = await postApartmentServices.getBuildings(city, locality.id, sublocality.id)
-                buildings.forEach(building => {
-                    dropdown.push({
-                        id: building.id,
-                        name: building.data().building_name + ' , ' + sublocality.data().sublocality_name + ' , ' + locality.data().locality_name,
-                        type: 'building'
-                    })
-                })
-            });
+
         });
+        sublocalities = await firebaseServices.startWithQuery('sublocalities', 'sublocality_name', query, 'city', city).catch((err) => { console.error(err); })
+        sublocalities.forEach(async (sublocality) => {
+            dropdown.push({
+                id: sublocality.id,
+                name: sublocality.data().sublocality_name + ' , ' + sublocality.data().locality_name,
+                type: 'sublocality'
+            })
+        });
+        buildings = await firebaseServices.startWithQuery('buildings', 'building_name', query, 'city', city).catch((err) => { console.error(err); })
+        buildings.forEach(building => {
+            dropdown.push({
+                id: building.id,
+                name: building.data().building_name + ' , ' + building.data().sublocality_name + ' , ' + building.data().locality_name,
+                type: 'building'
+            })
+        })
         console.log(dropdown)
         return dropdown
     },

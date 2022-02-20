@@ -278,10 +278,11 @@ export default {
         return await getDocs(q)
     },
 
-    async startWithQuery(collectionID, parameter1, parameter2) { //returns all results that start with parameter2
+    async startWithQuery(collectionID, parameter1, parameter2, parameter3, parameter4) { //returns all results that start with parameter2
         const q = query(collection(db, collectionID),
             where(parameter1, ">=", parameter2),
-            where(parameter1, "<=", parameter2 + '~')
+            where(parameter1, "<=", parameter2 + '~'),
+            where(parameter3, "==", parameter4),
         );
         return await getDocs(q)
     },
