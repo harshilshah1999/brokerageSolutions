@@ -11,6 +11,10 @@
         <v-icon left> mdi-home </v-icon>
         Home
       </v-btn>
+       <v-btn class="ma-1" plain to="/yash">
+        <v-icon left> mdi-archive-plus </v-icon>
+        yash
+      </v-btn>
       <v-btn class="ma-1" plain to="/post-property">
         <v-icon left> mdi-archive-plus </v-icon>
         Post Property

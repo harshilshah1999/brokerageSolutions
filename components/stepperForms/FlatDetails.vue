@@ -117,11 +117,7 @@
             <v-date-picker v-model="flat_available_from" no-title scrollable>
               <v-spacer></v-spacer>
               <v-btn text color="primary" @click="menu = false"> Cancel </v-btn>
-              <v-btn
-                text
-                color="primary"
-                @click="$refs.menu.save(flat_available_from)"
-              >
+              <v-btn text color="primary" @click="$refs.menu.save(flat_available_from)">
                 OK
               </v-btn>
             </v-date-picker>
@@ -145,8 +141,8 @@
             <v-icon right> mdi-arrow-right-thin </v-icon>
           </v-btn>
           <v-snackbar v-model="snackbar">
-            Please enter atleast one of the following areas - Carpet Area,
-            Builtup Area, Super Builtup Area
+            Please enter atleast one of the following areas - Carpet Area, Builtup Area,
+            Super Builtup Area
             <template v-slot:action="{ attrs }">
               <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
                 Close
@@ -160,51 +156,51 @@
 </template>
 
 <script>
-import postApartmentServices from '../../services/postForm/apartments/postApartmentServices'
+import postApartmentServices from "../../services/postForm/apartments/postApartmentServices";
 
 export default {
-  props: ['apartmentId'],
+  props: ["apartmentId"],
   data: () => ({
     snackbar: false,
-    BHKtype: '',
-    carpet_area: '',
-    builtup_area: '',
-    super_builtup_area: '',
-    floor_number: '',
-    facing: '',
+    BHKtype: "",
+    carpet_area: "",
+    builtup_area: "",
+    super_builtup_area: "",
+    floor_number: "",
+    facing: "",
     facing_values: [
-      'East',
-      'West',
-      'North',
-      'South',
-      'North-East',
-      'North-West',
-      'South-East',
-      'South-West',
+      "East",
+      "West",
+      "North",
+      "South",
+      "North-East",
+      "North-West",
+      "South-East",
+      "South-West",
     ],
-    furnishing: '',
-    furnishing_values: ['Fully-furnished', 'Semi-Furnished', 'Unfurnished'],
-    bathrooms: '3',
-    balconies: '0',
+    furnishing: "",
+    furnishing_values: ["Fully-furnished", "Semi-Furnished", "Unfurnished"],
+    bathrooms: "3",
+    balconies: "0",
     flat_available_from: null,
-    description: '',
+    description: "",
 
     menu: false,
     valid: false,
-    rules: [(v) => !!v || 'This is a required field'],
+    rules: [(v) => !!v || "This is a required field"],
     loading: false,
   }),
   mounted() {},
   methods: {
-    validate: async function() {
-      if(this.$refs.form.validate()) {
-        if(!this.carpet_area && !this.builtup_area && !this.super_builtup_area) {
+    validate: async function () {
+      if (this.$refs.form.validate()) {
+        if (!this.carpet_area && !this.builtup_area && !this.super_builtup_area) {
           this.valid = false;
           this.snackbar = true;
           return;
         }
         try {
-          this.loading = true
+          this.loading = true;
           await postApartmentServices.postFlatDetails(
             "apartments_sale",
             this.apartmentId,
@@ -223,19 +219,18 @@ export default {
                 flat_available_from: this.flat_available_from,
               },
             }
-          )
-          this.$emit("stepperChange")
-        }
-        catch(e) {
-          console.log(e)
+          );
+          this.$emit("stepperChange");
+        } catch (e) {
+          console.log(e);
         } finally {
-          this.loading = false
+          this.loading = false;
         }
       }
     },
   },
   watch: {},
-}
+};
 </script>
 
 <style></style>
