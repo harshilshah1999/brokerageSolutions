@@ -6,7 +6,7 @@
       label-idle="Drop files here..."
       :allow-multiple="true"
       accepted-file-types="image/jpeg, image/png"
-      :server="{  process, revert,  restore, load, fetch }"
+      :server="{  process, revert }"
       :files="files2"
       @init="handleFilePondInit"
     />
@@ -14,6 +14,8 @@
 </template>
 
 <script>
+
+import firebaseService from "../../services/firebaseServices";
 // Import Vue FilePond
 import vueFilePond from "vue-filepond";
 
@@ -45,55 +47,17 @@ export default {
   },
   methods: {
             process(fieldName, file, metadata, load, error, progress, abort)  {
-                var self = this
-                try {
-                    progress(true, 0, 1024);
-                    var uploadTask = this.$storage.ref().child('images/' + file.name).put(file, metadata)
-                    uploadTask.on(this.$firebase.storage.TaskEvent.STATE_CHANGED,
-                        function (snapshot) { progress(true, snapshot.bytesTransferred, snapshot.totalBytes)},
-                        function (e) {  self.handleError(error, e)},
-                        function () {
-                            load(uploadTask.snapshot.ref.fullPath)
-                            self.files.push(uploadTask.snapshot.ref.fullPath)
-                        }
-                    )
-                    return {
-                        abort: () => {
+                const uploadTask = firebaseService.setSingleMedia(file.name, file, progress, load, abort, error);
+                return {
+                    abort: () => {
                             abort()
                             uploadTask.cancel();
-                        }
-                    }
-                } catch (e) {
-                    this.handleError(error, e)
-                    return {
-                        abort: () => { abort() }
                     }
                 }
             },
             revert (uniqueFileId, load, error) {
-                var self = this
-                // Create a reference to the file to delete
                 console.log(uniqueFileId)
-                var desertRef = this.$storage.ref().child(uniqueFileId);
-                        desertRef.delete().then(function() {
-                            var index = self.files.indexOf(uniqueFileId);
-                            if (index > -1) {
-                                self.files.splice(index, 1);
-                            }
-                            load();
-                        }).catch(function(e) {
-                           this.handleError(error, e)
-                        });
-            },
-            load (uniqueFileId, load, error){ error()},
-            fetch (url, load, error, progress, abort, headers) {   error("Solo archivos locales")   },
-            restore (uniqueFileId, load, error, progress, abort, headers) { error() },
-            handleError (error, e){
-                switch (e.code) {
-                    case 'storage/canceled':
-                        break;
-                    default: error(e.message)
-                }
+                firebaseService.deleteSingleMedia(uniqueFileId, error);
             },
             handleFilePondInit: function() {
                 this.$refs.input.getFiles();

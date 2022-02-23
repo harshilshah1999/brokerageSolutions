@@ -253,8 +253,9 @@ export default {
         } catch (error) { console.error(error); return error }
     },
 
-    async setSingleMedia(media_path, file) { // add single media to storage
+    setSingleMedia(media_path, file, progress, load, abort, error) { // add single media to storage
         const uploadLocation = ref(storage, media_path);
+        progress(true, 0, 1024)
         try {
             // return await uploadBytes(uploadLocation, file) //(parameter) snapshot: UploadResult
             const uploadTask = uploadBytesResumable(uploadLocation, file);
@@ -265,38 +266,31 @@ export default {
             // 3. Completion observer, called on successful completion
             uploadTask.on('state_changed',
                 (snapshot) => {
-                    // Observe state change events such as progress, pause, and resume
-                    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    console.log('Upload is ' + progress + '% done');
-                    switch (snapshot.state) {
-                        case 'paused':
-                            console.log('Upload is paused');
-                            break;
-                        case 'running':
-                            console.log('Upload is running');
-                            break;
-                    }
+                    progress(true, snapshot.bytesTransferred, snapshot.totalBytes);
                 },
-                (error) => {
+                (e) => {
                     // Handle unsuccessful uploads
+                    error(e.message)
                 },
                 () => {
                     // Handle successful uploads on complete
                     // For instance, get the download URL: https://firebasestorage.googleapis.com/...
                     getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                        return downloadURL;
+                        load(downloadURL);
                     });
                 }
             );
+            return uploadTask;
         } catch (error) { console.error(error); return error }
     },
 
-    async deleteSingleMedia(media_path) { // add single media to storage
+    async deleteSingleMedia(media_path, error) { // add single media to storage
         const deleteLocation = ref(storage, media_path);
         try {
             return await deleteObject(deleteLocation)
-        } catch (error) { console.error(error); return error }
+        } catch (e) { 
+            error(e.message)
+         }
     },
 
     async singleEqualsQuery(collectionID, parameter1, parameter2) {
