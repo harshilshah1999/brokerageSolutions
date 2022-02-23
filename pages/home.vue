@@ -11,4 +11,5 @@ export default {
   mounted: {},
   methods: {},
 };
+// https://vuejsexamples.com/a-vue-component-about-toy-bricks-of-skeleton-screen-loading/
 </script>
