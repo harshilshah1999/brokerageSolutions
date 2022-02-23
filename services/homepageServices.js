@@ -24,14 +24,16 @@ export default {
                 type: 'sublocality'
             })
         });
-        buildings = await firebaseServices.startWithQuery('buildings', 'building_name', query, 'city', city).catch((err) => { console.error(err); })
-        buildings.forEach(building => {
-            dropdown.push({
-                id: building.id,
-                name: building.data().building_name + ' , ' + building.data().sublocality_name + ' , ' + building.data().locality_name,
-                type: 'building'
-            })
-        })
+
+
+        // buildings = await firebaseServices.startWithQuery('buildings', 'building_name', query, 'city', city).catch((err) => { console.error(err); })
+        // buildings.forEach(building => {
+        //     dropdown.push({
+        //         id: building.id,
+        //         name: building.data().building_name + ' , ' + building.data().sublocality_name + ' , ' + building.data().locality_name,
+        //         type: 'building'
+        //     })
+        // })
         console.log(dropdown)
         return dropdown
     },
