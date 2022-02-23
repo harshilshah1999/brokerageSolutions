@@ -13,8 +13,12 @@
     "@nuxtjs/pwa": "^3.3.5",
     "browser-image-compression": "^1.0.17",
     "core-js": "^3.15.1",
+    "filepond": "^4.30.3",
+    "filepond-plugin-file-validate-type": "^1.2.6",
+    "filepond-plugin-image-preview": "^4.6.10",
     "firebase": "^9.6.5",
     "nuxt": "^2.15.7",
+    "vue-filepond": "^6.0.0",
     "vuetify": "^2.5.5"
   },
   "devDependencies": {

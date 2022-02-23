@@ -13,6 +13,7 @@
             truncate-length="50"
             accept="image/*,video/mp4,video/x-m4v,video/*"
             v-model="chosenFile"
+            filled
           ></v-file-input>
           <v-btn v-on:click="submit_image">UPLOAD IMAGE</v-btn>
         </v-col>

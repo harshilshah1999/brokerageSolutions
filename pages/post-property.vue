@@ -59,16 +59,24 @@
         </v-card>
       </v-stepper-content>
 
+      <v-stepper-content step="6">
+        <v-card elevation="0">
+          <file-pond @stepperChange="e1 = 7" />
+        </v-card>
+      </v-stepper-content>
+
     </v-stepper-items>
   </v-stepper>
 </template>
 
 <script>
+
 const BuildingDetails = () => import("~/components/stepperForms/BuildingDetails.vue");
 const LocationDetails = () => import("~/components/stepperForms/LocationDetails.vue");
 const FlatDetails = () => import("~/components/stepperForms/FlatDetails.vue");
 const Amenities = () => import("~/components/stepperForms/Amenities.vue");
 const Media = () => import("~/components/stepperForms/Media.vue");
+const FilePond = () => import("~/components/stepperForms/FilePond.vue");
 
 export default {
   components: {
@@ -77,6 +85,7 @@ export default {
     FlatDetails,
     Amenities,
     Media,
+    FilePond,
   },
   data() {
     return {
@@ -107,6 +116,10 @@ export default {
           title: "Media",
           number: 5,
         },
+        {
+          title: "File Pond",
+          number: 6,
+        }
       ],
     };
   },

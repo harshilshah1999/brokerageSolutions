@@ -9,6 +9,7 @@
             :append-icon="amenity.icon"
             color="indigo"
             class="custom-icon-spacing"
+            ripple
           ></v-checkbox>
         </v-col>
          <v-col cols="12" sm="4">
