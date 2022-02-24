@@ -37,6 +37,7 @@
 
 <script>
 import { auth, signInWithPhoneNumber, RecaptchaVerifier } from "../plugins/firebase";
+import loginServices from "../services/loginServices";
 
 export default {
   name: "login",
@@ -68,11 +69,13 @@ export default {
       },
       auth
     );
-
+    //to always view reCaptcha
     // this.recaptchaVerifier = new RecaptchaVerifier("recaptcha-container", {}, auth);
     // await this.recaptchaVerifier.render().then((widgetId) => {
     //   this.recaptchaWidgetId = widgetId;
     // });
+
+
   },
   methods: {
     submit() {
@@ -92,6 +95,7 @@ export default {
         .confirm(this.OTP)
         .then((result) => {
           alert("Registeration Successfull!", result);
+          let response = await loginServices.signup("");
           this.redirectFunction();
           var user = result.user;
           console.log(user);
