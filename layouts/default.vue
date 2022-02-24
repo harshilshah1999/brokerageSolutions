@@ -1,11 +1,11 @@
 <template>
   <v-app dark>
     <!-- <Header /> -->
-    <TopNavigation />
+    <!-- <TopNavigation /> -->
     <v-main>
-      <v-container>
+      <!-- <v-container> -->
         <Nuxt />
-      </v-container>
+      <!-- </v-container>  -->
     </v-main>
   </v-app>
 </template>
