@@ -74,8 +74,6 @@ export default {
     // await this.recaptchaVerifier.render().then((widgetId) => {
     //   this.recaptchaWidgetId = widgetId;
     // });
-
-
   },
   methods: {
     submit() {
@@ -93,7 +91,7 @@ export default {
     verifyCode() {
       this.confirmResult
         .confirm(this.OTP)
-        .then((result) => {
+        .then(async (result) => {
           alert("Registeration Successfull!", result);
           let response = await loginServices.signup("");
           this.redirectFunction();
