@@ -1,14 +1,19 @@
 // @TODO COUNTRY SELECT PREFIX IN MOBILE NUMBER
 <template>
-  <div id="signup-page-wrapper" class="dark-background-color" style="height: 100vh">
+  <div
+    id="signup-page-wrapper"
+    class="dark-background-color"
+    style="height: 100vh"
+  >
     <v-row id="animated">
       <v-col class="dark-background-color">
         <v-card class="a1">
           <v-card-title>
             <h1 v-if="!otp_confirmed" class="light-color">Sign Up</h1>
+
             <h1 v-else class="light-color">Enter Details</h1>
           </v-card-title>
-          <!-- <transition :duration="1000" name="fade"> -->
+
           <div v-if="!otp_confirmed">
             <v-col cols="12" sm="12">
               <v-text-field
@@ -48,7 +53,9 @@
                   color="#1e2738da"
                   type="number"
                 ></v-otp-input>
-                <v-btn class="a3" @click="confirmOTP" id="otp-btn"> Confirm OTP </v-btn>
+                <v-btn class="a3" @click="confirmOTP" id="otp-btn">
+                  Confirm OTP
+                </v-btn>
               </v-col>
             </v-expand-transition>
 
@@ -56,7 +63,9 @@
               <v-divider></v-divider>
               <div class="captcha-text">
                 (This site is protected by reCAPTCHA and the Google
-                <a class="captcha-link" href="https://policies.google.com/privacy"
+                <a
+                  class="captcha-link"
+                  href="https://policies.google.com/privacy"
                   >Privacy Policy</a
                 >
                 and
@@ -67,26 +76,55 @@
               </div>
             </v-col>
           </div>
+
           <div v-else>
             <v-col cols="12" sm="12">
-              <v-text-field
-                label="Mobile Number"
-                v-model="phoneNumber"
-                placeholder="9999999999"
-                outlined
-                :hint="true ? 'Please enter a 10 digit number' : null"
-                color="#1e2738da"
-                class="input-field"
-                clearable
-              >
-              </v-text-field>
-
-              <v-btn class="a3" id="submit-details" @click="submit_details">
-                <span id="send-otp-button"> Submit Details</span>
-              </v-btn>
+              <v-row>
+                <v-text-field
+                  label="Alternate Mobile Number"
+                  v-model="alternate_phoneNumber"
+                  placeholder="9999999999"
+                  outlined
+                  :hint="true ? 'Please enter a 10 digit number' : null"
+                  color="#1e2738da"
+                  class="input-field"
+                  clearable
+                >
+                </v-text-field>
+              </v-row>
+              <v-row>
+                <v-text-field
+                  label="Name"
+                  v-model="name"
+                  placeholder="Enter your Name"
+                  outlined
+                  :hint="true ? 'Ex. Somil Shah' : null"
+                  color="#1e2738da"
+                  class="input-field"
+                  clearable
+                >
+                </v-text-field>
+              </v-row>
+              <v-row>
+                <v-text-field
+                  label="Email ID"
+                  v-model="email"
+                  placeholder="Enter your Email ID"
+                  outlined
+                  :hint="true ? 'Ex. somilshah@xyz.com' : null"
+                  color="#1e2738da"
+                  class="input-field"
+                  clearable
+                >
+                </v-text-field>
+              </v-row>
+              <v-row>
+                <v-btn class="a3" id="submit-details" @click="submit_details">
+                  <span id="send-otp-button"> Submit Details</span>
+                </v-btn>
+              </v-row>
             </v-col>
           </div>
-          <!-- </transition> -->
         </v-card>
       </v-col>
     </v-row>
@@ -100,10 +138,14 @@ export default {
     OTP: null,
     sending_otp: false,
     drawer: false,
-    phoneNumber: "",
-    display_number: "",
+    phoneNumber: '',
+    display_number: '',
     styleObject: null,
     otp_confirmed: false,
+    alternate_phoneNumber: null,
+    name: null,
+    email: null,
+    show: false,
   }),
   async mounted() {},
   methods: {
@@ -120,36 +162,36 @@ export default {
     //     });
     // },
 
-
     async submit() {
-      this.display_number = this.phoneNumber;
-      this.sending_otp = true; //temp
+      this.display_number = this.phoneNumber
+      this.sending_otp = true //temp
 
-      this.show_otp_div = true;
-      this.sending_otp = false; //temp
-      this.otp_confirmed = false;
+      this.show_otp_div = true
+      this.sending_otp = false //temp
+      this.otp_confirmed = false
       this.styleObject = {
-        "background-color": "green !important",
-      };
-      document.getElementById("send-otp-button").innerHTML = "OTP Sent";
+        'background-color': 'green !important',
+      }
+      document.getElementById('send-otp-button').innerHTML = 'OTP Sent'
       // setTimeout(() => {
       // }, 1000);
     },
     async confirmOTP() {
-      this.otp_confirmed = true;
+      this.otp_confirmed = true
 
       // setTimeout(() => {
       //   document.getElementById("send-otp-button").innerHTML = "OTP Sent";
       // }, 3000);
     },
   },
-};
+}
 </script>
 
 <style>
 #signup-page-wrapper {
   background-image: linear-gradient(#1e2738da, #1e2738da),
-    url("../assets/signup-wallpaper.jpg") !important;
+    url('../assets/signup-wallpaper.jpg') !important;
+  background-size: cover;
 }
 
 .v-text-field {
@@ -162,7 +204,8 @@ export default {
   background-color: white !important;
 }
 .a1 {
-  background-image: url("../assets/signup-card-bg.jpg");
+  background-image: url('../assets/signup-card-bg.jpg');
+  min-width: 25% !important;
   max-width: 25% !important;
   border-radius: 2% !important;
   padding: 1%;
@@ -178,6 +221,7 @@ export default {
 }
 .a3 {
   width: 100% !important;
+  height: 50px !important;
   border-radius: 10px;
   background-color: #1e2738da !important;
   color: white !important;
@@ -201,17 +245,6 @@ export default {
   color: black;
 }
 
-.slide-fade-enter-active {
-  transition: all 3s ease;
-}
-.slide-fade-leave-active {
-  transition: all 1s;
-}
-.slide-fade-enter, .slide-fade-leave-to
-/* .slide-fade-leave-active below version 2.1.8 */ {
-  transform: translateX(1000px);
-  opacity: 0;
-}
 #animated {
   -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 1s; /* Firefox < 16 */
