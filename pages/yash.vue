@@ -4,58 +4,89 @@
     <v-row id="animated">
       <v-col class="dark-background-color">
         <v-card class="a1">
-          <v-card-title><h1 class="light-color">Sign Up</h1></v-card-title>
-          <v-col cols="12" sm="12">
-            <v-text-field
-              label="Mobile Number"
-              v-model="phoneNumber"
-              placeholder="Ex. +91 99999 99999"
-              outlined
-              :hint="true ? 'Please enter a 10 digit number' : null"
-              color="#1e2738da"
-              class="input-field"
-            >
-            </v-text-field>
-            <v-btn
-              :loading="sending_otp"
-              class="a3"
-              id="log-in"
-              @click="submit"
-              v-bind:style="styleObject ? styleObject : null"
-              >{{ otp_button_text }}</v-btn
-            >
-          </v-col>
-
-          <v-expand-transition>
-            <v-col v-if="show_otp_div">
-              <h4>
-                <span class="extra-light"> Enter the Verification Code sent to</span>
-                <span class="dark-color"> {{ display_number }} </span>
-              </h4>
-              <v-otp-input
-                v-model="OTP"
-                required
-                length="6"
+          <v-card-title>
+            <h1 v-if="!otp_confirmed" class="light-color">Sign Up</h1>
+            <h1 v-else class="light-color">Enter Details</h1>
+          </v-card-title>
+          <!-- <transition :duration="1000" name="fade"> -->
+          <div v-if="!otp_confirmed">
+            <v-col cols="12" sm="12">
+              <v-text-field
+                label="Mobile Number"
+                v-model="phoneNumber"
+                placeholder="9999999999"
+                outlined
+                :hint="true ? 'Please enter a 10 digit number' : null"
                 color="#1e2738da"
-                type="number"
-              ></v-otp-input>
-              <v-btn class="a3" @click="verifyCode" id="otp-btn"> Confirm OTP </v-btn>
+                class="input-field"
+                clearable
+                prefix="+91 "
+              >
+              </v-text-field>
+
+              <v-btn
+                :loading="sending_otp"
+                class="a3"
+                id="log-in"
+                @click="submit"
+                v-bind:style="styleObject ? styleObject : null"
+              >
+                <span id="send-otp-button"> Send OTP</span>
+              </v-btn>
             </v-col>
-          </v-expand-transition>
-          <v-col>
-            <v-divider></v-divider>
-            <div class="captcha-text">
-              (This site is protected by reCAPTCHA and the Google
-              <a class="captcha-link" href="https://policies.google.com/privacy"
-                >Privacy Policy</a
+
+            <v-expand-transition>
+              <v-col v-if="show_otp_div">
+                <h3>
+                  <span class="extra-light"> Enter the OTP sent to</span>
+                  <span class="dark-color"> {{ display_number }} </span>
+                </h3>
+                <v-otp-input
+                  v-model="OTP"
+                  required
+                  length="6"
+                  color="#1e2738da"
+                  type="number"
+                ></v-otp-input>
+                <v-btn class="a3" @click="confirmOTP" id="otp-btn"> Confirm OTP </v-btn>
+              </v-col>
+            </v-expand-transition>
+
+            <v-col>
+              <v-divider></v-divider>
+              <div class="captcha-text">
+                (This site is protected by reCAPTCHA and the Google
+                <a class="captcha-link" href="https://policies.google.com/privacy"
+                  >Privacy Policy</a
+                >
+                and
+                <a class="captcha-link" href="https://policies.google.com/terms"
+                  >Terms of Service</a
+                >
+                apply)
+              </div>
+            </v-col>
+          </div>
+          <div v-else>
+            <v-col cols="12" sm="12">
+              <v-text-field
+                label="Mobile Number"
+                v-model="phoneNumber"
+                placeholder="9999999999"
+                outlined
+                :hint="true ? 'Please enter a 10 digit number' : null"
+                color="#1e2738da"
+                class="input-field"
+                clearable
               >
-              and
-              <a class="captcha-link" href="https://policies.google.com/terms"
-                >Terms of Service</a
-              >
-              apply)
-            </div>
-          </v-col>
+              </v-text-field>
+
+              <v-btn class="a3" id="submit-details" @click="submit_details">
+                <span id="send-otp-button"> Submit Details</span>
+              </v-btn>
+            </v-col>
+          </div>
+          <!-- </transition> -->
         </v-card>
       </v-col>
     </v-row>
@@ -71,22 +102,45 @@ export default {
     drawer: false,
     phoneNumber: "",
     display_number: "",
-    otp_button_text: "Send OTP",
     styleObject: null,
+    otp_confirmed: false,
   }),
   async mounted() {},
   methods: {
+    // async submit() {
+    //   signInWithPhoneNumber(auth, this.phoneNumber, this.recaptchaVerifier)
+    //     .then((confirmationResult) => {
+    //       this.confirmResult = confirmationResult;
+    //       console.log(this.confirmResult);
+    //       alert("Sms Sent!");
+    //       this.smsSent = true;
+    //     })
+    //     .catch((error) => {
+    //       console.log("Sms not sent", error.message);
+    //     });
+    // },
+
+
     async submit() {
       this.display_number = this.phoneNumber;
       this.sending_otp = true; //temp
-      setTimeout(() => {
-        this.show_otp_div = true;
-        this.sending_otp = false; //temp
-        this.styleObject = {
-          "background-color": "green !important",
-        };
-        this.otp_button_text = "OTP Sent";
-      }, 3000);
+
+      this.show_otp_div = true;
+      this.sending_otp = false; //temp
+      this.otp_confirmed = false;
+      this.styleObject = {
+        "background-color": "green !important",
+      };
+      document.getElementById("send-otp-button").innerHTML = "OTP Sent";
+      // setTimeout(() => {
+      // }, 1000);
+    },
+    async confirmOTP() {
+      this.otp_confirmed = true;
+
+      // setTimeout(() => {
+      //   document.getElementById("send-otp-button").innerHTML = "OTP Sent";
+      // }, 3000);
     },
   },
 };
@@ -145,6 +199,18 @@ export default {
 }
 .captcha-text .captcha-link {
   color: black;
+}
+
+.slide-fade-enter-active {
+  transition: all 3s ease;
+}
+.slide-fade-leave-active {
+  transition: all 1s;
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateX(1000px);
+  opacity: 0;
 }
 #animated {
   -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
