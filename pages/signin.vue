@@ -44,7 +44,7 @@ export default {
   data() {
     return {
       testNumber: "+19999999999",
-      phoneNumber: "+19999999999",
+      phoneNumber: "9999999999",
       confirmationResult: null,
       testOTP: "000000",
       OTP: "000000",
@@ -77,7 +77,7 @@ export default {
   },
   methods: {
     submit() {
-      signInWithPhoneNumber(auth, this.phoneNumber, this.recaptchaVerifier)
+      signInWithPhoneNumber(auth, "+1" + this.phoneNumber, this.recaptchaVerifier)
         .then((confirmationResult) => {
           this.confirmResult = confirmationResult;
           console.log(this.confirmResult);

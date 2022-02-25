@@ -1,4 +1,3 @@
-// @TODO COUNTRY SELECT PREFIX IN MOBILE NUMBER
 <template>
   <div id="signup-page-wrapper" class="dark-background-color" style="height: 100vh">
     <v-row id="animated">
@@ -23,7 +22,10 @@
                 prefix="+91 "
               >
               </v-text-field>
-
+              <div
+                id="recaptcha-container"
+                style="background-color: #1b1a1a; width: 300px; margin: auto"
+              ></div>
               <v-btn
                 :loading="sending_otp"
                 class="a3"
@@ -48,7 +50,7 @@
                   color="#1e2738da"
                   type="number"
                 ></v-otp-input>
-                <v-btn class="a3" @click="confirmOTP" id="otp-btn"> Confirm OTP </v-btn>
+                <v-btn class="a3" @click="verifyCode" id="otp-btn"> Confirm OTP </v-btn>
               </v-col>
             </v-expand-transition>
 
@@ -94,53 +96,76 @@
 </template>
 
 <script>
+import { auth, signInWithPhoneNumber, RecaptchaVerifier } from "../plugins/firebase";
+import loginServices from "../services/loginServices";
 export default {
   data: () => ({
+    phoneNumber: "9999999999",
+    confirmationResult: null,
+    testOTP: "000000",
+    OTP: "000000",
+    recaptchaVerifier: null,
+    confirmResult: null,
     show_otp_div: false,
-    OTP: null,
     sending_otp: false,
-    drawer: false,
-    phoneNumber: "",
     display_number: "",
     styleObject: null,
     otp_confirmed: false,
   }),
-  async mounted() {},
+  async mounted() {
+    this.recaptchaVerifier = new RecaptchaVerifier(
+      "log-in",
+      {
+        size: "invisible",
+        callback: (response) => {},
+        "expired-callback": () => {
+          // Response expired. Ask user to solve reCAPTCHA again.
+          this.recaptchaVerifier = new RecaptchaVerifier("recaptcha-container", {}, auth);
+        },
+      },
+      auth
+    );
+  },
   methods: {
-    // async submit() {
-    //   signInWithPhoneNumber(auth, this.phoneNumber, this.recaptchaVerifier)
-    //     .then((confirmationResult) => {
-    //       this.confirmResult = confirmationResult;
-    //       console.log(this.confirmResult);
-    //       alert("Sms Sent!");
-    //       this.smsSent = true;
-    //     })
-    //     .catch((error) => {
-    //       console.log("Sms not sent", error.message);
-    //     });
-    // },
-
-
     async submit() {
-      this.display_number = this.phoneNumber;
-      this.sending_otp = true; //temp
+      this.sending_otp = true;
 
-      this.show_otp_div = true;
-      this.sending_otp = false; //temp
-      this.otp_confirmed = false;
-      this.styleObject = {
-        "background-color": "green !important",
-      };
-      document.getElementById("send-otp-button").innerHTML = "OTP Sent";
-      // setTimeout(() => {
-      // }, 1000);
+      await signInWithPhoneNumber(auth, "+1" + this.phoneNumber, this.recaptchaVerifier)
+        .then((confirmationResult) => {
+          this.confirmResult = confirmationResult;
+          document.getElementById("send-otp-button").innerHTML = "OTP Sent";
+          this.display_number = this.phoneNumber;
+
+          this.show_otp_div = true;
+          this.sending_otp = false;
+          this.styleObject = {
+            "background-color": "green !important",
+          };
+        })
+        .catch((error) => {
+          console.log("Sms not sent", error.message);
+        });
     },
-    async confirmOTP() {
-      this.otp_confirmed = true;
+    verifyCode() {
+      this.confirmResult
+        .confirm(this.OTP)
+        .then(async (result) => {
+          this.otp_confirmed = true;
 
-      // setTimeout(() => {
-      //   document.getElementById("send-otp-button").innerHTML = "OTP Sent";
-      // }, 3000);
+          alert("Registeration Successfull!", result);
+          await loginServices.signup("");
+          this.redirectFunction();
+          var user = result.user;
+          console.log(user);
+        })
+        .catch((error) => {
+          alert("Invalid OTP");
+          console.error(error);
+        });
+    },
+    redirectFunction() {
+      alert("You will be redirected");
+      // this.$router.replace({ name: 'home' })
     },
   },
 };
