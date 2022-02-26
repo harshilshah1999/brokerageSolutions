@@ -301,7 +301,7 @@
             "staff_roles(optional)": [
                 "string"
             ],
-            "date_joined": "Date and Time",
+            "created_at": "Date and Time",
             "favourites": [
                 "propertyID"
             ],

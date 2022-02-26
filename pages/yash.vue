@@ -6,8 +6,7 @@
         <v-card class="a1">
           <v-card-title>
             <h1 v-if="!otp_confirmed" class="light-color">Sign In</h1>
-
-            <h1 v-else class="light-color">Enter Details</h1>
+            <h1 v-else class="light-color">Contact Details</h1>
           </v-card-title>
 
           <div v-if="!otp_confirmed">
@@ -48,7 +47,15 @@
                   color="#1e2738da"
                   type="number"
                 ></v-otp-input>
-                <v-btn class="a3" @click="verifyCode" id="otp-btn"> Confirm OTP </v-btn>
+                <v-btn
+                  class="a3"
+                  :loading="confirming_otp"
+                  id="otp-btn"
+                  @click="verifyCode"
+                  v-bind:style="userID ? 'background-color: green !important' : null"
+                >
+                  Confirm OTP
+                </v-btn>
               </v-col>
             </v-expand-transition>
 
@@ -76,51 +83,59 @@
 
           <div v-else>
             <v-col cols="12" sm="12">
-              <v-row>
-                <v-text-field
-                  label="Alternate Mobile Number"
-                  v-model="alternate_phoneNumber"
-                  placeholder="9999999999"
-                  outlined
-                  :hint="true ? 'Please enter a 10 digit number' : null"
-                  color="#1e2738da"
-                  class="input-field"
-                  clearable
-                  prefix="+91 "
-                >
-                </v-text-field>
-              </v-row>
-              <v-row>
-                <v-text-field
-                  label="Name"
-                  v-model="name"
-                  placeholder="Enter your Name"
-                  outlined
-                  :hint="true ? 'Ex. Somil Shah' : null"
-                  color="#1e2738da"
-                  class="input-field"
-                  clearable
-                >
-                </v-text-field>
-              </v-row>
-              <v-row>
-                <v-text-field
-                  label="Email ID"
-                  v-model="email"
-                  placeholder="Enter your Email ID"
-                  outlined
-                  :hint="true ? 'Ex. somilshah@xyz.com' : null"
-                  color="#1e2738da"
-                  class="input-field"
-                  clearable
-                >
-                </v-text-field>
-              </v-row>
-              <v-row>
-                <v-btn class="a3" id="submit-details" @click="submit_details">
-                  <span id="send-otp-button"> Submit Details</span>
-                </v-btn>
-              </v-row>
+              <v-text-field
+                label="Name"
+                v-model="name"
+                placeholder="Firstname Lastname"
+                outlined
+                color="#1e2738da"
+                class="input-field"
+                clearable
+              >
+              </v-text-field>
+
+              <v-text-field
+                label="Alternate Mobile Number"
+                v-model="alternate_phoneNumber"
+                placeholder="9999999999"
+                outlined
+                color="#1e2738da"
+                class="input-field"
+                clearable
+                prefix="+91 "
+              >
+              </v-text-field>
+
+              <v-text-field
+                label="Email ID"
+                v-model="email"
+                placeholder="help@spacifyme.com"
+                outlined
+                color="#1e2738da"
+                class="input-field"
+                clearable
+              >
+              </v-text-field>
+
+              <v-text-field
+                label="Alternate Email ID"
+                v-model="alternate_email"
+                placeholder="help@spacifyme.com"
+                outlined
+                color="#1e2738da"
+                class="input-field"
+                clearable
+              >
+              </v-text-field>
+
+              <v-btn
+                :loading="submitting_details"
+                class="a3"
+                id="submit-details"
+                @click="submit_details"
+              >
+                Submit Details
+              </v-btn>
             </v-col>
           </div>
         </v-card>
@@ -162,18 +177,21 @@ export default {
     confirmResult: null,
     show_otp_div: false,
     sending_otp: false,
+    confirming_otp: false,
     display_number: null,
     otp_confirmed: false,
     userID: null,
     alternate_phoneNumber: null,
     name: null,
     email: null,
+    alternate_email: null,
     snackbar: {
       text: null,
       show: null,
       color: null,
       backgroundColor: null,
     },
+    submitting_details: false,
   }),
   async mounted() {
     this.recaptchaVerifier = new RecaptchaVerifier(
@@ -204,28 +222,45 @@ export default {
         })
         .catch((error) => {
           this.sending_otp = false;
-          this.showSnackbar("Failed to send OTP to " + this.phoneNumber);
+          this.showSnackbar("Failed to send OTP! Please check the number!!");
         });
     },
     verifyCode() {
+      this.confirming_otp = true;
       this.confirmResult
         .confirm(this.OTP)
         .then(async (result) => {
           this.otp_confirmed = true;
+          this.confirming_otp = false;
           this.userID = result.user.uid;
           this.showSnackbar("User verified successfully!");
           await loginServices.AddUser(result.user.uid, {
             mobile_number: this.phoneNumber,
           });
-          // this.redirectFunction();
         })
         .catch((error) => {
           this.showSnackbar("Invalid OTP");
         });
     },
+    async submit_details() {
+      this.submitting_details = true;
+      try {
+        await loginServices.updateUser(this.userID, {
+          user_name: this.name,
+          alternate_mobile_number: this.alternate_phoneNumber,
+          user_email: this.email,
+          user_alternate_email: this.alternate_email,
+        });
+        this.showSnackbar("Contact Details saved successfully!");
+        this.submitting_details = false;
+        this.redirectFunction();
+      } catch (error) {
+        this.showSnackbar("Error occured while saving contact details!");
+        this.submitting_details = false;
+      }
+    },
     redirectFunction() {
-      // alert("You will be redirected");
-      // this.$router.replace({ name: "post-property" });
+      this.$router.replace({ name: "post-property" });
     },
     showSnackbar(text) {
       this.snackbar.show = true;

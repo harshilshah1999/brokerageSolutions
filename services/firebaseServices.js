@@ -16,6 +16,7 @@ import {
     collectionGroup, //collection group queries
     orderBy,
     limit,
+    serverTimestamp,
     enableIndexedDbPersistence //for offline data and caching
 } from 'firebase/firestore'
 import { ref, deleteObject, uploadBytesResumable, getDownloadURL, uploadBytes } from 'firebase/storage'
@@ -170,6 +171,14 @@ export default {
         } catch (error) { console.error(error); return error }
     },
 
+    async updateTimestamp(collectionID, documentID, key) { //update any document in a collection
+        const documentLocation = doc(db, collectionID, documentID);
+        try {
+            await updateDoc(documentLocation, { [key]: serverTimestamp() }); //(parameter) response: void
+            return "Timestamp Updated Successfully"
+        } catch (error) { console.error(error); return error }
+    },
+
     async addArrayElement(collectionID, documentID, key, value) {
         const documentLocation = doc(db, collectionID, documentID);
         try {
@@ -288,9 +297,9 @@ export default {
         const deleteLocation = ref(storage, media_path);
         try {
             return await deleteObject(deleteLocation)
-        } catch (e) { 
+        } catch (e) {
             error(e.message)
-         }
+        }
     },
 
     async singleEqualsQuery(collectionID, parameter1, parameter2) {
