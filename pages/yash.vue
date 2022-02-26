@@ -1,14 +1,11 @@
 <template>
-  <div
-    id="signup-page-wrapper"
-    class="dark-background-color"
-    style="height: 100vh"
-  >
+  <div id="signup-page-wrapper" class="dark-background-color" style="height: 100vh">
+    <div id="recaptcha-container"></div>
     <v-row id="animated">
-      <v-col class="dark-background-color">
+      <v-col cols="12" sm="12" class="dark-background-color">
         <v-card class="a1">
           <v-card-title>
-            <h1 v-if="!otp_confirmed" class="light-color">Sign Up</h1>
+            <h1 v-if="!otp_confirmed" class="light-color">Sign In</h1>
 
             <h1 v-else class="light-color">Enter Details</h1>
           </v-card-title>
@@ -27,16 +24,12 @@
                 prefix="+91 "
               >
               </v-text-field>
-              <div
-                id="recaptcha-container"
-                style="background-color: #1b1a1a; width: 300px; margin: auto"
-              ></div>
               <v-btn
                 :loading="sending_otp"
                 class="a3"
                 id="log-in"
                 @click="submit"
-                v-bind:style="styleObject ? styleObject : null"
+                v-bind:style="show_otp_div ? 'background-color: green !important' : null"
               >
                 <span id="send-otp-button"> Send OTP</span>
               </v-btn>
@@ -62,17 +55,21 @@
             <v-col>
               <v-divider></v-divider>
               <div class="captcha-text">
-                (This site is protected by reCAPTCHA and the Google
+                This site is protected by reCAPTCHA and the Google
                 <a
                   class="captcha-link"
                   href="https://policies.google.com/privacy"
+                  target="_blank"
                   >Privacy Policy</a
                 >
                 and
-                <a class="captcha-link" href="https://policies.google.com/terms"
+                <a
+                  class="captcha-link"
+                  href="https://policies.google.com/terms"
+                  target="_blank"
                   >Terms of Service</a
                 >
-                apply)
+                apply.
               </div>
             </v-col>
           </div>
@@ -89,6 +86,7 @@
                   color="#1e2738da"
                   class="input-field"
                   clearable
+                  prefix="+91 "
                 >
                 </v-text-field>
               </v-row>
@@ -128,6 +126,27 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-snackbar
+      v-model="snackbar.show"
+      top
+      width="25%"
+      color="#dfdfdf"
+      content-class="extra-light"
+      :timeout="4000"
+    >
+      <b style="font-size: 1em">{{ snackbar.text }}</b>
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          style="background-color: #1e2738da; color: #dfdfdf"
+          text
+          v-bind="attrs"
+          @click="snackbar.show = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
@@ -138,19 +157,23 @@ export default {
   data: () => ({
     phoneNumber: "9999999999",
     confirmationResult: null,
-    testOTP: "000000",
     OTP: "000000",
     recaptchaVerifier: null,
     confirmResult: null,
     show_otp_div: false,
     sending_otp: false,
-    display_number: "",
-    styleObject: null,
+    display_number: null,
     otp_confirmed: false,
+    userID: null,
     alternate_phoneNumber: null,
     name: null,
     email: null,
-    show: false,
+    snackbar: {
+      text: null,
+      show: null,
+      color: null,
+      backgroundColor: null,
+    },
   }),
   async mounted() {
     this.recaptchaVerifier = new RecaptchaVerifier(
@@ -175,15 +198,13 @@ export default {
           this.confirmResult = confirmationResult;
           document.getElementById("send-otp-button").innerHTML = "OTP Sent";
           this.display_number = this.phoneNumber;
-
           this.show_otp_div = true;
           this.sending_otp = false;
-          this.styleObject = {
-            "background-color": "green !important",
-          };
+          this.showSnackbar("OTP has been sent to " + this.phoneNumber);
         })
         .catch((error) => {
-          console.log("Sms not sent", error.message);
+          this.sending_otp = false;
+          this.showSnackbar("Failed to send OTP to " + this.phoneNumber);
         });
     },
     verifyCode() {
@@ -191,30 +212,33 @@ export default {
         .confirm(this.OTP)
         .then(async (result) => {
           this.otp_confirmed = true;
-
-          alert("Registeration Successfull!", result);
-          await loginServices.signup("");
-          this.redirectFunction();
-          var user = result.user;
-          console.log(user);
+          this.userID = result.user.uid;
+          this.showSnackbar("User verified successfully!");
+          await loginServices.AddUser(result.user.uid, {
+            mobile_number: this.phoneNumber,
+          });
+          // this.redirectFunction();
         })
         .catch((error) => {
-          alert("Invalid OTP");
-          console.error(error);
+          this.showSnackbar("Invalid OTP");
         });
     },
     redirectFunction() {
-      alert("You will be redirected");
-      // this.$router.replace({ name: 'home' })
+      // alert("You will be redirected");
+      // this.$router.replace({ name: "post-property" });
+    },
+    showSnackbar(text) {
+      this.snackbar.show = true;
+      this.snackbar.text = text;
     },
   },
-}
+};
 </script>
 
 <style>
 #signup-page-wrapper {
   background-image: linear-gradient(#1e2738da, #1e2738da),
-    url('../assets/signup-wallpaper.jpg') !important;
+    url("../assets/signup-wallpaper.jpg") !important;
   background-size: cover;
 }
 
@@ -228,7 +252,7 @@ export default {
   background-color: white !important;
 }
 .a1 {
-  background-image: url('../assets/signup-card-bg.jpg');
+  background-image: url("../assets/signup-card-bg.jpg");
   min-width: 25% !important;
   max-width: 25% !important;
   border-radius: 2% !important;
@@ -238,7 +262,7 @@ export default {
   left: 50%;
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
-  background-color: #dfdfdf !important;
+  /* background-color: #dfdfdf !important; */
 }
 .dark-background-color {
   background-color: #1e2738;
