@@ -1,12 +1,12 @@
 <template>
-  <div id="signup-page-wrapper" class="dark-background-color" style="height: 100vh">
+  <div id="signup-page-wrapper">
     <div id="recaptcha-container"></div>
     <v-row id="animated">
-      <v-col cols="12" sm="12" class="dark-background-color">
-        <v-card class="a1">
-          <v-card-title>
-            <h1 v-if="!otp_confirmed" class="light-color">Sign In</h1>
-            <h1 v-else class="light-color">Contact Details</h1>
+      <v-col cols="12" sm="12">
+        <v-card class="card">
+          <v-card-title class="light_blue">
+            <h1 v-if="!otp_confirmed">Sign In</h1>
+            <h1 v-else>Contact Details</h1>
           </v-card-title>
 
           <div v-if="!otp_confirmed">
@@ -25,10 +25,15 @@
               </v-text-field>
               <v-btn
                 :loading="sending_otp"
-                class="a3"
+                :disabled="show_otp_div"
+                class="btn"
                 id="log-in"
                 @click="submit"
-                v-bind:style="show_otp_div ? 'background-color: green !important' : null"
+                v-bind:style="
+                  show_otp_div
+                    ? 'background-color: green !important;color:white !important'
+                    : null
+                "
               >
                 <span id="send-otp-button"> Send OTP</span>
               </v-btn>
@@ -37,8 +42,8 @@
             <v-expand-transition>
               <v-col v-if="show_otp_div">
                 <h3>
-                  <span class="extra-light"> Enter the OTP sent to</span>
-                  <span class="dark-color"> {{ display_number }} </span>
+                  <span class="extra-light_blue"> Enter the OTP sent to</span>
+                  <span class="dark-blue"> {{ display_number }} </span>
                 </h3>
                 <v-otp-input
                   v-model="OTP"
@@ -48,7 +53,7 @@
                   type="number"
                 ></v-otp-input>
                 <v-btn
-                  class="a3"
+                  class="btn"
                   :loading="confirming_otp"
                   id="otp-btn"
                   @click="verifyCode"
@@ -130,7 +135,7 @@
 
               <v-btn
                 :loading="submitting_details"
-                class="a3"
+                class="btn"
                 id="submit-details"
                 @click="submit_details"
               >
@@ -146,7 +151,7 @@
       top
       width="25%"
       color="#dfdfdf"
-      content-class="extra-light"
+      content-class="extra-light_blue"
       :timeout="4000"
     >
       <b style="font-size: 1em">{{ snackbar.text }}</b>
@@ -198,9 +203,14 @@ export default {
       "log-in",
       {
         size: "invisible",
-        callback: (response) => {},
+        callback: (response) => {
+          this.sending_otp = false;
+
+          console.log(response);
+        },
         "expired-callback": () => {
           // Response expired. Ask user to solve reCAPTCHA again.
+          this.sending_otp = false;
           this.recaptchaVerifier = new RecaptchaVerifier("recaptcha-container", {}, auth);
         },
       },
@@ -223,6 +233,7 @@ export default {
         .catch((error) => {
           this.sending_otp = false;
           this.showSnackbar("Failed to send OTP! Please check the number!!");
+          console.error(error);
         });
     },
     verifyCode() {
@@ -235,7 +246,7 @@ export default {
           this.userID = result.user.uid;
           this.showSnackbar("User verified successfully!");
           await loginServices.AddUser(result.user.uid, {
-            mobile_number: this.phoneNumber,
+            mobile_number: "+91" + this.phoneNumber,
           });
         })
         .catch((error) => {
@@ -275,18 +286,19 @@ export default {
   background-image: linear-gradient(#1e2738da, #1e2738da),
     url("../assets/signup-wallpaper.jpg") !important;
   background-size: cover;
+  height: 100vh;
 }
 
-.v-text-field {
+.input-field {
   border-radius: 10px;
 }
 .v-divider {
   background-color: rgb(30, 39, 56);
 }
-.v-text-field .v-input__slot {
+.input-field .v-input__slot {
   background-color: white !important;
 }
-.a1 {
+.card {
   background-image: url("../assets/signup-card-bg.jpg");
   min-width: 25% !important;
   max-width: 25% !important;
@@ -299,23 +311,21 @@ export default {
   transform: translate(-50%, -50%);
   /* background-color: #dfdfdf !important; */
 }
-.dark-background-color {
-  background-color: #1e2738;
-}
-.a3 {
+.btn {
   width: 100% !important;
   height: 50px !important;
   border-radius: 10px;
   background-color: #1e2738da !important;
   color: white !important;
 }
-.dark-color {
+
+.dark-blue {
   color: #1e2738;
 }
-.light-color {
+.light_blue {
   color: #1e2738da;
 }
-.extra-light {
+.extra-light_blue {
   color: #1e2738b9;
 }
 .captcha-text {
