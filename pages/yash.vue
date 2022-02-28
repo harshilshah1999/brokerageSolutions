@@ -1,10 +1,10 @@
 <template>
   <!--
-// @TODO Resolve multiple reCaptcha on wrong number input
 // @TODO Transition on Send OTP button to change it from blue to green very smoothly
 // @TODO Button styling change when captcha error is triggered
 // @TODO Change send OTP button styling when waiting for reCaptcha.
 // @TODO Colored snackbars
+// @TODO Pressing enter should send OTP, user form
  -->
   <div id="signup-page-wrapper">
     <v-row id="animated" style="height: 100vh; width: 100vw">
@@ -231,40 +231,28 @@ export default {
           "error-callback": (e) => {
             // reCAPTCHA error
             this.send_button_loading = false;
-            console.log("Error callback: invi", e);
-            this.createVisibleCaptcha().render();
+            this.showSnackbar(
+              "OTP not sent!! Please solve the reCAPTCHA and send OTP again!"
+            );
+            this.recaptchaVerifier = new RecaptchaVerifier(
+              "recaptcha-container",
+              {},
+              auth
+            );
+            this.recaptchaVerifier.render();
           },
           "expired-callback": () => {
             // Response expired. Ask user to solve reCAPTCHA again.
+            this.showSnackbar(
+              "OTP not sent!! Please solve the reCAPTCHA and send OTP again!"
+            );
             this.send_button_loading = false;
-            console.log("Expired error callback: invi", e);
-            this.createVisibleCaptcha().render();
-          },
-        },
-        auth
-      );
-    },
-
-    async createVisibleCaptcha() {
-      this.recaptchaVerifier = new RecaptchaVerifier(
-        "recaptcha-container",
-        {
-          size: "normal",
-          callback: (response) => {
-            // reCAPTCHA solved - will proceed with submit function
-            this.send_button_loading = false;
-          },
-          "error-callback": (e) => {
-            // reCAPTCHA error
-            this.send_button_loading = false;
-            console.log("Error callback: visib", e);
-            this.createVisibleCaptcha().render();
-          },
-          "expired-callback": () => {
-            // Response expired. Ask user to solve reCAPTCHA again.
-            console.log("Expired error callback: visib", e);
-            this.send_button_loading = false;
-            this.createVisibleCaptcha().render();
+            this.recaptchaVerifier = new RecaptchaVerifier(
+              "recaptcha-container",
+              {},
+              auth
+            );
+            this.recaptchaVerifier.render();
           },
         },
         auth
