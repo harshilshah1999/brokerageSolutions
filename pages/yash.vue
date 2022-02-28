@@ -1,8 +1,8 @@
 <template>
   <!--
+// @TODO Change send OTP button styling when waiting for reCaptcha.
 // @TODO Transition on Send OTP button to change it from blue to green very smoothly
 // @TODO Button styling change when captcha error is triggered
-// @TODO Change send OTP button styling when waiting for reCaptcha.
 // @TODO Colored snackbars
 // @TODO Pressing enter should send OTP, user form
  -->
@@ -231,32 +231,37 @@ export default {
           "error-callback": (e) => {
             // reCAPTCHA error
             this.send_button_loading = false;
+            this.send_button_disabled = true;
             this.showSnackbar(
               "OTP not sent!! Please solve the reCAPTCHA and send OTP again!"
             );
-            this.recaptchaVerifier = new RecaptchaVerifier(
-              "recaptcha-container",
-              {},
-              auth
-            );
-            this.recaptchaVerifier.render();
+            this.createVisibleCaptcha();
           },
           "expired-callback": () => {
             // Response expired. Ask user to solve reCAPTCHA again.
             this.showSnackbar(
-              "OTP not sent!! Please solve the reCAPTCHA and send OTP again!"
+              "reCAPTCHA expired!! Please solve the reCAPTCHA and send OTP again!"
             );
+            this.send_button_disabled = true;
             this.send_button_loading = false;
-            this.recaptchaVerifier = new RecaptchaVerifier(
-              "recaptcha-container",
-              {},
-              auth
-            );
-            this.recaptchaVerifier.render();
+            this.createVisibleCaptcha();
           },
         },
         auth
       );
+    },
+
+    async createVisibleCaptcha() {
+      this.recaptchaVerifier = new RecaptchaVerifier(
+        "recaptcha-container",
+        {
+          callback: (response) => {
+            this.send_button_disabled = false;
+          },
+        },
+        auth
+      );
+      this.recaptchaVerifier.render();
     },
 
     async submit() {
