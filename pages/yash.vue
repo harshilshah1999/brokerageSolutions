@@ -1,7 +1,13 @@
 <template>
+  <!--
+// @TODO Resolve multiple reCaptcha on wrong number input
+// @TODO Transition on Send OTP button to change it from blue to green very smoothly
+// @TODO Button styling change when captcha error is triggered
+// @TODO Change send OTP button styling when waiting for reCaptcha.
+// @TODO Colored snackbars
+ -->
   <div id="signup-page-wrapper">
-    <div id="recaptcha-container"></div>
-    <v-row id="animated">
+    <v-row id="animated" style="height: 100vh; width: 100vw">
       <v-col cols="12" sm="12">
         <v-card class="card">
           <v-card-title class="light_blue">
@@ -23,9 +29,12 @@
                 prefix="+91 "
               >
               </v-text-field>
+
+              <div id="recaptcha-container"></div>
+
               <v-btn
-                :loading="sending_otp"
-                :disabled="show_otp_div"
+                :loading="send_button_loading"
+                :disabled="send_button_disabled"
                 class="btn"
                 id="log-in"
                 @click="submit"
@@ -37,6 +46,13 @@
               >
                 <span id="send-otp-button"> Send OTP</span>
               </v-btn>
+              <p
+                v-if="send_button_disabled"
+                class="captcha-text"
+                style="margin-bottom: 0px"
+              >
+                Resend OTP in <span id="countdowntimer">20 </span> Seconds
+              </p>
             </v-col>
 
             <v-expand-transition>
@@ -152,7 +168,7 @@
       width="25%"
       color="#dfdfdf"
       content-class="extra-light_blue"
-      :timeout="4000"
+      :timeout="3000"
     >
       <b style="font-size: 1em">{{ snackbar.text }}</b>
 
@@ -181,7 +197,8 @@ export default {
     recaptchaVerifier: null,
     confirmResult: null,
     show_otp_div: false,
-    sending_otp: false,
+    send_button_loading: false,
+    send_button_disabled: false,
     confirming_otp: false,
     display_number: null,
     otp_confirmed: false,
@@ -199,42 +216,94 @@ export default {
     submitting_details: false,
   }),
   async mounted() {
-    this.recaptchaVerifier = new RecaptchaVerifier(
-      "log-in",
-      {
-        size: "invisible",
-        callback: (response) => {
-          this.sending_otp = false;
-
-          console.log(response);
-        },
-        "expired-callback": () => {
-          // Response expired. Ask user to solve reCAPTCHA again.
-          this.sending_otp = false;
-          this.recaptchaVerifier = new RecaptchaVerifier("recaptcha-container", {}, auth);
-        },
-      },
-      auth
-    );
+    this.createInvisibleCaptcha();
   },
   methods: {
-    async submit() {
-      this.sending_otp = true;
+    async createInvisibleCaptcha() {
+      this.recaptchaVerifier = new RecaptchaVerifier(
+        "log-in",
+        {
+          size: "invisible",
+          callback: (response) => {
+            // reCAPTCHA solved - will proceed with submit function
+            this.send_button_loading = false;
+          },
+          "error-callback": (e) => {
+            // reCAPTCHA error
+            this.send_button_loading = false;
+            console.log("Error callback: invi", e);
+            this.createVisibleCaptcha().render();
+          },
+          "expired-callback": () => {
+            // Response expired. Ask user to solve reCAPTCHA again.
+            this.send_button_loading = false;
+            console.log("Expired error callback: invi", e);
+            this.createVisibleCaptcha().render();
+          },
+        },
+        auth
+      );
+    },
 
-      await signInWithPhoneNumber(auth, "+1" + this.phoneNumber, this.recaptchaVerifier)
+    async createVisibleCaptcha() {
+      this.recaptchaVerifier = new RecaptchaVerifier(
+        "recaptcha-container",
+        {
+          size: "normal",
+          callback: (response) => {
+            // reCAPTCHA solved - will proceed with submit function
+            this.send_button_loading = false;
+          },
+          "error-callback": (e) => {
+            // reCAPTCHA error
+            this.send_button_loading = false;
+            console.log("Error callback: visib", e);
+            this.createVisibleCaptcha().render();
+          },
+          "expired-callback": () => {
+            // Response expired. Ask user to solve reCAPTCHA again.
+            console.log("Expired error callback: visib", e);
+            this.send_button_loading = false;
+            this.createVisibleCaptcha().render();
+          },
+        },
+        auth
+      );
+    },
+
+    async submit() {
+      this.send_button_loading = true;
+
+      await signInWithPhoneNumber(auth, "+91" + this.phoneNumber, this.recaptchaVerifier)
         .then((confirmationResult) => {
           this.confirmResult = confirmationResult;
           document.getElementById("send-otp-button").innerHTML = "OTP Sent";
           this.display_number = this.phoneNumber;
           this.show_otp_div = true;
-          this.sending_otp = false;
+          this.send_button_loading = false;
+          this.send_button_disabled = true;
           this.showSnackbar("OTP has been sent to " + this.phoneNumber);
+          this.disableSendOtpButton(20); //incase wrong number is entered,enabling button in 30 secs
         })
         .catch((error) => {
-          this.sending_otp = false;
+          this.send_button_loading = false;
           this.showSnackbar("Failed to send OTP! Please check the number!!");
           console.error(error);
         });
+    },
+    disableSendOtpButton(timer) {
+      setTimeout(() => {
+        this.send_button_disabled = false;
+      }, timer * 1000);
+      if (this.send_button_disabled) {
+        var timeleft = timer;
+        var downloadTimer = setInterval(function () {
+          timeleft -= 1;
+          if (timeleft == 0) {
+            clearInterval(downloadTimer);
+          } else document.getElementById("countdowntimer").textContent = timeleft;
+        }, 1000);
+      }
     },
     verifyCode() {
       this.confirming_otp = true;
@@ -288,7 +357,12 @@ export default {
   background-size: cover;
   height: 100vh;
 }
-
+#recaptcha-container {
+  padding-bottom: 2%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .input-field {
   border-radius: 10px;
 }
