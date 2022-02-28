@@ -1,10 +1,11 @@
 <template>
   <!--
 // @TODO Change send OTP button styling when waiting for reCaptcha.
+// @TODO hide captcha div if otp is sent
 // @TODO Transition on Send OTP button to change it from blue to green very smoothly
 // @TODO Button styling change when captcha error is triggered
 // @TODO Colored snackbars
-// @TODO Pressing enter should send OTP, user form
+// @TODO Pressing enter key should send OTP, user form
  -->
   <div id="signup-page-wrapper">
     <v-row id="animated" style="height: 100vh; width: 100vw">
@@ -38,16 +39,11 @@
                 class="btn"
                 id="log-in"
                 @click="submit"
-                v-bind:style="
-                  show_otp_div
-                    ? 'background-color: green !important;color:white !important'
-                    : null
-                "
               >
                 <span id="send-otp-button"> Send OTP</span>
               </v-btn>
               <p
-                v-if="send_button_disabled"
+                v-if="send_button_disabled && display_number"
                 class="captcha-text"
                 style="margin-bottom: 0px"
               >
@@ -73,7 +69,6 @@
                   :loading="confirming_otp"
                   id="otp-btn"
                   @click="verifyCode"
-                  v-bind:style="userID ? 'background-color: green !important' : null"
                 >
                   Confirm OTP
                 </v-btn>
@@ -230,20 +225,16 @@ export default {
           },
           "error-callback": (e) => {
             // reCAPTCHA error
-            this.send_button_loading = false;
-            this.send_button_disabled = true;
             this.showSnackbar(
-              "OTP not sent!! Please solve the reCAPTCHA and send OTP again!"
+              "OTP not sent!! Please solve the reCAPTCHA before sending OTP again!"
             );
             this.createVisibleCaptcha();
           },
           "expired-callback": () => {
             // Response expired. Ask user to solve reCAPTCHA again.
             this.showSnackbar(
-              "reCAPTCHA expired!! Please solve the reCAPTCHA and send OTP again!"
+              "reCAPTCHA expired!! Please solve the reCAPTCHA before sending OTP again!"
             );
-            this.send_button_disabled = true;
-            this.send_button_loading = false;
             this.createVisibleCaptcha();
           },
         },
@@ -252,11 +243,17 @@ export default {
     },
 
     async createVisibleCaptcha() {
+      this.send_button_loading = false;
+      this.send_button_disabled = true;
+      this.changeSendOTPbuttonText("Solve reCAPTCHA");
+      this.changeSendOTPbuttonColors("#1e2738b9", "white");
       this.recaptchaVerifier = new RecaptchaVerifier(
         "recaptcha-container",
         {
           callback: (response) => {
             this.send_button_disabled = false;
+            this.changeSendOTPbuttonText("Send OTP");
+            this.changeSendOTPbuttonColors("#1e2738da", "white");
           },
         },
         auth
@@ -270,19 +267,31 @@ export default {
       await signInWithPhoneNumber(auth, "+91" + this.phoneNumber, this.recaptchaVerifier)
         .then((confirmationResult) => {
           this.confirmResult = confirmationResult;
-          document.getElementById("send-otp-button").innerHTML = "OTP Sent";
+          this.changeSendOTPbuttonText("OTP Sent");
+          this.changeSendOTPbuttonColors("green", "white");
           this.display_number = this.phoneNumber;
           this.show_otp_div = true;
           this.send_button_loading = false;
           this.send_button_disabled = true;
           this.showSnackbar("OTP has been sent to " + this.phoneNumber);
-          this.disableSendOtpButton(20); //incase wrong number is entered,enabling button in 30 secs
+          this.disableSendOtpButton(20); //incase wrong number is entered,enabling button in 20 secs
         })
         .catch((error) => {
           this.send_button_loading = false;
           this.showSnackbar("Failed to send OTP! Please check the number!!");
           console.error(error);
         });
+    },
+    changeSendOTPbuttonText(text) {
+      document.getElementById("send-otp-button").innerHTML = text;
+    },
+    changeSendOTPbuttonColors(backgroundColor, color) {
+      document.getElementById("log-in").style =
+        "background-color: " +
+        backgroundColor +
+        "!important; color:" +
+        color +
+        "!important; transition: background-color 0.5s";
     },
     disableSendOtpButton(timer) {
       setTimeout(() => {
@@ -293,6 +302,8 @@ export default {
         var downloadTimer = setInterval(function () {
           timeleft -= 1;
           if (timeleft == 0) {
+            changeSendOTPbuttonText("Resend OTP");
+            this.changeSendOTPbuttonColors("#1e2738da", "white");
             clearInterval(downloadTimer);
           } else document.getElementById("countdowntimer").textContent = timeleft;
         }, 1000);
@@ -313,6 +324,7 @@ export default {
         })
         .catch((error) => {
           this.showSnackbar("Invalid OTP");
+          this.confirming_otp = false;
         });
     },
     async submit_details() {
@@ -345,7 +357,7 @@ export default {
 
 <style>
 #signup-page-wrapper {
-  background-image: linear-gradient(#1e2738da, #1e2738da),
+  background-image: linear-gradient(#1e2738da, #1e2738b8),
     url("../assets/signup-wallpaper.jpg") !important;
   background-size: cover;
   height: 100vh;
