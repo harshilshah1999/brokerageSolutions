@@ -13,7 +13,7 @@
                 "landmark": [
                     "Azam Dairy"
                 ],
-                "location_cordinates" : "geopoint in firebase"
+                "location_cordinates": "geopoint in firebase"
             },
             "building_details": {
                 "construction_type": "Under Construction/New/Resale",
@@ -294,6 +294,8 @@
             "alternate_mobile_number": "1234567890",
             "user_email": "",
             "user_alternate_email": "",
+            "created_at": "Date and Time",
+            "last_updated_at": "Date and Time",
             "user_role": "string - user/agent/staff",
             "search_preferences/filter_preferences": {
                 "object": "THIS OBJECT CAN INCLUDE ALL FIELDS RELATED TO SEARCH FILTER/ used for continue last search feature"
@@ -301,7 +303,6 @@
             "staff_roles(optional)": [
                 "string"
             ],
-            "created_at": "Date and Time",
             "favourites": [
                 "propertyID"
             ],
@@ -355,11 +356,11 @@
                     "suggested_date": "Date and Time"
                 }
             ],
-            "blacklisted?": "boolean"
+            "blacklisted": "false"
         }
     ],
     "global_metadata": {
-        "homepage_least_enquiries_count" : 5
+        "homepage_least_enquiries_count": 5
     },
     "staff_roles": [
         "admin",

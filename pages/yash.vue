@@ -233,7 +233,7 @@ export default {
           this.confirming_otp = false;
           this.userID = result.user.uid;
           this.showSnackbar("User verified successfully!", "success");
-          await loginServices.AddUser(result.user.uid, {
+          await loginServices.updateUser(result.user.uid, {
             mobile_number: "+91" + this.phoneNumber,
           });
         })
@@ -321,7 +321,7 @@ export default {
         backgroundColor +
         "!important; color:" +
         color +
-        "!important; transition: background-color 0.75s";
+        "!important;";
     },
     showSnackbar(text, backgroundColor) {
       this.snackbar.show = true;
@@ -373,6 +373,7 @@ export default {
   border-radius: 10px;
   background-color: #1e2738da !important;
   color: white !important;
+  transition: background-color 0.75s;
 }
 
 .dark-blue {
