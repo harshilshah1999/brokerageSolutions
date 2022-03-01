@@ -1,16 +1,20 @@
 <template>
-  <div>
-    <hr />
-    HOME
-  </div>
+  <!--
+// @TODO
+// @TODO
+// @TODO
+ -->
+  <div>HOME</div>
 </template>
 
 <script>
+import { auth, signInWithPhoneNumber, RecaptchaVerifier } from "../plugins/firebase";
+import loginServices from "../services/loginServices";
 export default {
-  name: "home",
-  data: function () {},
-  mounted: {},
+  data: () => ({}),
+  async mounted() {},
   methods: {},
 };
-// https://vuejsexamples.com/a-vue-component-about-toy-bricks-of-skeleton-screen-loading/
 </script>
+
+<style></style>
