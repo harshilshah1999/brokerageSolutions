@@ -1,8 +1,8 @@
 <template>
   <!--
-// @TODO hide captcha div if otp is sent
-// @TODO Colored snackbars for success and errors
+// @TODO Fix the stupid invisible recaptcha div that floats on the bottom
 // @TODO Pressing enter key should send OTP, user form
+// @TODO Make this page responsive
  -->
   <div id="signup-page-wrapper">
     <v-row id="animated" style="height: 100vh; width: 100vw">
@@ -27,9 +27,7 @@
                 prefix="+91 "
               >
               </v-text-field>
-
               <div id="recaptcha-container"></div>
-
               <v-btn
                 :loading="send_button_loading"
                 :disabled="send_button_disabled"
@@ -151,8 +149,7 @@
       v-model="snackbar.show"
       top
       width="25%"
-      color="#dfdfdf"
-      content-class="extra-light_blue"
+      :color="snackbar.backgroundColor"
       :timeout="3000"
     >
       <b style="font-size: 1em">{{ snackbar.text }}</b>
@@ -165,6 +162,7 @@
           @click="snackbar.show = false"
         >
           Close
+          <!-- Cross icon -->
         </v-btn>
       </template>
     </v-snackbar>
@@ -195,8 +193,7 @@ export default {
     snackbar: {
       text: null,
       show: null,
-      color: null,
-      backgroundColor: null,
+      backgroundColor: "#dfdfdf",
     },
     submitting_details: false,
   }),
@@ -204,6 +201,68 @@ export default {
     this.createInvisibleCaptcha();
   },
   methods: {
+    async submit() {
+      this.send_button_loading = true;
+      await signInWithPhoneNumber(auth, "+91" + this.phoneNumber, this.recaptchaVerifier)
+        .then((confirmationResult) => {
+          this.confirmResult = confirmationResult;
+          if (!this.send_button_disabled) {
+            this.changeSendOTPbuttonText("Send OTP Again");
+            this.changeSendOTPbuttonColors("green", "white");
+          } else {
+            this.changeSendOTPbuttonText("Solve reCAPTCHA");
+            this.changeSendOTPbuttonColors("#1e2738b9", "white");
+          }
+          this.display_number = this.phoneNumber;
+          this.show_otp_div = true;
+          this.send_button_loading = false;
+          this.showSnackbar("OTP has been sent to " + this.phoneNumber, "success");
+        })
+        .catch((error) => {
+          this.send_button_loading = false;
+          this.showSnackbar("Failed to send OTP! Please check the number!!", "error");
+          console.error(error);
+        });
+    },
+    verifyCode() {
+      this.confirming_otp = true;
+      this.confirmResult
+        .confirm(this.OTP)
+        .then(async (result) => {
+          this.otp_confirmed = true;
+          this.confirming_otp = false;
+          this.userID = result.user.uid;
+          this.showSnackbar("User verified successfully!", "success");
+          await loginServices.AddUser(result.user.uid, {
+            mobile_number: "+91" + this.phoneNumber,
+          });
+        })
+        .catch((error) => {
+          this.showSnackbar("Invalid OTP", "error");
+          this.confirming_otp = false;
+        });
+    },
+    async submit_details() {
+      this.submitting_details = true;
+      try {
+        await loginServices.updateUser(this.userID, {
+          user_name: this.name,
+          alternate_mobile_number: this.alternate_phoneNumber,
+          user_email: this.email,
+          user_alternate_email: this.alternate_email,
+        });
+        this.showSnackbar("Contact Details saved successfully!", "success");
+        this.submitting_details = false;
+        this.redirectFunction();
+      } catch (error) {
+        this.showSnackbar("Error occured while saving contact details!", "error");
+        this.submitting_details = false;
+      }
+    },
+    redirectFunction() {
+      this.$router.replace({ name: "post-property" });
+    },
+
     async createInvisibleCaptcha() {
       this.recaptchaVerifier = new RecaptchaVerifier(
         "log-in",
@@ -216,14 +275,16 @@ export default {
           "error-callback": (e) => {
             // reCAPTCHA error
             this.showSnackbar(
-              "OTP not sent!! Please solve the reCAPTCHA before sending OTP again!"
+              "OTP not sent!! Please solve the reCAPTCHA before sending OTP again!",
+              "error"
             );
             this.createVisibleCaptcha();
           },
           "expired-callback": () => {
             // Response expired. Ask user to solve reCAPTCHA again.
             this.showSnackbar(
-              "reCAPTCHA expired!! Please solve the reCAPTCHA before sending OTP again!"
+              "reCAPTCHA expired!! Please solve the reCAPTCHA before sending OTP again!",
+              "error"
             );
             this.createVisibleCaptcha();
           },
@@ -231,13 +292,12 @@ export default {
         auth
       );
     },
-
     async createVisibleCaptcha() {
       this.send_button_loading = false;
       if (!this.send_button_disabled) {
         this.send_button_disabled = true;
         this.changeSendOTPbuttonText("Solve reCAPTCHA");
-        this.changeSendOTPbuttonColors("#1e2738b9", "white");
+        this.changeSendOTPbuttonColors("#1e273864", "white");
       }
       this.recaptchaVerifier = new RecaptchaVerifier(
         "recaptcha-container",
@@ -252,31 +312,6 @@ export default {
       );
       this.recaptchaVerifier.render();
     },
-
-    async submit() {
-      this.send_button_loading = true;
-
-      await signInWithPhoneNumber(auth, "+91" + this.phoneNumber, this.recaptchaVerifier)
-        .then((confirmationResult) => {
-          this.confirmResult = confirmationResult;
-          if (!this.send_button_disabled) {
-            this.changeSendOTPbuttonText("Send OTP Again");
-            this.changeSendOTPbuttonColors("green", "white");
-          } else {
-            this.changeSendOTPbuttonText("Solve reCAPTCHA");
-            this.changeSendOTPbuttonColors("#1e2738b9", "white");
-          }
-          this.display_number = this.phoneNumber;
-          this.show_otp_div = true;
-          this.send_button_loading = false;
-          this.showSnackbar("OTP has been sent to " + this.phoneNumber);
-        })
-        .catch((error) => {
-          this.send_button_loading = false;
-          this.showSnackbar("Failed to send OTP! Please check the number!!");
-          console.error(error);
-        });
-    },
     changeSendOTPbuttonText(text) {
       document.getElementById("send-otp-button").innerHTML = text;
     },
@@ -286,49 +321,12 @@ export default {
         backgroundColor +
         "!important; color:" +
         color +
-        "!important; transition: background-color 0.5s";
+        "!important; transition: background-color 0.75s";
     },
-    verifyCode() {
-      this.confirming_otp = true;
-      this.confirmResult
-        .confirm(this.OTP)
-        .then(async (result) => {
-          this.otp_confirmed = true;
-          this.confirming_otp = false;
-          this.userID = result.user.uid;
-          this.showSnackbar("User verified successfully!");
-          await loginServices.AddUser(result.user.uid, {
-            mobile_number: "+91" + this.phoneNumber,
-          });
-        })
-        .catch((error) => {
-          this.showSnackbar("Invalid OTP");
-          this.confirming_otp = false;
-        });
-    },
-    async submit_details() {
-      this.submitting_details = true;
-      try {
-        await loginServices.updateUser(this.userID, {
-          user_name: this.name,
-          alternate_mobile_number: this.alternate_phoneNumber,
-          user_email: this.email,
-          user_alternate_email: this.alternate_email,
-        });
-        this.showSnackbar("Contact Details saved successfully!");
-        this.submitting_details = false;
-        this.redirectFunction();
-      } catch (error) {
-        this.showSnackbar("Error occured while saving contact details!");
-        this.submitting_details = false;
-      }
-    },
-    redirectFunction() {
-      this.$router.replace({ name: "post-property" });
-    },
-    showSnackbar(text) {
+    showSnackbar(text, backgroundColor) {
       this.snackbar.show = true;
       this.snackbar.text = text;
+      this.snackbar.backgroundColor = backgroundColor;
     },
   },
 };
@@ -403,7 +401,6 @@ export default {
   -o-animation: fadein 1s; /* Opera < 12.1 */
   animation: fadein 1s;
 }
-
 @keyframes fadein {
   from {
     opacity: 0;
@@ -412,7 +409,6 @@ export default {
     opacity: 1;
   }
 }
-
 /* Firefox < 16 */
 @-moz-keyframes fadein {
   from {
@@ -422,7 +418,6 @@ export default {
     opacity: 1;
   }
 }
-
 /* Safari, Chrome and Opera > 12.1 */
 @-webkit-keyframes fadein {
   from {
@@ -432,7 +427,6 @@ export default {
     opacity: 1;
   }
 }
-
 /* Internet Explorer */
 @-ms-keyframes fadein {
   from {
@@ -442,7 +436,6 @@ export default {
     opacity: 1;
   }
 }
-
 /* Opera < 12.1 */
 @-o-keyframes fadein {
   from {
