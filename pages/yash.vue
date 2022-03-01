@@ -173,6 +173,7 @@
 import { auth, signInWithPhoneNumber, RecaptchaVerifier } from "../plugins/firebase";
 import loginServices from "../services/loginServices";
 export default {
+  layout: "none",
   data: () => ({
     phoneNumber: "9999999999",
     confirmationResult: null,
@@ -341,8 +342,7 @@ export default {
 }
 #recaptcha-container {
   padding-bottom: 2%;
-  display: flex;
-  justify-content: center;
+   justify-content: center;
   align-items: center;
 }
 .input-field {

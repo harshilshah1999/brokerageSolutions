@@ -76,7 +76,6 @@ const LocationDetails = () => import("~/components/stepperForms/LocationDetails.
 const FlatDetails = () => import("~/components/stepperForms/FlatDetails.vue");
 const Amenities = () => import("~/components/stepperForms/Amenities.vue");
 const Media = () => import("~/components/stepperForms/Media.vue");
-const FilePond = () => import("~/components/stepperForms/FilePond.vue");
 
 export default {
   components: {
@@ -85,7 +84,6 @@ export default {
     FlatDetails,
     Amenities,
     Media,
-    FilePond,
   },
   data() {
     return {
@@ -115,10 +113,6 @@ export default {
         {
           title: "Media",
           number: 5,
-        },
-        {
-          title: "File Pond",
-          number: 6,
         }
       ],
     };

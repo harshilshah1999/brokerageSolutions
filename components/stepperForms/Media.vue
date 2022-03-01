@@ -1,92 +1,134 @@
 <template>
-  <!-- @TODO OC CC INFO ALERT-->
-
-  <v-form v-model="valid" ref="form" lazy-validation>
-    <v-container>
-      <v-row>
-        <v-col cols="12" sm="6">
-          <v-file-input
-            counter
-            multiple
-            show-size
-            small-chips
-            truncate-length="50"
-            accept="image/*,video/mp4,video/x-m4v,video/*"
-            v-model="chosenFile"
-            filled
-          ></v-file-input>
-          <v-btn v-on:click="submit_image">UPLOAD IMAGE</v-btn>
-        </v-col>
-
-        <v-col cols="12" sm="6">
-          <v-btn
-            :disabled="!valid || loading"
-            :loading="loading"
-            color="primary"
-            @click="validate"
+  <div id="app">
+    <file-pond
+      name="file"
+      ref="input"
+      label-idle="Drop files here..."
+      :allow-multiple="true"
+      accepted-file-types="image/jpeg, image/png"
+      :server="{ process, revert }"
+      :files="files2"
+      @init="handleFilePondInit"
+    />
+    <v-row>
+      <v-col cols="12" sm="3" v-for="file in myFiles" :key="file">
+        <v-card>
+          <v-img
+            :src="file"
+            class="white--text align-end"
+            gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+            height="200px"
           >
-            Save and Continue
-            <v-icon right> mdi-arrow-right-thin </v-icon>
-          </v-btn>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-form>
+          </v-img>
+
+          <v-card-actions>
+             <v-spacer></v-spacer>
+            <v-select
+              :items="['Bedroom', 'Kitchen', 'Living Room', 'Dining Room']"
+              menu-props="auto"
+              label="Image Type"
+              outlined
+            >
+            </v-select>
+            <v-btn icon>
+              <v-icon>mdi-heart</v-icon>
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
+    <br />
+    <br />
+  </div>
 </template>
 
 <script>
-import postApartmentServices from "../../services/postForm/apartments/postApartmentServices";
+import firebaseService from "../../services/firebaseServices";
+// Import Vue FilePond
+import vueFilePond from "vue-filepond";
+
+// Import FilePond styles
+import "filepond/dist/filepond.min.css";
+
+// Import FilePond plugins
+// Please note that you need to install these plugins separately
+
+// Import image preview plugin styles
+//import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css";
+
+// Import image preview and file type validation plugins
+import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
+//import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+
+// Create component
+const FilePond = vueFilePond(FilePondPluginFileValidateType);
+
+import imageCompression from "browser-image-compression";
 
 export default {
-  data: () => ({
-    construction_type: "",
-    oc_status: null,
-    cc_status: null,
-    construction_types: ["Under Construction", "New Construction", "Resale"],
-    oc_cc_types: ["Received", "Not Received", "Dont Know"],
-    possession_date: null,
-    building_age: null,
-    menu: false,
-    valid: false,
-    rules: [(v) => !!v || "This is a required field"],
-    loading: false,
-  }),
-  mounted() {
-    //get building data
+  name: "app",
+  data: function () {
+    return {
+      myFiles: [],
+      files2: [],
+    };
   },
   methods: {
-    validate: async function () {},
-    submit_image: async function () {
+    async process(fieldName, file, metadata, load, error, progress, abort) {
+      const options = {
+        maxSizeMB: 0.4,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true,
+      };
+
+      const compressedFile = await imageCompression(file, options);
+      const uploadTask = firebaseService.setSingleMedia(
+        file.name,
+        compressedFile,
+        progress,
+        load,
+        abort,
+        error,
+        this.myFiles
+      );
+      return {
+        abort: () => {
+          abort();
+          uploadTask.cancel();
+        },
+      };
+    },
+    async revert(uniqueFileId, load, error) {
       try {
-        this.chosenFile.forEach(async (element, index) => {
-          const options = {
-            maxSizeMB: 0.4,
-            maxWidthOrHeight: 1920,
-            useWebWorker: true,
-          };
-          console.log(`originalFile size ${element.size / 1024 / 1024} MB`);
-          const compressedFile = await imageCompression(element, options);
-          console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
-          (this.media_formData = {
-            storage_path: this.storage_path + "/" + index + "_" + element.name, //need image name validation here
-            media_type: "Living Room/Bedroom/Kitchen/...",
-            thumbnail: true,
-          }),
-            await postApartmentServices.postMedia(
-              this.property_type,
-              this.documentID,
-              compressedFile,
-              this.media_formData,
-              this.property_type + "/" + this.documentID + "/" + element.name
-            );
-        });
-      } catch (error) {
-        console.error(error);
+        await firebaseService.deleteSingleMedia(uniqueFileId, error);
+        const index = this.myFiles.indexOf(uniqueFileId);
+        if (index > -1) {
+          this.myFiles.splice(index, 1);
+        }
+      } catch (e) {
+        console.log(e);
       }
     },
+    handleFilePondInit: function () {
+      this.$refs.input.getFiles();
+    },
   },
-  watch: {},
+  watch: {
+    files: {
+      handler: function (val, oldVal) {
+        if (this.first) this.first = false;
+        this.$emit("input", val);
+      },
+      deep: true,
+    },
+  },
+  components: {
+    FilePond,
+  },
 };
 </script>
-
-<style></style>
+<style>
+.filepond--credits {
+  display: none;
+}
+</style>
