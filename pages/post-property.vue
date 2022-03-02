@@ -55,7 +55,7 @@
 
       <v-stepper-content step="5">
         <v-card elevation="0">
-          <media @stepperChange="e1 = 6" />
+          <media :apartmentId="apartmentID"  @stepperChange="e1 = 6" />
         </v-card>
       </v-stepper-content>
 

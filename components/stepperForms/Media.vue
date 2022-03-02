@@ -11,10 +11,10 @@
       @init="handleFilePondInit"
     />
     <v-row>
-      <v-col cols="12" sm="3" v-for="file in myFiles" :key="file">
+      <v-col cols="12" sm="4" v-for="file in myFiles" :key="file.downloadURL">
         <v-card>
           <v-img
-            :src="file"
+            :src="file.downloadURL"
             class="white--text align-end"
             gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
             height="200px"
@@ -22,22 +22,40 @@
           </v-img>
 
           <v-card-actions>
-             <v-spacer></v-spacer>
-            <v-select
-              :items="['Bedroom', 'Kitchen', 'Living Room', 'Dining Room']"
-              menu-props="auto"
-              label="Image Type"
-              outlined
-            >
-            </v-select>
-            <v-btn icon>
-              <v-icon>mdi-heart</v-icon>
-            </v-btn>
+            <v-row align="center" justify="center">
+              <v-col cols="8">
+                <v-select
+                  :items="['Bedroom', 'Kitchen', 'Living Room', 'Dining Room']"
+                  v-model="file.media_type"
+                  menu-props="auto"
+                  label="Image Type"
+                  hide-details
+                  dense
+                  filled
+                  clearable
+                >
+                </v-select>
+              </v-col>
+              <v-col cols="4" class="text-right">
+                <v-spacer></v-spacer>
+                <v-btn
+                  icon
+                  @click="changeFavourite(file)"
+                  :color="file.thumbnail ? 'red' : 'grey'"
+                >
+                  <v-icon>mdi-heart</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
           </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
-    <br />
+    <v-row v-if="myFiles.length">
+      <v-col cols="12" sm="6">
+        <v-btn color="primary" @click="saveDetails"> Save Details </v-btn>
+      </v-col>
+    </v-row>
     <br />
   </div>
 </template>
@@ -66,7 +84,7 @@ const FilePond = vueFilePond(FilePondPluginFileValidateType);
 import imageCompression from "browser-image-compression";
 
 export default {
-  name: "app",
+  props: ["apartmentId"],
   data: function () {
     return {
       myFiles: [],
@@ -83,12 +101,14 @@ export default {
 
       const compressedFile = await imageCompression(file, options);
       const uploadTask = firebaseService.setSingleMedia(
-        file.name,
+        "apartments_sale/" + this.apartmentId + "/" + file.name,
         compressedFile,
         progress,
         load,
         abort,
         error,
+        "apartments_sale",
+        this.apartmentId,
         this.myFiles
       );
       return {
@@ -101,16 +121,44 @@ export default {
     async revert(uniqueFileId, load, error) {
       try {
         await firebaseService.deleteSingleMedia(uniqueFileId, error);
-        const index = this.myFiles.indexOf(uniqueFileId);
-        if (index > -1) {
-          this.myFiles.splice(index, 1);
-        }
+        let id = this.myFiles.find((file) => file.downloadURL === uniqueFileId).id;
+        await firebaseService.deleteSingleDocument2D(
+          "apartments_sale",
+          this.apartmentId,
+          "media",
+          id
+        );
+        this.myFiles = this.myFiles.filter((file) => file.downloadURL !== uniqueFileId);
       } catch (e) {
         console.log(e);
       }
     },
     handleFilePondInit: function () {
       this.$refs.input.getFiles();
+    },
+    changeFavourite: function (file) {
+      this.myFiles.forEach((f) => (f.thumbnail = false));
+      file.thumbnail = !file.thumbnail;
+    },
+    saveDetails: async function () {
+      console.log(this.myFiles);
+
+      for (let index = 0; index < this.myFiles.length; index++) {
+        try {
+          await firebaseService.updateSingleDocument2D(
+            "apartments_sale",
+            this.apartmentId,
+            "media",
+            this.myFiles[index].id,
+            {
+              media_type: this.myFiles[index].media_type,
+              thumbnail: this.myFiles[index].thumbnail,
+            }
+          );
+        } catch (e) {
+          console.log(e);
+        }
+      }
     },
   },
   watch: {
