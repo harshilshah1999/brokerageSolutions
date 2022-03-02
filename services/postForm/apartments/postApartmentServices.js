@@ -37,7 +37,7 @@ export default {
         }
         this.updateApartmentDetails(collectionID, apartmentID, { other_details })
     },
-    async postMedia(collectionID, apartmentID, file, mediaData, image_path) {
+    async postMedia(collectionID, apartmentID, mediaData) {
         try {
             return await firebaseServices.addDocumentAutoID2D(collectionID, apartmentID, 'media', mediaData) // update in firerstore
 
