@@ -40,7 +40,6 @@ export default {
     async postMedia(collectionID, apartmentID, mediaData) {
         try {
             return await firebaseServices.addDocumentAutoID2D(collectionID, apartmentID, 'media', mediaData) // update in firerstore
-
         } catch (error) { console.error(error); return error }
     },
     async postOtherDetails(collectionID, apartmentID, newdata) {
