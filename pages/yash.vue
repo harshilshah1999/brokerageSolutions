@@ -1,8 +1,11 @@
 <template>
   <!--
 // @TODO Fix the stupid invisible recaptcha div that floats on the bottom
+// @TODO Add Validation
 // @TODO Pressing enter key should send OTP, user form
 // @TODO Make this page responsive
+// @TODO Check Session expiry
+
  -->
   <div id="signup-page-wrapper">
     <v-row id="animated" style="height: 100vh; width: 100vw">
@@ -342,7 +345,7 @@ export default {
 }
 #recaptcha-container {
   padding-bottom: 2%;
-   justify-content: center;
+  justify-content: center;
   align-items: center;
 }
 .input-field {

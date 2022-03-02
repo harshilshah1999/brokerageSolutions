@@ -39,10 +39,8 @@ export default {
     },
     async postMedia(collectionID, apartmentID, file, mediaData, image_path) {
         try {
-            return [
-                await firebaseServices.setSingleMedia(image_path, file), //update property in storage
-                await firebaseServices.addDocumentAutoID2D(collectionID, apartmentID, 'media', mediaData) // update in firerstore
-            ]
+            return await firebaseServices.addDocumentAutoID2D(collectionID, apartmentID, 'media', mediaData) // update in firerstore
+
         } catch (error) { console.error(error); return error }
     },
     async postOtherDetails(collectionID, apartmentID, newdata) {
