@@ -262,7 +262,7 @@ export default {
         } catch (error) { console.error(error); return error }
     },
 
-    setSingleMedia( media_path, file, progress, load, abort, error, vueRef) { // add single media to storage
+    setSingleMedia( media_path, file, progress, load, abort, error, collectionID, apartmentID, vueRef) { // add single media to storage
         const uploadLocation = ref(storage, media_path);
         progress(true, 0, 1024)
         try {
@@ -284,9 +284,19 @@ export default {
                 () => {
                     // Handle successful uploads on complete
                     // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-                    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
                         load(downloadURL);
-                        vueRef.push(downloadURL)
+                        const response = await this.addDocumentAutoID2D(collectionID, apartmentID, 'media', {
+                            downloadURL,
+                            thumbnail: false,
+                            media_type: ''
+                        })
+                        vueRef.push({
+                            media_type: '',
+                            thumbnail: false,
+                            id: response.id,
+                            downloadURL 
+                        })
                     });
                 }
             );
