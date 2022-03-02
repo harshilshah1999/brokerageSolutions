@@ -7,13 +7,13 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn class="ma-1" plain to="/" >
+      <v-btn class="ma-1" plain to="/">
         <v-icon left> mdi-home </v-icon>
         Home
       </v-btn>
-       <v-btn class="ma-1" plain to="/yash">
+      <v-btn class="ma-1" plain to="/signin">
         <v-icon left> mdi-archive-plus </v-icon>
-        yash
+        Sign In
       </v-btn>
       <v-btn class="ma-1" plain to="/post-property">
         <v-icon left> mdi-archive-plus </v-icon>
