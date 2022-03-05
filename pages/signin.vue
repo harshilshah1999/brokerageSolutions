@@ -8,8 +8,8 @@
 
  -->
   <div id="signup-page-wrapper">
-    <v-row id="animated" style="height: 100vh; width: 100vw">
-      <v-col cols="12" sm="12">
+    <div id="animated">
+      <v-col class="wrapper" cols="12" sm="12">
         <v-card class="card">
           <v-card-title class="light_blue">
             <h1 v-if="!otp_confirmed">Sign In</h1>
@@ -30,7 +30,9 @@
                 prefix="+91 "
               >
               </v-text-field>
+
               <div id="recaptcha-container"></div>
+
               <v-btn
                 :loading="send_button_loading"
                 :disabled="send_button_disabled"
@@ -147,7 +149,7 @@
           </div>
         </v-card>
       </v-col>
-    </v-row>
+    </div>
     <v-snackbar
       v-model="snackbar.show"
       top
@@ -344,9 +346,7 @@ export default {
   height: 100vh;
 }
 #recaptcha-container {
-  padding-bottom: 2%;
-  justify-content: center;
-  align-items: center;
+  padding-bottom: 1%;
 }
 .input-field {
   border-radius: 10px;
@@ -357,18 +357,23 @@ export default {
 .input-field .v-input__slot {
   background-color: white !important;
 }
+.wrapper {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: center;
+}
 .card {
   background-image: url("../assets/signup-card-bg.jpg");
   min-width: 25% !important;
   max-width: 25% !important;
   border-radius: 2% !important;
   padding: 1%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  /* background-color: #dfdfdf !important; */
 }
 .btn {
   width: 100% !important;
