@@ -262,7 +262,7 @@ export default {
         } catch (error) { console.error(error); return error }
     },
 
-    setSingleMedia( media_path, file, progress, load, abort, error, collectionID, apartmentID, vueRef) { // add single media to storage
+    setSingleMedia(media_path, file, progress, load, abort, error, collectionID, apartmentID, vueRef) { // add single media to storage
         const uploadLocation = ref(storage, media_path);
         progress(true, 0, 1024)
         try {
@@ -295,7 +295,7 @@ export default {
                             media_type: '',
                             thumbnail: false,
                             id: response.id,
-                            downloadURL 
+                            downloadURL
                         })
                     });
                 }

@@ -99,6 +99,7 @@
                 color="#1e2738da"
                 class="input-field"
                 clearable
+                required
               >
               </v-text-field>
 
@@ -237,6 +238,7 @@ export default {
           this.otp_confirmed = true;
           this.confirming_otp = false;
           this.userID = result.user.uid;
+          localStorage.setItem("user_id", this.userID);
           this.showSnackbar("User verified successfully!", "success");
           await loginServices.updateUser(result.user.uid, {
             mobile_number: "+91" + this.phoneNumber,
@@ -256,6 +258,7 @@ export default {
           user_email: this.email,
           user_alternate_email: this.alternate_email,
         });
+        // localStorage.setItem("user_name", this.name);
         this.showSnackbar("Contact Details saved successfully!", "success");
         this.submitting_details = false;
         this.redirectFunction();

@@ -5,7 +5,7 @@
 // @TODO
  -->
   <div>
-    <v-row class="col-wrapper   ">
+    <v-row class="col-wrapper">
       <v-col cols="12" sm="8"> ALREADY LISTED PROPERTIES </v-col>
       <v-col class="wrapper center" cols="12" sm="4">
         <v-card class="card">
@@ -96,10 +96,32 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-snackbar
+      v-model="snackbar.show"
+      top
+      width="25%"
+      :color="snackbar.backgroundColor"
+      :timeout="3000"
+    >
+      <b style="font-size: 1em">{{ snackbar.text }}</b>
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          style="background-color: #1e2738da; color: #dfdfdf"
+          text
+          v-bind="attrs"
+          @click="snackbar.show = false"
+        >
+          Close
+          <!-- Cross icon -->
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
 <script>
+import listingServices from "../services/listingServices";
 export default {
   // layout: "no-container",
   data: () => ({
@@ -123,18 +145,47 @@ export default {
 
     submit_button_loading: false,
     submit_button_disabled: false,
+
+    snackbar: {
+      text: null,
+      show: null,
+      backgroundColor: "#dfdfdf",
+    },
   }),
   async mounted() {},
   methods: {
     async submit() {
       let collectionID = this.property_type + "s_" + this.property_for;
-      console.log(collectionID);
+      let user;
+      let propertyID;
+      try {
+        user = await listingServices.getUser(localStorage.getItem("user_id"));
+      } catch (error) {
+        this.showSnackbar("Error retrieving user details! Please try again", "danger");
+        console.log(error);
+      }
+
+      try {
+        if (user.data()) {
+          // to make sure that user_id is not manipulated from localstorage
+          propertyID = await listingServices.addProperty(collectionID, {
+            posted_by_user_id: user.id,
+            posted_by_user_name: user.data().user_name,
+          });
+          this.showSnackbar("Property ad created!!", "success");
+          console.log(propertyID);
+        }
+      } catch (error) {
+        this.showSnackbar("Property add not created! Please try again", "danger");
+        console.log(error);
+      }
     },
-    // updatePropertyTypes(category) {
-    //   if (category == "residential") this.property_types = this.residential_properties;
-    //   else if (category == "commercial") this.property_types = this.commercial_properties;
-    //   else this.property_types = this.other_properties;
-    // },
+
+    showSnackbar(text, backgroundColor) {
+      this.snackbar.show = true;
+      this.snackbar.text = text;
+      this.snackbar.backgroundColor = backgroundColor;
+    },
   },
 };
 </script>
@@ -145,7 +196,6 @@ export default {
 }
 .wrapper {
   display: flex;
-  /* justify-content: center; */
   align-items: center;
   justify-items: center;
 }
