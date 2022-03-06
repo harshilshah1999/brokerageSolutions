@@ -19,8 +19,8 @@
         :loading="locality_loader"
       ></v-combobox>
     </v-col>
-    <hr>
-    <br>
+    <hr />
+    <br />
   </div>
 </template>
 <script>
@@ -118,6 +118,4 @@ export default {
   },
 };
 </script>
-<style scoped>
-
-</style>
+<style scoped></style>

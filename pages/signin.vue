@@ -1,11 +1,10 @@
 <template>
   <!--
-// @TODO Fix the stupid invisible recaptcha div that floats on the bottom
+// @TODO recaptcha div size not responsive
 // @TODO Add Validation
 // @TODO Pressing enter key should send OTP, user form
 // @TODO Make this page responsive
-// @TODO Check Session expiry
-
+// @TODO Check Session expiry and make it infinity
  -->
   <div id="signup-page-wrapper">
     <div id="animated">
