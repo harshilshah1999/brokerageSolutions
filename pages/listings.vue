@@ -1,19 +1,20 @@
 <template>
   <!--
 // @TODO user cannot post a new property if he has more than 5 properties in pending
-// @TODO
+// @TODO get all the properties posted by the user.
 // @TODO
  -->
   <div>
     <v-row class="col-wrapper">
       <v-col cols="12" sm="8"> ALREADY LISTED PROPERTIES </v-col>
-      <v-col class="wrapper center" cols="12" sm="4">
-        <v-card class="card">
-          <v-col>
-            <h2 class="light_blue">Post New Property</h2>
-          </v-col>
+      <v-col class="center" cols="12" sm="4">
+        <div class="wrapper">
+          <v-card class="card">
+            <v-col>
+              <h2 class="light_blue">Post New Property</h2>
+            </v-col>
 
-          <!-- <v-col cols="12" sm="12">
+            <!-- <v-col cols="12" sm="12">
             <p class="extra-light_blue">My property category is:</p>
             <v-chip
               v-for="category in categories"
@@ -33,23 +34,23 @@
             </v-chip>
           </v-col> -->
 
-          <v-col cols="12" sm="12">
-            <p class="extra-light_blue left">What kind of property do you have?</p>
-            <v-chip
-              v-for="type in property_type_chips"
-              :key="type.id"
-              v-on:click="property_type = type.id"
-              class="categories"
-              pill
-              color="#1e2738da"
-              :disabled="type.id == 'pg'"
-              :text-color="property_type != type.id ? '' : 'white'"
-              :outlined="property_type != type.id"
-              link
-            >
-              <span class="capitalize">{{ type.name }} </span>
-            </v-chip>
-            <!-- <v-select
+            <v-col cols="12" sm="12">
+              <p class="extra-light_blue left">What kind of property do you have?</p>
+              <v-chip
+                v-for="type in property_type_chips"
+                :key="type.id"
+                v-on:click="property_type = type.id"
+                class="categories"
+                pill
+                color="#1e2738da"
+                :disabled="type.id == 'pg'"
+                :text-color="property_type != type.id ? '' : 'white'"
+                :outlined="property_type != type.id"
+                link
+              >
+                <span class="capitalize">{{ type.name }} </span>
+              </v-chip>
+              <!-- <v-select
               v-if="property_type === 'Other'"
               v-model="property_type"
               :items="property_types"
@@ -58,48 +59,113 @@
               outlined
               required
             ></v-select> -->
-          </v-col>
+            </v-col>
 
-          <v-col cols="12" sm="12">
-            <p class="extra-light_blue left">
-              What would you like to do with your
-              <span v-if="property_type">{{ property_type }}</span>
-              <span v-else>property</span>?
-            </p>
-            <v-chip
-              v-for="property_for_type in property_for_types"
-              :key="property_for_type"
-              v-on:click="property_for = property_for_type"
-              class="categories"
-              pill
-              color="#1e2738da"
-              :text-color="property_for != property_for_type ? '' : 'white'"
-              :outlined="property_for != property_for_type"
-              :disabled="property_type == 'shop' && property_for_type == 'share'"
-              link
-            >
-              <span class="capitalize">{{ property_for_type }} </span>
-            </v-chip>
-          </v-col>
+            <v-col cols="12" sm="12">
+              <p class="extra-light_blue left">
+                What would you like to do with your
+                <span v-if="property_type">{{ property_type }}</span>
+                <span v-else>property</span>?
+              </p>
+              <v-chip
+                v-for="property_for_type in property_for_types"
+                :key="property_for_type"
+                v-on:click="property_for = property_for_type"
+                class="categories"
+                pill
+                color="#1e2738da"
+                :text-color="property_for != property_for_type ? '' : 'white'"
+                :outlined="property_for != property_for_type"
+                :disabled="property_type == 'shop' && property_for_type == 'share'"
+                link
+              >
+                <span class="capitalize">{{ property_for_type }} </span>
+              </v-chip>
+            </v-col>
 
-          <v-col cols="12" sm="12">
-            <v-btn
-              :loading="submit_button_loading"
-              :disabled="submit_button_disabled"
-              class="btn"
-              id="submit"
-              @click="submit"
-            >
-              <span id="send-otp-button"> Submit </span>
-            </v-btn>
-          </v-col>
-        </v-card>
+            <v-col cols="12" sm="12">
+              <v-btn
+                :loading="submit_button_loading"
+                :disabled="submit_button_disabled && property_for && property_type"
+                class="btn"
+                id="submit"
+                @click="submit"
+              >
+                <span id="send-otp-button"> Create </span>
+              </v-btn>
+            </v-col>
+          </v-card>
+        </div>
+
+        <!-- <div class="wrapper">
+          <v-card :loading="loading" class="mx-auto my-12" max-width="374">
+            <template slot="progress">
+              <v-progress-linear
+                color="deep-purple"
+                height="10"
+                indeterminate
+              ></v-progress-linear>
+            </template>
+
+            <v-img
+              height="250"
+              src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
+            ></v-img>
+
+            <v-card-title>Cafe Badilico</v-card-title>
+
+            <v-card-text>
+              <v-row align="center" class="mx-0">
+                <v-rating
+                  :value="4.5"
+                  color="amber"
+                  dense
+                  half-increments
+                  readonly
+                  size="14"
+                ></v-rating>
+
+                <div class="grey--text ms-4">4.5 (413)</div>
+              </v-row>
+
+              <div class="my-4 text-subtitle-1">$ • Italian, Cafe</div>
+
+              <div>
+                Small plates, salads & sandwiches - an intimate setting with 12 indoor
+                seats plus patio seating.
+              </div>
+            </v-card-text>
+
+            <v-divider class="mx-4"></v-divider>
+
+            <v-card-title>Tonight's availability</v-card-title>
+
+            <v-card-text>
+              <v-chip-group
+                v-model="selection"
+                active-class="deep-purple accent-4 white--text"
+                column
+              >
+                <v-chip>5:30PM</v-chip>
+
+                <v-chip>7:30PM</v-chip>
+
+                <v-chip>8:00PM</v-chip>
+
+                <v-chip>9:00PM</v-chip>
+              </v-chip-group>
+            </v-card-text>
+
+            <v-card-actions>
+              <v-btn color="deep-purple lighten-2" text @click="reserve"> Reserve </v-btn>
+            </v-card-actions>
+          </v-card>
+        </div> -->
       </v-col>
     </v-row>
     <v-snackbar
       v-model="snackbar.show"
-      top
-      width="25%"
+      bottom
       :color="snackbar.backgroundColor"
       :timeout="3000"
     >
@@ -125,20 +191,20 @@ import listingServices from "../services/listingServices";
 export default {
   // layout: "no-container",
   data: () => ({
+    user: null,
+    user_listings: [],
+
     property_category: null,
     categories: ["residential", "commercial", "other"],
 
     property_type: null,
     property_type_chips: [
-      { id: "apartment", name: "Flat/Apartment" },
-      { id: "shop", name: "Retail Shop" },
-      { id: "pg", name: "PG/Hostel" },
+      { id: "apartment", name: "Flat/Apartment", type: "Residential" },
+      { id: "shop", name: "Retail Shop", type: "Commercial" },
+      { id: "pg", name: "PG/Hostel", type: "Residential" },
       // { id: "other", name: "Other" },
     ],
     property_types: [],
-    // residential_properties: ["apartment"],
-    // commercial_properties: ["shop"],
-    // other_properties: ["farm"],
 
     property_for: null,
     property_for_types: ["sale", "rent", "share"],
@@ -152,31 +218,46 @@ export default {
       backgroundColor: "#dfdfdf",
     },
   }),
-  async mounted() {},
+  async mounted() {
+    this.user = await listingServices.getUser(localStorage.getItem("user_id"));
+    if (this.user) {
+      // to make sure that user_id is not manipulated from localstorage
+      let properties_posted = this.user.data().properties_posted;
+      properties_posted.forEach(async (property) => {
+        let collectionID = property.split("-")[0];
+        let propertyID = property.split("-")[1];
+        await listingServices.getProperty(collectionID, propertyID).then((response) => {
+          let data = response.data();
+          data["type"] = collectionID;
+          data["property_id"] = propertyID;
+          this.user_listings.push(data);
+        });
+      });
+    } else {
+      this.showSnackbar("Stop fucking around and login again bitch!", "danger");
+      localStorage.removeItem("user_id");
+      this.$router.replace({ name: "signin" });
+    }
+  },
   methods: {
     async submit() {
       let collectionID = this.property_type + "s_" + this.property_for;
-      let user;
       let propertyID;
-      try {
-        user = await listingServices.getUser(localStorage.getItem("user_id"));
-      } catch (error) {
-        this.showSnackbar("Error retrieving user details! Please try again", "danger");
-        console.log(error);
-      }
 
       try {
-        if (user.data()) {
-          // to make sure that user_id is not manipulated from localstorage
-          propertyID = await listingServices.addProperty(collectionID, {
-            posted_by_user_id: user.id,
-            posted_by_user_name: user.data().user_name,
-          });
-          this.showSnackbar("Property ad created!!", "success");
-          console.log(propertyID);
-        }
+        this.submit_button_loading = true;
+        propertyID = await listingServices.addProperty(collectionID, {
+          posted_by_user_id: this.user.id,
+          posted_by_user_name: this.user.data().user_name,
+          posting_status: "incomplete",
+        });
+        this.submit_button_loading = false;
+
+        this.showSnackbar("Property ad created!!", "success");
+        console.log(propertyID);
       } catch (error) {
-        this.showSnackbar("Property add not created! Please try again", "danger");
+        this.submit_button_loading = false;
+        this.showSnackbar("Property add not created! Please try again", "error");
         console.log(error);
       }
     },

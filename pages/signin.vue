@@ -1,6 +1,7 @@
 <template>
   <!--
 // @TODO recaptcha div size not responsive
+// @TODO use v-window
 // @TODO Add Validation
 // @TODO Pressing enter key should send OTP, user form
 // @TODO Make this page responsive

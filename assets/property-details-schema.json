@@ -72,7 +72,7 @@
             "other_details": {
                 "posted_date": "Date and Time",
                 "verification_date": "Date and Time",
-                "posting_status": "Complete/Incomplete",
+                "posting_status": "incomplete",
                 "expiration_date": "Date and Time",
                 "status": "Active/Inactive",
                 "posted_by_user_id": "ObjectID",

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-app-bar color="#1e2738da" dark app>
+    <v-app-bar color="#3d4553" dark app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
       <v-toolbar-title>Whiteline Realtors</v-toolbar-title>
