@@ -54,11 +54,12 @@ export default {
           }
         })
         await postApartmentServices.postAmenitiesDetails(
-          'apartments_sale',
+          this.$route.params.property_type + '_' + this.$route.params.property_for,
           this.buildingId,
           this.apartmentId,
           {
-            amenity_details: amenities
+            amenity_details: amenities,
+            step: 5
           }
         )
         this.$emit('stepperChange')

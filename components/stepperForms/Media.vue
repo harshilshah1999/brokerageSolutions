@@ -101,13 +101,13 @@ export default {
 
       const compressedFile = await imageCompression(file, options);
       const uploadTask = firebaseService.setSingleMedia(
-        "apartments_sale/" + this.apartmentId + "/" + file.name,
+        this.$route.params.property_type + '_' + this.$route.params.property_for + "/" + this.apartmentId + "/" + file.name,
         compressedFile,
         progress,
         load,
         abort,
         error,
-        "apartments_sale",
+        this.$route.params.property_type + '_' + this.$route.params.property_for,
         this.apartmentId,
         this.myFiles
       );
@@ -123,7 +123,7 @@ export default {
         await firebaseService.deleteSingleMedia(uniqueFileId, error);
         let id = this.myFiles.find((file) => file.downloadURL === uniqueFileId).id;
         await firebaseService.deleteSingleDocument2D(
-          "apartments_sale",
+          this.$route.params.property_type + '_' + this.$route.params.property_for,
           this.apartmentId,
           "media",
           id
@@ -146,7 +146,7 @@ export default {
       for (let index = 0; index < this.myFiles.length; index++) {
         try {
           await firebaseService.updateSingleDocument2D(
-            "apartments_sale",
+            this.$route.params.property_type + '_' + this.$route.params.property_for,
             this.apartmentId,
             "media",
             this.myFiles[index].id,

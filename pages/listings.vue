@@ -91,7 +91,7 @@
             <v-col cols="12" sm="12">
               <v-btn
                 :loading="submit_button_loading"
-                :disabled="submit_button_disabled && property_for && property_type"
+                :disabled="!property_for || !property_type"
                 class="btn"
                 id="submit"
                 @click="submit"
@@ -204,9 +204,9 @@ export default {
 
     property_type: null,
     property_type_chips: [
-      { id: "apartment", name: "Flat/Apartment", type: "Residential" },
-      { id: "shop", name: "Retail Shop", type: "Commercial" },
-      { id: "pg", name: "PG/Hostel", type: "Residential" },
+      { id: "apartments", name: "Flat/Apartment", type: "Residential" },
+      { id: "shops", name: "Retail Shop", type: "Commercial" },
+      { id: "pgs", name: "PG/Hostel", type: "Residential" },
       // { id: "other", name: "Other" },
     ],
     property_types: [],
@@ -215,7 +215,6 @@ export default {
     property_for_types: ["sale", "rent", "share"],
 
     submit_button_loading: false,
-    submit_button_disabled: false,
 
     snackbar: {
       text: null,
@@ -248,19 +247,24 @@ export default {
   },
   methods: {
     async submit() {
-      let collectionID = this.property_type + "s_" + this.property_for;
-      let propertyID;
+      let collectionID = this.property_type + "_" + this.property_for;
+      
 
       try {
         this.submit_button_loading = true;
-        propertyID = await listingServices.addProperty(collectionID, {
+        let propertyID = await listingServices.addProperty(collectionID, {
           posted_by_user_id: this.user.id,
           posted_by_user_name: this.user.data().user_name,
           posting_status: "incomplete",
+          step: 1
         });
         this.submit_button_loading = false;
 
         this.showSnackbar("Property ad created!!", "success");
+        this.$router.replace({
+          path:
+            "/post/" + this.property_type + "/" + this.property_for + "/" + propertyID.id,
+        });
         console.log(propertyID);
       } catch (error) {
         this.submit_button_loading = false;

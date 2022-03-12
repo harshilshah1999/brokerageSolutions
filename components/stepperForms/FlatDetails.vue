@@ -202,7 +202,7 @@ export default {
         try {
           this.loading = true;
           await postApartmentServices.postFlatDetails(
-            "apartments_sale",
+            this.$route.params.property_type + '_' + this.$route.params.property_for,
             this.apartmentId,
             {
               flat_details: {
@@ -218,6 +218,7 @@ export default {
                 description: this.description,
                 flat_available_from: this.flat_available_from,
               },
+              step: 4
             }
           );
           this.$emit("stepperChange");

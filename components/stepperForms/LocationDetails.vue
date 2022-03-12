@@ -107,6 +107,7 @@ import postApartmentServices from "../../services/postForm/apartments/postApartm
 import cities from "../../assets/cities.json";
 
 export default {
+  props: ["property_details"],
   data: () => ({
     cities: [],
     localities: [],
@@ -234,8 +235,9 @@ export default {
             : await this.add_building(localityID, sublocalityID);
           if (!this.building.id && !this.landmarks.find((l) => l === this.landmark))
             await postApartmentServices.addLandmark(buildingID, this.landmark);
-          const apartmentID = await postApartmentServices.postLocationDetails(
-            "apartments_sale",
+          const apartmentID = await postApartmentServices.updateLocationDetails(
+            this.$route.params.property_type + "_" + this.$route.params.property_for,
+            this.$route.params.id,
             {
               location_details: {
                 city: this.city,
@@ -251,6 +253,7 @@ export default {
                   google_map_coordinates: "Point",
                 },
               },
+              step: 2,
             },
             sublocalityID
           );
@@ -272,23 +275,45 @@ export default {
     },
   },
   watch: {
+    property_details: function (newVal) {
+      if (newVal.location_details) {
+        this.city = newVal.location_details.city
+          ? newVal.location_details.city
+          : "";
+        this.locality = newVal.location_details.locality_name
+          ? newVal.location_details.locality_name
+          : "";
+        this.sublocality = newVal.location_details.sublocality_name
+          ? newVal.location_details.sublocality_name
+          : "";
+        this.building = newVal.location_details.building_name
+          ? newVal.location_details.building_name
+          : "";
+        this.flatNumber = newVal.location_details.flat_number
+          ? newVal.location_details.flat_number
+          : "";
+        this.landmark = newVal.location_details.landmark
+          ? newVal.location_details.landmark
+          : "";
+      }
+    },
     localities: function () {
       this.locality = "";
     },
     locality: function () {
-      this.sublocalities = [];
+      if (!this.locality) this.sublocalities = [];
     },
     sublocalities: function () {
       this.sublocality = "";
     },
     sublocality: function () {
-      this.buildings = [];
+      if (!this.sublocality) this.buildings = [];
     },
     buildings: function () {
       this.building = "";
     },
     building: function () {
-      this.landmarks = [];
+      if (!this.building) this.landmarks = [];
     },
     landmarks: function () {
       this.landmark = "";

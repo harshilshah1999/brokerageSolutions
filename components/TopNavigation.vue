@@ -15,7 +15,7 @@
         <v-icon left> mdi-archive-plus </v-icon>
         Sign In
       </v-btn>
-      <v-btn class="ma-1" plain to="/post-property">
+      <v-btn class="ma-1" plain to="/listings">
         <v-icon left> mdi-archive-plus </v-icon>
         Post Property
       </v-btn>

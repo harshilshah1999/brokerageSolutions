@@ -108,7 +108,7 @@
 import postApartmentServices from "../../services/postForm/apartments/postApartmentServices";
 
 export default {
-  props: ["buildingId", "apartmentId", "city", "sublocalityId", "localityId"],
+  props: ["property_details"],
   data: function () {
     return {
       total_floors: null,
@@ -135,12 +135,12 @@ export default {
         try {
           this.loading = true;
           await postApartmentServices.postBuildingDetails(
-            "apartments_sale",
-            this.apartmentId,
-            this.buildingId,
+            this.$route.params.property_type + '_' + this.$route.params.property_for,
+            this.$route.params.id,
+            this.property_details.location_details.building_id,
             {
               building_details: {
-                ...(this.landmark && { landmark: [this.landmark] }),
+                ...(this.property_details.location_details.landmark && { landmark: [this.property_details.location_details.landmark] }),
                 construction_type: this.construction_type,
                 ...(this.building_age && { building_age: this.building_age }),
                 ...(this.oc_status && { oc_status: this.oc_status }),
@@ -148,11 +148,12 @@ export default {
                 ...(this.possession_date && { possession_date: this.possession_date }),
                 ...(this.total_floors && { total_floors: this.total_floors }),
               },
+              step: 3
             },
             {
-              city: this.city,
-              localityID: this.localityId,
-              sublocalityID: this.sublocalityId,
+              city: this.property_details.location_details.city,
+              localityID: this.property_details.location_details.locality_id,
+              sublocalityID: this.property_details.location_details.sublocality_id
             }
           );
           this.$emit("stepperChange");
@@ -165,11 +166,11 @@ export default {
     },
   },
   watch: {
-    buildingId: async function () {
+    property_details: async function () {
       let building_details = null;
-      building_details = await postApartmentServices.getBuildingDetails(this.buildingId);
+      building_details = await postApartmentServices.getBuildingDetails(this.property_details.location_details.building_id);
       building_details = building_details.data();
-      console.log(building_details);
+      
       if (building_details.hasOwnProperty("construction_type")) {
         this.construction_type = building_details.construction_type;
         this.building_age = building_details.building_age;
