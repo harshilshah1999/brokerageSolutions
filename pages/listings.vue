@@ -6,7 +6,12 @@
  -->
   <div>
     <v-row class="col-wrapper">
-      <v-col cols="12" sm="8"> ALREADY LISTED PROPERTIES </v-col>
+      <v-col cols="12" sm="8">
+        ALREADY LISTED PROPERTIES
+        <div>
+          {{ user_listings }}
+        </div>
+      </v-col>
       <v-col class="center" cols="12" sm="4">
         <div class="wrapper">
           <v-card class="card">
@@ -222,7 +227,9 @@ export default {
     this.user = await listingServices.getUser(localStorage.getItem("user_id"));
     if (this.user) {
       // to make sure that user_id is not manipulated from localstorage
-      let properties_posted = this.user.data().properties_posted;
+      let properties_posted = this.user.data().properties_posted
+        ? this.user.data().properties_posted
+        : [];
       properties_posted.forEach(async (property) => {
         let collectionID = property.split("-")[0];
         let propertyID = property.split("-")[1];
