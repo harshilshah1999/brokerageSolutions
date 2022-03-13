@@ -60,12 +60,6 @@
           <media @stepperChange="property_details.step = 6" />
         </v-card>
       </v-stepper-content>
-
-      <!-- <v-stepper-content step="6">
-        <v-card elevation="0">
-          <file-pond @stepperChange="property_details.step = 7" />
-        </v-card>
-      </v-stepper-content> -->
     </v-stepper-items>
   </v-stepper>
 </template>
