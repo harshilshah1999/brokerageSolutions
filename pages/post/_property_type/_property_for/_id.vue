@@ -91,16 +91,6 @@ export default {
       property_details: {
         step: 1,
       },
-      buildingID: null,
-      apartmentID: null,
-      localityID: null,
-      sublocalityID: null,
-      city: null,
-      building: "",
-      landmark: "",
-      locality: "",
-      sublocality: "",
-      flatNumber: "",
       stepperData: [
         {
           title: "Location Details",
@@ -131,7 +121,6 @@ export default {
       this.$route.params.id
     );
     this.property_details = { ...response.data() };
-    this.apartmentID = this.$route.params.id;
   },
   methods: {
     updateBuildingDetails: function (localtion_details) {

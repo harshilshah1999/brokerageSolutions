@@ -119,7 +119,6 @@ export default {
   },
   methods: {
     load: function (source, load, error, progress, abort, headers) {
-      console.log("fired");
       var myRequest = new Request(source);
       fetch(myRequest).then(function (response) {
         response.blob().then(function (myBlob) {
