@@ -52,14 +52,14 @@
                     ]
                 }
             },
-            "amenities": {
-                "lift": true,
-                "gas_pipeline": false,
-                "visitor_parking": true,
-                "gym": false,
-                "swimming_pool": true,
-                "clubhouse": false
-            },
+            "amenity_details": [
+                "lift",
+                "gas_pipeline",
+                "visitor_parking",
+                "gym",
+                "swimming_pool",
+                "clubhouse"
+            ],
             "media": [
                 {
                     "media_id": "ObjectID",
