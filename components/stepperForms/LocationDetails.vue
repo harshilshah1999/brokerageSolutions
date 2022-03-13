@@ -235,7 +235,7 @@ export default {
             : await this.add_building(localityID, sublocalityID);
           if (!this.building.id && !this.landmarks.find((l) => l === this.landmark))
             await postApartmentServices.addLandmark(buildingID, this.landmark);
-          const apartmentID = await postApartmentServices.updateLocationDetails(
+          await postApartmentServices.updateLocationDetails(
             this.$route.params.property_type + "_" + this.$route.params.property_for,
             this.$route.params.id,
             {
@@ -248,24 +248,24 @@ export default {
                 flat_number: this.flatNumber,
                 building_name: this.building.name || this.building,
                 building_id: buildingID,
-                landmark: this.landmark,
-                google_map_details: {
-                  google_map_coordinates: "Point",
-                },
+                landmark: this.landmark
               },
               step: 2,
             },
             sublocalityID
           );
-          //console.log('build:' , this.building)
-          this.$emit(
-            "stepperChange",
-            this.city,
-            localityID,
-            sublocalityID,
-            buildingID,
-            apartmentID
-          );
+
+          this.$emit("stepperChange", {
+            city: this.city,
+            locality_id: localityID,
+            locality_name: this.locality,
+            sublocality_id: sublocalityID,
+            sublocality_name: this.sublocality,
+            building_id: buildingID,
+            building_name: this.building,
+            landmark: this.landmark,
+            flat_number: this.flatNumber,
+          });
         } catch (e) {
           console.log(e);
         } finally {
@@ -277,17 +277,15 @@ export default {
   watch: {
     property_details: function (newVal) {
       if (newVal.location_details) {
-        this.city = newVal.location_details.city
-          ? newVal.location_details.city
-          : "";
+        this.city = newVal.location_details.city ? newVal.location_details.city : "";
         this.locality = newVal.location_details.locality_name
-          ? newVal.location_details.locality_name
+          ? { id: newVal.location_details.locality_id, name: newVal.location_details.locality_name }
           : "";
         this.sublocality = newVal.location_details.sublocality_name
-          ? newVal.location_details.sublocality_name
+          ? { id: newVal.location_details.sublocality_id, name: newVal.location_details.sublocality_name }
           : "";
         this.building = newVal.location_details.building_name
-          ? newVal.location_details.building_name
+          ? {id: newVal.location_details.building_id, name: newVal.location_details.building_name}
           : "";
         this.flatNumber = newVal.location_details.flat_number
           ? newVal.location_details.flat_number

@@ -159,7 +159,7 @@
 import postApartmentServices from "../../services/postForm/apartments/postApartmentServices";
 
 export default {
-  props: ["apartmentId"],
+  props: ["property_details"],
   data: () => ({
     snackbar: false,
     BHKtype: "",
@@ -201,27 +201,28 @@ export default {
         }
         try {
           this.loading = true;
+          let flat_details = {
+            BHKtype: this.BHKtype,
+            carpet_area: this.carpet_area,
+            builtup_area: this.builtup_area,
+            super_builtup_area: this.super_builtup_area,
+            floor_number: this.floor_number,
+            facing: this.facing,
+            furnishing: this.furnishing,
+            bathrooms: this.bathrooms,
+            balconies: this.balconies,
+            description: this.description,
+            flat_available_from: this.flat_available_from,
+          };
           await postApartmentServices.postFlatDetails(
-            this.$route.params.property_type + '_' + this.$route.params.property_for,
-            this.apartmentId,
+            this.$route.params.property_type + "_" + this.$route.params.property_for,
+            this.$route.params.id,
             {
-              flat_details: {
-                BHKtype: this.BHKtype,
-                carpet_area: this.carpet_area,
-                builtup_area: this.builtup_area,
-                super_builtup_area: this.super_builtup_area,
-                floor_number: this.floor_number,
-                facing: this.facing,
-                furnishing: this.furnishing,
-                bathrooms: this.bathrooms,
-                balconies: this.balconies,
-                description: this.description,
-                flat_available_from: this.flat_available_from,
-              },
-              step: 4
+              flat_details,
+              step: 4,
             }
           );
-          this.$emit("stepperChange");
+          this.$emit("stepperChange", flat_details);
         } catch (e) {
           console.log(e);
         } finally {
@@ -230,7 +231,30 @@ export default {
       }
     },
   },
-  watch: {},
+  watch: {
+    property_details: function (newVal) {
+      if (newVal.flat_details) {
+        let properties = [
+          "BHKtype",
+          "carpet_area",
+          "builtup_area",
+          "super_builtup_area",
+          "floor_number",
+          "facing",
+          "furnishing",
+          "bathrooms",
+          "balconies",
+          "description",
+          "flat_available_from",
+        ];
+        properties.forEach((property) => {
+          if (newVal.flat_details[property]) {
+            this[property] = newVal.flat_details[property];
+          }
+        });
+      }
+    },
+  },
 };
 </script>
 

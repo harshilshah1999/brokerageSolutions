@@ -289,7 +289,8 @@ export default {
                         const response = await this.addDocumentAutoID2D(collectionID, apartmentID, 'media', {
                             downloadURL,
                             thumbnail: false,
-                            media_type: ''
+                            media_type: '',
+                            name: file.name
                         })
                         vueRef.push({
                             media_type: '',

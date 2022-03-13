@@ -2,7 +2,7 @@
   <v-form v-model="valid" ref="form" lazy-validation>
     <v-container>
       <v-row>
-        <v-col cols="12" sm="4" v-for="amenity in amenities" :key="amenity.name"> 
+        <v-col cols="12" sm="4" v-for="amenity in amenities" :key="amenity.name">
           <v-checkbox
             v-model="amenity.selected"
             :label="amenity.name"
@@ -12,7 +12,7 @@
             ripple
           ></v-checkbox>
         </v-col>
-         <v-col cols="12" sm="4">
+        <v-col cols="12" sm="4">
           <v-btn
             :disabled="!valid || loading"
             :loading="loading"
@@ -29,54 +29,64 @@
 </template>
 
 <script>
-import postApartmentServices from '../../services/postForm/apartments/postApartmentServices';
+import postApartmentServices from "../../services/postForm/apartments/postApartmentServices";
 import amenities from "../../assets/amenities.json";
 
 export default {
-  props: ['buildingId', 'apartmentId'],
+  props: ["property_details"],
   data: () => ({
     amenities: [],
     valid: false,
     loading: false,
   }),
   mounted() {
-    this.amenities = amenities
-    this.amenities.forEach(amenity => amenity.selected = false)
+    this.amenities = amenities;
+    this.amenities.forEach((amenity) => (amenity.selected = false));
   },
   methods: {
-    validate: async function() {
+    validate: async function () {
       try {
         this.loading = true;
-        let amenities = {}
-        this.amenities.forEach(amenity => {
+        let amenities = {};
+        this.amenities.forEach((amenity) => {
           if (amenity.selected) {
-            amenities[amenity.property_name] = true
+            amenities[amenity.property_name] = true;
           }
-        })
+        });
         await postApartmentServices.postAmenitiesDetails(
-          this.$route.params.property_type + '_' + this.$route.params.property_for,
-          this.buildingId,
-          this.apartmentId,
+          this.$route.params.property_type + "_" + this.$route.params.property_for,
+          this.property_details.location_details.building_id,
+          this.$route.params.id,
           {
             amenity_details: amenities,
-            step: 5
+            step: 5,
           }
-        )
-        this.$emit('stepperChange')
-      }
-      catch(e) {
-        console.log(e)
-      }
-      finally {
+        );
+        this.$emit("stepperChange", amenities);
+      } catch (e) {
+        console.log(e);
+      } finally {
         this.loading = false;
       }
-    }
-  }
-}
+    },
+  },
+  watch: {
+    property_details: function (newVal) {
+      if (newVal.amenity_details) {
+        this.amenities.forEach((amenity) => {
+          if (newVal.amenity_details[amenity.property_name]) {
+            amenity.selected = true;
+          }
+        });
+      }
+      this.amenities = [...this.amenities];
+    },
+  },
+};
 </script>
 
 <style lang="scss">
-.custom-icon-spacing > .v-input__control{
+.custom-icon-spacing > .v-input__control {
   flex-grow: unset;
   width: unset;
 }

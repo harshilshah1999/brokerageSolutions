@@ -23,7 +23,7 @@
         <v-card elevation="0">
           <location-details
             :property_details="property_details"
-            @stepperChange="moveToBuildingDetails"
+            @stepperChange="updateBuildingDetails"
           />
         </v-card>
       </v-stepper-content>
@@ -32,22 +32,24 @@
         <v-card elevation="0">
           <building-details
             :property_details="property_details"
-            @stepperChange="property_details.step = 3"
+            @stepperChange="updateFlatDetails"
           />
         </v-card>
       </v-stepper-content>
 
       <v-stepper-content step="3">
         <v-card elevation="0">
-          <flat-details :apartmentId="apartmentID" @stepperChange="property_details.step = 4" />
+          <flat-details
+            :property_details="property_details"
+            @stepperChange="updateAmenities"
+          />
         </v-card>
       </v-stepper-content>
 
       <v-stepper-content step="4">
         <v-card elevation="0">
           <amenities
-            :buildingId="buildingID"
-            :apartmentId="apartmentID"
+            :property_details="property_details"
             @stepperChange="property_details.step = 5"
           />
         </v-card>
@@ -55,7 +57,7 @@
 
       <v-stepper-content step="5">
         <v-card elevation="0">
-          <media :apartmentId="apartmentID" @stepperChange="property_details.step = 6" />
+          <media @stepperChange="property_details.step = 6" />
         </v-card>
       </v-stepper-content>
 
@@ -87,7 +89,7 @@ export default {
   data() {
     return {
       property_details: {
-        step: 1
+        step: 1,
       },
       buildingID: null,
       apartmentID: null,
@@ -128,27 +130,28 @@ export default {
       this.$route.params.property_type + "_" + this.$route.params.property_for,
       this.$route.params.id
     );
-    this.property_details = {...response.data()};
-    this.buildingID = this.property_details.location_details.building_id;
-    this.localityID = this.property_details.location_details.locality_id;
-    this.sublocalityID = this.property_details.location_details.sublocality_id;
+    this.property_details = { ...response.data() };
     this.apartmentID = this.$route.params.id;
   },
   methods: {
-    moveToBuildingDetails: function (
-      city,
-      localityID,
-      sublocalityID,
-      buildingID,
-      apartmentID
-    ) {
-      this.city = city;
-      this.localityID = localityID;
-      this.sublocalityID = sublocalityID;
-      this.buildingID = buildingID;
-      this.apartmentID = apartmentID;
-      this.property_details.step = 2;
+    updateBuildingDetails: function (localtion_details) {
+      this.property_details.location_details = {
+        ...localtion_details,
+      };
+      this.property_details = { ...this.property_details, step: 2 };
     },
+    updateFlatDetails: function (flat_details) {
+      this.property_details.flat_details = {
+        ...flat_details,
+      };
+      this.property_details = { ...this.property_details, step: 3 };
+    },
+    updateAmenities: function(amenities) {
+      this.property_details.amenities = {
+        ...amenities,
+      };
+      this.property_details = { ...this.property_details, step: 4 };
+    }
   },
 };
 </script>

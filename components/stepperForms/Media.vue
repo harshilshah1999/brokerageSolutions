@@ -6,8 +6,9 @@
       label-idle="Drop files here..."
       :allow-multiple="true"
       accepted-file-types="image/jpeg, image/png"
-      :server="{ process, revert }"
+      :server="{ process, revert, load }"
       :files="files2"
+      :disabled="loading"
       @init="handleFilePondInit"
     />
     <v-row>
@@ -28,7 +29,7 @@
                   :items="['Bedroom', 'Kitchen', 'Living Room', 'Dining Room']"
                   v-model="file.media_type"
                   menu-props="auto"
-                  label="Image Type"
+                  label="Type"
                   hide-details
                   dense
                   filled
@@ -53,7 +54,7 @@
     </v-row>
     <v-row v-if="myFiles.length">
       <v-col cols="12" sm="6">
-        <v-btn color="primary" @click="saveDetails"> Save Details </v-btn>
+        <v-btn color="primary" @click="saveDetails" :disabled="loading"> Save Details </v-btn>
       </v-col>
     </v-row>
     <br />
@@ -82,16 +83,50 @@ import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
 const FilePond = vueFilePond(FilePondPluginFileValidateType);
 
 import imageCompression from "browser-image-compression";
+import postApartmentServices from "../../services/postForm/apartments/postApartmentServices";
 
 export default {
-  props: ["apartmentId"],
+  components: {
+    FilePond,
+  },
   data: function () {
     return {
       myFiles: [],
       files2: [],
+      loading: false,
     };
   },
+  async mounted() {
+    let response = await postApartmentServices.getMediaDetails(
+      this.$route.params.property_type + "_" + this.$route.params.property_for,
+      this.$route.params.id
+    );
+
+    response = response.forEach((res) => {
+      this.myFiles.push({
+        id: res.id,
+        media_type: res.data().media_type,
+        downloadURL: res.data().downloadURL,
+        thumbnail: res.data().thumbnail,
+      });
+      this.files2.push({
+        source: res.data().downloadURL,
+        options: {
+          type: "limbo",
+        },
+      });
+    });
+  },
   methods: {
+    load: function (source, load, error, progress, abort, headers) {
+      console.log("fired");
+      var myRequest = new Request(source);
+      fetch(myRequest).then(function (response) {
+        response.blob().then(function (myBlob) {
+          load(myBlob);
+        });
+      });
+    },
     async process(fieldName, file, metadata, load, error, progress, abort) {
       const options = {
         maxSizeMB: 0.4,
@@ -101,14 +136,20 @@ export default {
 
       const compressedFile = await imageCompression(file, options);
       const uploadTask = firebaseService.setSingleMedia(
-        this.$route.params.property_type + '_' + this.$route.params.property_for + "/" + this.apartmentId + "/" + file.name,
+        this.$route.params.property_type +
+          "_" +
+          this.$route.params.property_for +
+          "/" +
+          this.$route.params.id +
+          "/" +
+          file.name,
         compressedFile,
         progress,
         load,
         abort,
         error,
-        this.$route.params.property_type + '_' + this.$route.params.property_for,
-        this.apartmentId,
+        this.$route.params.property_type + "_" + this.$route.params.property_for,
+        this.$route.params.id,
         this.myFiles
       );
       return {
@@ -119,18 +160,23 @@ export default {
       };
     },
     async revert(uniqueFileId, load, error) {
+      console.log("fired", uniqueFileId);
       try {
+        this.loading = true;
         await firebaseService.deleteSingleMedia(uniqueFileId, error);
         let id = this.myFiles.find((file) => file.downloadURL === uniqueFileId).id;
         await firebaseService.deleteSingleDocument2D(
-          this.$route.params.property_type + '_' + this.$route.params.property_for,
-          this.apartmentId,
+          this.$route.params.property_type + "_" + this.$route.params.property_for,
+          this.$route.params.id,
           "media",
           id
         );
         this.myFiles = this.myFiles.filter((file) => file.downloadURL !== uniqueFileId);
+        this.files2 = this.files2.filter((file) => file.source !== uniqueFileId);
       } catch (e) {
         console.log(e);
+      } finally {
+        this.loading = false;
       }
     },
     handleFilePondInit: function () {
@@ -146,8 +192,8 @@ export default {
       for (let index = 0; index < this.myFiles.length; index++) {
         try {
           await firebaseService.updateSingleDocument2D(
-            this.$route.params.property_type + '_' + this.$route.params.property_for,
-            this.apartmentId,
+            this.$route.params.property_type + "_" + this.$route.params.property_for,
+            this.$route.params.id,
             "media",
             this.myFiles[index].id,
             {
@@ -169,9 +215,6 @@ export default {
       },
       deep: true,
     },
-  },
-  components: {
-    FilePond,
   },
 };
 </script>

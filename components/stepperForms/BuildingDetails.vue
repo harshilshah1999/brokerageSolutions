@@ -135,12 +135,14 @@ export default {
         try {
           this.loading = true;
           await postApartmentServices.postBuildingDetails(
-            this.$route.params.property_type + '_' + this.$route.params.property_for,
+            this.$route.params.property_type + "_" + this.$route.params.property_for,
             this.$route.params.id,
             this.property_details.location_details.building_id,
             {
               building_details: {
-                ...(this.property_details.location_details.landmark && { landmark: [this.property_details.location_details.landmark] }),
+                ...(this.property_details.location_details.landmark && {
+                  landmark: [this.property_details.location_details.landmark],
+                }),
                 construction_type: this.construction_type,
                 ...(this.building_age && { building_age: this.building_age }),
                 ...(this.oc_status && { oc_status: this.oc_status }),
@@ -148,12 +150,12 @@ export default {
                 ...(this.possession_date && { possession_date: this.possession_date }),
                 ...(this.total_floors && { total_floors: this.total_floors }),
               },
-              step: 3
+              step: 3,
             },
             {
               city: this.property_details.location_details.city,
               localityID: this.property_details.location_details.locality_id,
-              sublocalityID: this.property_details.location_details.sublocality_id
+              sublocalityID: this.property_details.location_details.sublocality_id,
             }
           );
           this.$emit("stepperChange");
@@ -167,16 +169,21 @@ export default {
   },
   watch: {
     property_details: async function () {
-      let building_details = null;
-      building_details = await postApartmentServices.getBuildingDetails(this.property_details.location_details.building_id);
-      building_details = building_details.data();
-      
+      let building_details = {};
+      if (this.property_details.location_details) {
+        building_details = await postApartmentServices.getBuildingDetails(
+          this.property_details.location_details.building_id
+        );
+        building_details = building_details.data();
+      }
+
       if (building_details.hasOwnProperty("construction_type")) {
         this.construction_type = building_details.construction_type;
         this.building_age = building_details.building_age;
         this.oc_status = building_details.oc_status;
         this.cc_status = building_details.cc_status;
         this.possession_date = building_details.possession_date;
+        this.total_floors = building_details.total_floors;
       }
     },
   },
