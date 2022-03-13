@@ -119,6 +119,11 @@ export default {
     //         return await firebaseServices.getSingleDocumentByID2D('buildings', buildingID, 'flats', flatID)
     //     } catch (error) { console.error(error); return error }
     // },
+    async getMediaDetails(collectionID, apartmentID) {
+        try {
+            return await firebaseServices.getAllDocuments2D(collectionID, apartmentID, 'media')
+        } catch (error) { console.error(error); return error }
+    },
     async getMedia(media_path) {
         try {
             return await firebaseServices.getSingleMedia(media_path)
