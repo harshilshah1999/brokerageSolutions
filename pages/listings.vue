@@ -11,33 +11,31 @@
         <div>
           {{ user_listings }}
         </div>
+
+        <v-card
+          v-for="(item, i) in items"
+          :key="i"
+          class="mx-auto"
+          style="margin-bottom: 5px"
+        >
+          <v-container>
+            <v-row dense>
+              <v-col cols="3" sm="3">
+                <v-img :src="item.src"> </v-img>
+              </v-col>
+              <v-col cols="6" sm="6"> </v-col>
+            </v-row>
+          </v-container>
+        </v-card>
       </v-col>
+
+      <!-- right section starts here -->
       <v-col class="center" cols="12" sm="4">
         <div class="wrapper">
           <v-card class="card">
             <v-col>
               <h2 class="light_blue">Post New Property</h2>
             </v-col>
-
-            <!-- <v-col cols="12" sm="12">
-            <p class="extra-light_blue">My property category is:</p>
-            <v-chip
-              v-for="category in categories"
-              :key="category"
-              v-on:click="
-                property_category = category;
-                updatePropertyTypes(category);
-              "
-              class="categories"
-              pill
-              color="#1e2738da"
-              :text-color="property_category != category ? '' : 'white'"
-              :outlined="property_category != category"
-              link
-            >
-              <span class="capitalize">{{ category }} </span>
-            </v-chip>
-          </v-col> -->
 
             <v-col cols="12" sm="12">
               <p class="extra-light_blue left">What kind of property do you have?</p>
@@ -55,15 +53,6 @@
               >
                 <span class="capitalize">{{ type.name }} </span>
               </v-chip>
-              <!-- <v-select
-              v-if="property_type === 'Other'"
-              v-model="property_type"
-              :items="property_types"
-              menu-props="auto"
-              label="Property Type"
-              outlined
-              required
-            ></v-select> -->
             </v-col>
 
             <v-col cols="12" sm="12">
@@ -101,71 +90,6 @@
             </v-col>
           </v-card>
         </div>
-
-        <!-- <div class="wrapper">
-          <v-card :loading="loading" class="mx-auto my-12" max-width="374">
-            <template slot="progress">
-              <v-progress-linear
-                color="deep-purple"
-                height="10"
-                indeterminate
-              ></v-progress-linear>
-            </template>
-
-            <v-img
-              height="250"
-              src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
-            ></v-img>
-
-            <v-card-title>Cafe Badilico</v-card-title>
-
-            <v-card-text>
-              <v-row align="center" class="mx-0">
-                <v-rating
-                  :value="4.5"
-                  color="amber"
-                  dense
-                  half-increments
-                  readonly
-                  size="14"
-                ></v-rating>
-
-                <div class="grey--text ms-4">4.5 (413)</div>
-              </v-row>
-
-              <div class="my-4 text-subtitle-1">$ • Italian, Cafe</div>
-
-              <div>
-                Small plates, salads & sandwiches - an intimate setting with 12 indoor
-                seats plus patio seating.
-              </div>
-            </v-card-text>
-
-            <v-divider class="mx-4"></v-divider>
-
-            <v-card-title>Tonight's availability</v-card-title>
-
-            <v-card-text>
-              <v-chip-group
-                v-model="selection"
-                active-class="deep-purple accent-4 white--text"
-                column
-              >
-                <v-chip>5:30PM</v-chip>
-
-                <v-chip>7:30PM</v-chip>
-
-                <v-chip>8:00PM</v-chip>
-
-                <v-chip>9:00PM</v-chip>
-              </v-chip-group>
-            </v-card-text>
-
-            <v-card-actions>
-              <v-btn color="deep-purple lighten-2" text @click="reserve"> Reserve </v-btn>
-            </v-card-actions>
-          </v-card>
-        </div> -->
       </v-col>
     </v-row>
     <v-snackbar
@@ -221,6 +145,21 @@ export default {
       show: null,
       backgroundColor: "#dfdfdf",
     },
+
+    items: [
+      {
+        color: "#1F7087",
+        src: "https://cdn.vuetifyjs.com/images/cards/foster.jpg",
+        title: "Supermodel",
+        artist: "Foster the People",
+      },
+      {
+        color: "#952175",
+        src: "https://cdn.vuetifyjs.com/images/cards/halcyon.png",
+        title: "Halcyon Days",
+        artist: "Ellie Goulding",
+      },
+    ],
   }),
   async mounted() {
     this.user = await listingServices.getUser(localStorage.getItem("user_id"));
