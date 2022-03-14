@@ -70,8 +70,10 @@
                 }
             ],
             "other_details": {
+                "created_date": "Date and Time",
+                "last_updated_date": "Date and Time",
                 "posted_date": "Date and Time",
-                "verification_date": "Date and Time",
+                "verified_date": "Date and Time",
                 "posting_status": "incomplete",
                 "expiration_date": "Date and Time",
                 "status": "Active/Inactive",

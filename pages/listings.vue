@@ -196,6 +196,7 @@ export default {
           posted_by_user_id: this.user.id,
           posted_by_user_name: this.user.data().user_name,
           posting_status: "incomplete",
+          status: "inactive",
           step: 1,
         });
         this.submit_button_loading = false;

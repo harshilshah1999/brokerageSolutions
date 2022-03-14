@@ -7,6 +7,7 @@ export default {
     async addProperty(collectionID, formData) {
         let property = await firebaseServices.addDocumentAutoID(collectionID, formData).catch((err) => { console.error(err); })
         firebaseServices.addArrayElement('users', formData.posted_by_user_id, 'properties_posted', collectionID + '-' + property.id).catch((err) => { console.error(err); })
+        firebaseServices.updateTimestamp(collectionID, property.id, 'created_date').catch((err) => { console.error(err); })
         return property
     },
     async getProperty(collectionID, documentID) {
