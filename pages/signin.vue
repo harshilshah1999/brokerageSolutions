@@ -2,7 +2,7 @@
   <!--
 // @TODO recaptcha div size not responsive
 // @TODO use v-window
-// @TODO Add Validation
+// @TODO Add Validation (email id)
 // @TODO Pressing enter key should send OTP, user form
 // @TODO Make this page responsive
 // @TODO Check Session expiry and make it infinity
