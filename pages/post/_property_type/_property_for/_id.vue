@@ -111,7 +111,7 @@ export default {
   },
   async mounted() {
     let response = await postApartmentServices.getApartmentDetails(
-      this.$route.params.property_type + "_" + this.$route.params.property_for,
+      this.$route.params.property_type + "s_" + this.$route.params.property_for,
       this.$route.params.id
     );
     this.property_details = { ...response.data() };

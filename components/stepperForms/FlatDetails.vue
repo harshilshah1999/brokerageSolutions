@@ -215,7 +215,7 @@ export default {
             flat_available_from: this.flat_available_from,
           };
           await postApartmentServices.postFlatDetails(
-            this.$route.params.property_type + "_" + this.$route.params.property_for,
+            this.$route.params.property_type + "s_" + this.$route.params.property_for,
             this.$route.params.id,
             {
               flat_details,

@@ -204,9 +204,9 @@ export default {
 
     property_type: null,
     property_type_chips: [
-      { id: "apartments", name: "Flat/Apartment", type: "Residential" },
-      { id: "shops", name: "Retail Shop", type: "Commercial" },
-      { id: "pgs", name: "PG/Hostel", type: "Residential" },
+      { id: "apartment", name: "Flat/Apartment", type: "Residential" },
+      { id: "shop", name: "Retail Shop", type: "Commercial" },
+      { id: "pg", name: "PG/Hostel", type: "Residential" },
       // { id: "other", name: "Other" },
     ],
     property_types: [],
@@ -233,9 +233,11 @@ export default {
         let collectionID = property.split("-")[0];
         let propertyID = property.split("-")[1];
         await listingServices.getProperty(collectionID, propertyID).then((response) => {
-          let data = response.data();
-          data["type"] = collectionID;
-          data["property_id"] = propertyID;
+          let data = {
+            ...response.data(),
+            type: collectionID,
+            property_id: propertyID,
+          };
           this.user_listings.push(data);
         });
       });
@@ -247,8 +249,7 @@ export default {
   },
   methods: {
     async submit() {
-      let collectionID = this.property_type + "_" + this.property_for;
-      
+      let collectionID = this.property_type + "s_" + this.property_for;
 
       try {
         this.submit_button_loading = true;
@@ -256,7 +257,7 @@ export default {
           posted_by_user_id: this.user.id,
           posted_by_user_name: this.user.data().user_name,
           posting_status: "incomplete",
-          step: 1
+          step: 1,
         });
         this.submit_button_loading = false;
 
@@ -265,7 +266,6 @@ export default {
           path:
             "/post/" + this.property_type + "/" + this.property_for + "/" + propertyID.id,
         });
-        console.log(propertyID);
       } catch (error) {
         this.submit_button_loading = false;
         this.showSnackbar("Property add not created! Please try again", "error");

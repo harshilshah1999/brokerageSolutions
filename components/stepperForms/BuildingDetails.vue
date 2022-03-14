@@ -135,7 +135,7 @@ export default {
         try {
           this.loading = true;
           await postApartmentServices.postBuildingDetails(
-            this.$route.params.property_type + "_" + this.$route.params.property_for,
+            this.$route.params.property_type + "s_" + this.$route.params.property_for,
             this.$route.params.id,
             this.property_details.location_details.building_id,
             {

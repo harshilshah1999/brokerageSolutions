@@ -236,7 +236,7 @@ export default {
           if (!this.building.id && !this.landmarks.find((l) => l === this.landmark))
             await postApartmentServices.addLandmark(buildingID, this.landmark);
           await postApartmentServices.updateLocationDetails(
-            this.$route.params.property_type + "_" + this.$route.params.property_for,
+            this.$route.params.property_type + "s_" + this.$route.params.property_for,
             this.$route.params.id,
             {
               location_details: {

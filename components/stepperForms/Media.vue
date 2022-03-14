@@ -98,7 +98,7 @@ export default {
   },
   async mounted() {
     let response = await postApartmentServices.getMediaDetails(
-      this.$route.params.property_type + "_" + this.$route.params.property_for,
+      this.$route.params.property_type + "s_" + this.$route.params.property_for,
       this.$route.params.id
     );
 
@@ -147,7 +147,7 @@ export default {
         load,
         abort,
         error,
-        this.$route.params.property_type + "_" + this.$route.params.property_for,
+        this.$route.params.property_type + "s_" + this.$route.params.property_for,
         this.$route.params.id,
         this.myFiles
       );
@@ -165,7 +165,7 @@ export default {
         await firebaseService.deleteSingleMedia(uniqueFileId, error);
         let id = this.myFiles.find((file) => file.downloadURL === uniqueFileId).id;
         await firebaseService.deleteSingleDocument2D(
-          this.$route.params.property_type + "_" + this.$route.params.property_for,
+          this.$route.params.property_type + "s_" + this.$route.params.property_for,
           this.$route.params.id,
           "media",
           id
@@ -191,7 +191,7 @@ export default {
       for (let index = 0; index < this.myFiles.length; index++) {
         try {
           await firebaseService.updateSingleDocument2D(
-            this.$route.params.property_type + "_" + this.$route.params.property_for,
+            this.$route.params.property_type + "s_" + this.$route.params.property_for,
             this.$route.params.id,
             "media",
             this.myFiles[index].id,

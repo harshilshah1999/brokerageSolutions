@@ -54,7 +54,7 @@ export default {
           }
         });
         await postApartmentServices.postAmenitiesDetails(
-          this.$route.params.property_type + "_" + this.$route.params.property_for,
+          this.$route.params.property_type + "s_" + this.$route.params.property_for,
           this.property_details.location_details.building_id,
           this.$route.params.id,
           {
