@@ -11,7 +11,7 @@
     <div id="animated">
       <v-col class="wrapper" cols="12" sm="12">
         <v-card class="card">
-          <v-card-title class="light_blue">
+          <v-card-title class="lightblue">
             <h1 v-if="!otp_confirmed">Sign In</h1>
             <h1 v-else>Contact Details</h1>
           </v-card-title>
@@ -47,7 +47,7 @@
             <v-expand-transition>
               <v-col v-if="show_otp_div">
                 <h3>
-                  <span class="extra-light_blue"> Enter the OTP sent to</span>
+                  <span class="extra-lightblue"> Enter the OTP sent to</span>
                   <span class="dark-blue"> {{ display_number }} </span>
                 </h3>
                 <v-otp-input
@@ -390,10 +390,10 @@ export default {
 .dark-blue {
   color: #1e2738;
 }
-.light_blue {
+.lightblue {
   color: #1e2738da;
 }
-.extra-light_blue {
+.extra-lightblue {
   color: #1e2738b9;
 }
 .captcha-text {

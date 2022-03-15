@@ -1,7 +1,7 @@
 <template>
   <v-app dark>
     <TopNavigation />
-    <v-main class="ultra-light-blue-bg">
+    <v-main class="ultra-lightblue-bg">
       <v-container>
         <Nuxt />
       </v-container>
@@ -24,7 +24,7 @@ export default {
 html {
   overflow-y: auto;
 }
-.ultra-light-blue-bg {
+.ultra-lightblue-bg {
   background-color: #1e27380b;
 }
 </style>
