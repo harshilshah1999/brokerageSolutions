@@ -20,6 +20,7 @@ import {
     enableIndexedDbPersistence //for offline data and caching
 } from 'firebase/firestore'
 import { ref, deleteObject, uploadBytesResumable, getDownloadURL, uploadBytes } from 'firebase/storage'
+
 export default {
 
     async addDocumentAutoID(collectionID, data) { // adds a document in the collection
@@ -262,7 +263,7 @@ export default {
         } catch (error) { console.error(error); return error }
     },
 
-    setSingleMedia(media_path, file, progress, load, abort, error, collectionID, apartmentID, vueRef) { // add single media to storage
+    setSingleMedia(media_path, file, progress, load, abort, error, collectionID, apartmentID, vueRef, vuePondRef) { // add single media to storage
         const uploadLocation = ref(storage, media_path);
         progress(true, 0, 1024)
         try {
@@ -294,10 +295,16 @@ export default {
                         })
                         vueRef.push({
                             media_type: '',
-                            thumbnail: false,
+                            thumbnail: vueRef.length ? false : true,
                             id: response.id,
                             downloadURL
                         })
+                        vuePondRef.push({
+                            source: downloadURL,
+                            options: {
+                              type: "limbo",
+                            },
+                        });
                     });
                 }
             );

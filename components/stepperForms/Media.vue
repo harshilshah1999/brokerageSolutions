@@ -149,7 +149,8 @@ export default {
         error,
         this.$route.params.property_type + "s_" + this.$route.params.property_for,
         this.$route.params.id,
-        this.myFiles
+        this.myFiles,
+        this.files2
       );
       return {
         abort: () => {
@@ -160,6 +161,7 @@ export default {
     },
     async revert(uniqueFileId, load, error) {
       console.log("fired", uniqueFileId);
+      console.log(this.files2)
       try {
         this.loading = true;
         await firebaseService.deleteSingleMedia(uniqueFileId, error);
@@ -170,8 +172,22 @@ export default {
           "media",
           id
         );
-        this.myFiles = this.myFiles.filter((file) => file.downloadURL !== uniqueFileId);
-        this.files2 = this.files2.filter((file) => file.source !== uniqueFileId);
+        this.myFiles = this.myFiles.filter(file => file.downloadURL !== uniqueFileId);
+        this.files2 = this.files2.filter(file => file.source !== uniqueFileId);
+        
+        if(!this.myFiles.find(myFile => myFile.thumbnail === true)){
+          await firebaseService.updateSingleDocument2D(
+            this.$route.params.property_type + "s_" + this.$route.params.property_for,
+            this.$route.params.id,
+            "media",
+            this.myFiles[0].id,
+            {
+              media_type: this.myFiles[0].media_type,
+              thumbnail: true,
+            }
+          );
+          this.myFiles[0].thumbnail = true;
+        }
       } catch (e) {
         console.log(e);
       } finally {
